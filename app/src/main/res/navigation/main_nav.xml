@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.project.heyboardgame.main.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recommendFragment"
+        android:name="com.project.heyboardgame.main.recommend.RecommendFragment"
+        android:label="fragment_recommend"
+        tools:layout="@layout/fragment_recommend" >
+        <action
+            android:id="@+id/action_recommendFragment_to_matchFragment"
+            app:destination="@id/matchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/socialFragment"
+        android:name="com.project.heyboardgame.main.social.SocialFragment"
+        android:label="fragment_social"
+        tools:layout="@layout/fragment_social" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.project.heyboardgame.main.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/matchFragment"
+        android:name="com.project.heyboardgame.main.recommend.MatchFragment"
+        android:label="fragment_match"
+        tools:layout="@layout/fragment_match" >
+        <action
+            android:id="@+id/action_matchFragment_to_recommendFragment"
+            app:destination="@id/recommendFragment"
+            app:popUpTo="@id/recommendFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_matchFragment_to_matchResFragment"
+            app:destination="@id/matchResFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchResFragment"
+        android:name="com.project.heyboardgame.main.recommend.MatchResFragment"
+        android:label="fragment_match_res"
+        tools:layout="@layout/fragment_match_res" >
+        <action
+            android:id="@+id/action_matchResFragment_to_matchFragment"
+            app:destination="@id/matchFragment"
+            app:popUpTo="@id/matchFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.project.heyboardgame.main.home.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.project.heyboardgame.main.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
+</navigation>

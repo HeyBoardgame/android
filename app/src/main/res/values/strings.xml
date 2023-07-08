@@ -1,3 +1,51 @@
 <resources>
-    <string name="app_name">yeoboge</string>
+    <string name="app_name">heyboardgame</string>
+    <string name="login">로그인</string>
+    <string name="email">이메일</string>
+    <string name="password">비밀번호</string>
+    <string name="google_login">구글 로그인</string>
+    <string name="find_password">비밀번호 찾기</string>
+    <string name="favorite_genre">선호하는 장르</string>
+    <string name="sign_up">회원가입</string>
+    <string name="forgot_password_title">비밀번호를 잊으셨나요?</string>
+    <string name="forgot_password_text">가입한 이메일로 임시 비밀번호를 받아주세요</string>
+    <string name="send_password">임시 비밀번호 전송</string>
+    <string name="check_password">비밀번호 확인</string>
+    <string name="nickname">닉네임</string>
+    <string name="next">다음 단계</string>
+    <string name="home">홈</string>
+    <string name="recommend">추천</string>
+    <string name="social">소셜</string>
+    <string name="profile">프로필</string>
+    <string name="shake_title">흔들어 보세요!</string>
+    <string name="shake_text">주변 친구와 자동으로 그룹 매칭이 됩니다!</string>
+    <string name="add_friend">친구 추가</string>
+    <string name="go_back">뒤로 가기</string>
+    <string name="group_match">그룹 매칭이\n 완료되었습니다!</string>
+    <string name="group_recommend">추천 받기</string>
+    <string name="rematch">다시 매칭하기</string>
+    <string name="match_res_title">우리를 위한 보드게임</string>
+    <string name="write">플레이 기록하기</string>
+    <string name="bookmark">찜하기</string>
+    <string name="progress_bar">별점 매기기</string>
+    <string-array name="spinner_num">
+        <item>1인</item>
+        <item>2인</item>
+        <item>3인</item>
+        <item>4인</item>
+        <item>5인</item>
+        <item>6인 이상</item>
+    </string-array>
+    <string-array name="spinner_genre">
+        <item>전략</item>
+        <item>파티</item>
+        <item>단순</item>
+        <item>카드</item>
+        <item>가족</item>
+        <item>키즈</item>
+        <item>전쟁</item>
+        <item>세계관</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
