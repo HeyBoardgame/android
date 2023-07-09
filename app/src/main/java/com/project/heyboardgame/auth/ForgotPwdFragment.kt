@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.Navigation
-import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentForgotPwdBinding
 
 

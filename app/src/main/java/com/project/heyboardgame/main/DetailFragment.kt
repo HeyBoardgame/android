@@ -3,11 +3,9 @@ package com.project.heyboardgame.main
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentDetailBinding
-import timber.log.Timber
 
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
@@ -33,7 +31,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 findNavController().popBackStack()
             }
         }
-
     }
 
     override fun onDestroy() {

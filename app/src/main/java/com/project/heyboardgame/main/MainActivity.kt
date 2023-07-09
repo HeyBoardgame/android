@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.project.heyboardgame.R
-import com.project.heyboardgame.auth.AuthViewModel
 import com.project.heyboardgame.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

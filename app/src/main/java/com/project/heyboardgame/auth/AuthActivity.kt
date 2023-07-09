@@ -1,14 +1,11 @@
 package com.project.heyboardgame.auth
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.Observer
 import com.project.heyboardgame.databinding.ActivityAuthBinding
-import com.project.heyboardgame.main.MainActivity
+
 
 class AuthActivity : AppCompatActivity() {
 

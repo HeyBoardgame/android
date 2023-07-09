@@ -10,13 +10,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.HomeRVAdapter
 import com.project.heyboardgame.dataModel.BoardgameList
 import com.project.heyboardgame.databinding.FragmentHomeBinding
-import com.project.heyboardgame.main.MainActivity
 
 
 class HomeFragment : Fragment() {

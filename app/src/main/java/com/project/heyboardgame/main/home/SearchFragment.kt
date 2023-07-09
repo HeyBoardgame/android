@@ -3,7 +3,6 @@ package com.project.heyboardgame.main.home
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.ArrayAdapter
 import androidx.navigation.fragment.findNavController
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentSearchBinding
