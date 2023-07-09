@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
 
         binding.apply {
             searchBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_detailFragment)
+                findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
 
             }
         }
@@ -94,6 +94,11 @@ class HomeFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         callback.remove()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

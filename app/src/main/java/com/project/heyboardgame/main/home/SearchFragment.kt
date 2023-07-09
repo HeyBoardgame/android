@@ -15,8 +15,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var _binding : FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
-    private val numberOfPeople : Array<String> = resources.getStringArray(R.array.spinner_num)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,14 +26,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         _binding = FragmentSearchBinding.bind(view)
 
-//        binding.apply {
-//            backBtnSearch.setOnClickListener {
-//                findNavController().navigate(R.id.action_searchFragment_to_homeFragment)
-//            }
-//
-//        }
+        binding.apply {
+            backBtnSearch.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
+        }
 
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 
 }

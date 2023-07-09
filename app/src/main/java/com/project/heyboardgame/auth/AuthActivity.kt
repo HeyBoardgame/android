@@ -23,16 +23,6 @@ class AuthActivity : AppCompatActivity() {
         binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.checkLoginFlag() // 로그인 여부 확인
-        viewModel.logined.observe(this, Observer {
-            if(it) { // 로그인이 되어있는 유저
-                val intent = Intent(this, MainActivity::class.java)
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                startActivity(intent)
-            } else { // 로그인이 안되어있는 유저
-                binding.authNavContainerView.visibility = View.VISIBLE
-            }
-        })
     }
 
 

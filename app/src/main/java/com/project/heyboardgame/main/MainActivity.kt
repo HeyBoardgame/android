@@ -25,8 +25,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.setUpLoginFlag() // 로그인 flag를 TRUE로 바꿈
-
         // 네비게이션 연결
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavContainerView) as NavHostFragment
         navController = navHostFragment.navController

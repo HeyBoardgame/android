@@ -28,24 +28,7 @@
     <string name="write">플레이 기록하기</string>
     <string name="bookmark">찜하기</string>
     <string name="progress_bar">별점 매기기</string>
-    <string-array name="spinner_num">
-        <item>1인</item>
-        <item>2인</item>
-        <item>3인</item>
-        <item>4인</item>
-        <item>5인</item>
-        <item>6인 이상</item>
-    </string-array>
-    <string-array name="spinner_genre">
-        <item>전략</item>
-        <item>파티</item>
-        <item>단순</item>
-        <item>카드</item>
-        <item>가족</item>
-        <item>키즈</item>
-        <item>전쟁</item>
-        <item>세계관</item>
-    </string-array>
+    <string name="detail">보드게임 상세설명 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구 어쩌구 저쩌구</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -62,8 +62,10 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
 
+                <!-- 보드게임 이미지 -->
                 <ImageView
                     android:id="@+id/detailImg"
                     android:layout_width="180dp"
@@ -73,6 +75,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <!-- 보드게임 별점, 장르, 테마 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -100,22 +103,26 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- 보드게임 이름 -->
             <TextView
                 android:text="티켓 투 라이드 : 유럽"
                 android:textSize="25sp"
                 android:textColor="@color/black"
                 android:layout_marginStart="10dp"
-                android:layout_marginVertical="10dp"
+                android:layout_marginBottom="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <!-- 보드게임 난이도, 소요 시간, 인원수 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:orientation="horizontal"
                 android:weightSum="3"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginBottom="10dp">
 
+                <!-- 보드게임 난이도 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -140,6 +147,7 @@
                     android:layout_height="fill_parent"
                     android:background="@color/grey"/>
 
+                <!-- 보드게임 소요 시간 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -164,6 +172,7 @@
                     android:layout_height="fill_parent"
                     android:background="@color/grey"/>
 
+                <!-- 보드게임 인원수 -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -185,6 +194,7 @@
 
             </LinearLayout>
 
+            <!-- 보드게임 별점 매기기 -->
             <RatingBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -193,7 +203,58 @@
                 android:layout_gravity="center"
                 android:contentDescription="@string/progress_bar"
                 android:progressTint="@color/mainColor"
-                android:secondaryProgressTint="@color/mainColor"/>
+                android:secondaryProgressTint="@color/mainColor"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- 보드게임 상세설명 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:text="상세 설명"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="@string/detail"
+                    android:textColor="@color/detailDescription"
+                    android:textSize="15sp"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <!-- 보드게임 사용전략 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:text="사용 전략"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="@string/detail"
+                    android:textColor="@color/detailDescription"
+                    android:textSize="15sp"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 

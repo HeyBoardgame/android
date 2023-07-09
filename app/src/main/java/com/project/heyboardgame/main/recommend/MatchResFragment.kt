@@ -34,7 +34,11 @@ class MatchResFragment : Fragment(R.layout.fragment_match_res) {
         binding.apply {
             // 두 번째 화면(추천 완료 화면)으로 이동
             backBtnMr.setOnClickListener {
-                findNavController().navigate(R.id.action_matchResFragment_to_matchFragment)
+                findNavController().popBackStack()
+            }
+
+            testBtn.setOnClickListener {
+                findNavController().navigate(R.id.action_matchResFragment_to_detailFragment)
             }
         }
 
@@ -58,7 +62,6 @@ class MatchResFragment : Fragment(R.layout.fragment_match_res) {
 
     override fun onDestroy() {
         super.onDestroy()
-
         _binding = null
     }
 

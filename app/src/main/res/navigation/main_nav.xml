@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/recommendFragment"
@@ -42,11 +39,6 @@
         android:label="fragment_match"
         tools:layout="@layout/fragment_match" >
         <action
-            android:id="@+id/action_matchFragment_to_recommendFragment"
-            app:destination="@id/recommendFragment"
-            app:popUpTo="@id/recommendFragment"
-            app:popUpToInclusive="true"/>
-        <action
             android:id="@+id/action_matchFragment_to_matchResFragment"
             app:destination="@id/matchResFragment" />
     </fragment>
@@ -56,22 +48,14 @@
         android:label="fragment_match_res"
         tools:layout="@layout/fragment_match_res" >
         <action
-            android:id="@+id/action_matchResFragment_to_matchFragment"
-            app:destination="@id/matchFragment"
-            app:popUpTo="@id/matchFragment"
-            app:popUpToInclusive="true"/>
+            android:id="@+id/action_matchResFragment_to_detailFragment"
+            app:destination="@id/detailFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.project.heyboardgame.main.home.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" >
-        <action
-            android:id="@+id/action_searchFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true"/>
-    </fragment>
+        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.project.heyboardgame.main.DetailFragment"

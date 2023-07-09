@@ -26,7 +26,7 @@ class MatchFragment : Fragment(R.layout.fragment_match) {
         binding.apply {
             // 첫 번째 화면(추천 받는 화면)으로 이동
             rematchBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_matchFragment_to_recommendFragment)
+                findNavController().popBackStack()
             }
 
             // 세 번째 화면(추천 결과 화면)으로 이동

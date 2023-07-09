@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.heyboardgame.dataStore.MyDataStore
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -14,13 +13,4 @@ class AuthViewModel : ViewModel() {
     val logined : LiveData<Boolean>
         get() = _logined
 
-    fun checkLoginFlag() = viewModelScope.launch {
-
-        val getData = MyDataStore().getLoginData()
-
-        _logined.value = getData
-
-        Timber.d(getData.toString())
-
-    }
 }
