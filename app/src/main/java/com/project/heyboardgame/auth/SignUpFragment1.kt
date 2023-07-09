@@ -36,7 +36,7 @@ class SignUpFragment1 : Fragment() {
 
         // 뒤로가기 아이콘 누를 때 발생하는 이벤트
         binding.backBtnSu.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_signUpFragment1_to_loginFragment)
+            Navigation.findNavController(view).popBackStack()
         }
     }
 

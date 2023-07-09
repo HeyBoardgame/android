@@ -12,22 +12,24 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_forgotPwdFragment"
-            app:destination="@id/forgotPwdFragment" />
+            app:destination="@id/forgotPwdFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_loginFragment_to_signUpFragment1"
-            app:destination="@id/signUpFragment1" />
+            app:destination="@id/signUpFragment1"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/forgotPwdFragment"
         android:name="com.project.heyboardgame.auth.ForgotPwdFragment"
         android:label="fragment_forgot_pwd"
-        tools:layout="@layout/fragment_forgot_pwd" >
-        <action
-            android:id="@+id/action_forgotPwdFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_forgot_pwd" />
     <fragment
         android:id="@+id/signUpFragment1"
         android:name="com.project.heyboardgame.auth.SignUpFragment1"
@@ -35,12 +37,11 @@
         tools:layout="@layout/fragment_sign_up1" >
         <action
             android:id="@+id/action_signUpFragment1_to_signUpFragment2"
-            app:destination="@id/signUpFragment2" />
-        <action
-            android:id="@+id/action_signUpFragment1_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/signUpFragment2"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment2"
@@ -50,12 +51,11 @@
         <action
             android:id="@+id/action_signUpFragment2_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"/>
-        <action
-            android:id="@+id/action_signUpFragment2_to_signUpFragment1"
-            app:destination="@id/signUpFragment1"
-            app:popUpTo="@id/signUpFragment1"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
