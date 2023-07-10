@@ -8,7 +8,7 @@
 
     <!-- 뒤로가기 버튼 -->
     <ImageButton
-        android:id="@+id/backBtnDetail"
+        android:id="@+id/backBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/button_transparent"
@@ -260,6 +260,7 @@
 
     </ScrollView>
 
+    <!-- 가이드라인 -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline1"
         android:layout_width="wrap_content"

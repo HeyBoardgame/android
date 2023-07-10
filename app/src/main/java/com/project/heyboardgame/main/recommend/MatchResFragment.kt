@@ -31,7 +31,7 @@ class MatchResFragment : Fragment(R.layout.fragment_match_res) {
 
         binding.apply {
             // 두 번째 화면(추천 완료 화면)으로 이동
-            backBtnMr.setOnClickListener {
+            backBtn.setOnClickListener {
                 findNavController().popBackStack()
             }
 

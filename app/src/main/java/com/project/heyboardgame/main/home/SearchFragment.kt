@@ -26,7 +26,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = FragmentSearchBinding.bind(view)
 
         binding.apply {
-            backBtnSearch.setOnClickListener {
+            backBtn.setOnClickListener {
                 findNavController().popBackStack()
             }
 

@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // 네비게이션 연결
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavContainerView) as NavHostFragment
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavContainerView) as NavHostFragment
         navController = navHostFragment.navController
         // 바텀 네비게이션 연결
         binding.bottomNavView.setupWithNavController(navController)
@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // 바텀 네비게이션이 표시되는 Fragment
             if(destination.id == R.id.homeFragment || destination.id == R.id.recommendFragment || destination.id == R.id.profileFragment
-                || destination.id == R.id.socialFragment || destination.id == R.id.matchFragment ){
+                || destination.id == R.id.socialFragment || destination.id == R.id.matchFragment || destination.id == R.id.addFriendFragment){
                 binding.bottomNavView.visibility = View.VISIBLE
             }
             // 바텀 네비게이션이 표시되지 않는 Fragment
@@ -51,6 +51,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

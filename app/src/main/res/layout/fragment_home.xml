@@ -13,12 +13,12 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline1"
         app:layout_constraintTop_toTopOf="parent"
-        android:paddingHorizontal="10dp">
+        android:paddingHorizontal="15dp">
 
         <!-- 로고 이미지 -->
         <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:scaleType="fitXY"
             android:src="@drawable/logo_small"
             app:layout_constraintBottom_toBottomOf="parent"

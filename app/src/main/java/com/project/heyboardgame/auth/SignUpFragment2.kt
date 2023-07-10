@@ -48,7 +48,7 @@ class SignUpFragment2 : Fragment() {
         binding.genreListRV.layoutManager = GridLayoutManager(requireContext(), 2)
 
         // 뒤로가기 아이콘 누를 때 발생하는 이벤트
-        binding.backBtnSu.setOnClickListener {
+        binding.backBtn.setOnClickListener {
             Navigation.findNavController(view).popBackStack()
         }
 

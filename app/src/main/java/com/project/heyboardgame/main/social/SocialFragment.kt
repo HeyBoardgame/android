@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.FriendListRVAdapter
 import com.project.heyboardgame.adapter.FriendRequestRVAdapter
 import com.project.heyboardgame.databinding.FragmentSocialBinding
@@ -56,6 +58,12 @@ class SocialFragment : Fragment() {
         friendListRVAdapter = FriendListRVAdapter(requireContext(), nicknameList)
         binding.friendListRV.adapter = friendListRVAdapter
         binding.friendListRV.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.apply {
+            addFriendBtn.setOnClickListener {
+                findNavController().navigate(R.id.action_socialFragment_to_addFriendFragment)
+            }
+        }
 
     }
 

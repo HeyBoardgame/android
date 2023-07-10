@@ -44,7 +44,7 @@ class LoginFragment : Fragment() {
         }
 
         // 회원가입 버튼 누를 때 발생하는 이벤트
-        binding.toSignUpBtn.setOnClickListener {
+        binding.signUpBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_signUpFragment1)
         }
 
