@@ -58,11 +58,8 @@ class MatchResFragment : Fragment(R.layout.fragment_match_res) {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
-
-
-
 }

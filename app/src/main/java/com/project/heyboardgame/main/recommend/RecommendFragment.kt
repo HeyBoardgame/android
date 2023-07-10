@@ -35,6 +35,23 @@ class RecommendFragment : Fragment(), SensorEventListener {
     private var accelerometer: Sensor? = null
     private var isSensorRegistered = false // SensorEventListener 등록 여부를 저장하는 변수
 
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
+        callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime < 2500) {
+                    activity?.finish()
+                    return
+                }
+                Toast.makeText(activity, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
+                backPressedTime = System.currentTimeMillis()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,27 +61,6 @@ class RecommendFragment : Fragment(), SensorEventListener {
         currentAcceleration = SensorManager.GRAVITY_EARTH
         lastAcceleration = SensorManager.GRAVITY_EARTH
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (!isSensorRegistered) {
-            sensorManager?.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
-            isSensorRegistered = true
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if (isSensorRegistered) {
-            sensorManager?.unregisterListener(this)
-            isSensorRegistered = false
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        sensorManager?.unregisterListener(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -87,6 +83,34 @@ class RecommendFragment : Fragment(), SensorEventListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!isSensorRegistered) {
+            sensorManager?.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+            isSensorRegistered = true
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (isSensorRegistered) {
+            sensorManager?.unregisterListener(this)
+            isSensorRegistered = false
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        sensorManager?.unregisterListener(this)
+        _binding = null
+    }
+
+    // 뒤로 가기 두 번을 위해 추가
+    override fun onDetach() {
+        super.onDetach()
+        callback.remove()
+    }
+
     // 흔들림 감지 시 matchFragment로 화면 전환해주는 함수
     override fun onSensorChanged(event: SensorEvent) {
         val x = event.values[0]
@@ -106,33 +130,4 @@ class RecommendFragment : Fragment(), SensorEventListener {
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
-
-    // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (System.currentTimeMillis() - backPressedTime < 2500) {
-                    activity?.finish()
-                    return
-                }
-                Toast.makeText(activity, "한 번 더 누르면 앱이 종료됩니다.", Toast.LENGTH_SHORT).show()
-                backPressedTime = System.currentTimeMillis()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-    }
-
-    // 뒤로 가기 두 번을 위해 추가
-    override fun onDetach() {
-        super.onDetach()
-        callback.remove()
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
 }

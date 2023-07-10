@@ -17,16 +17,6 @@ class ProfileFragment : Fragment() {
     private lateinit var callback : OnBackPressedCallback
     private var backPressedTime : Long = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        return inflater.inflate(R.layout.fragment_profile, container, false)
-    }
-
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,6 +31,16 @@ class ProfileFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
     // 뒤로 가기 두 번을 위해 추가

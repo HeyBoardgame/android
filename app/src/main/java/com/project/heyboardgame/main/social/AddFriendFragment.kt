@@ -24,5 +24,10 @@ class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
 }
