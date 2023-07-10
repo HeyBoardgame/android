@@ -10,7 +10,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.FriendListRVAdapter
 import com.project.heyboardgame.adapter.FriendRequestRVAdapter
@@ -28,7 +27,6 @@ class SocialFragment : Fragment() {
     // Adapter
     private lateinit var friendListRVAdapter : FriendListRVAdapter
     private lateinit var friendRequestRVAdapter : FriendRequestRVAdapter
-    private val layoutManager: RecyclerView.LayoutManager? = null
 
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
     override fun onAttach(context: Context) {
@@ -59,7 +57,6 @@ class SocialFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         var nicknameList = mutableListOf<String>()
         nicknameList.add("닉네임1")
         nicknameList.add("닉네임2")
@@ -78,6 +75,10 @@ class SocialFragment : Fragment() {
         binding.apply {
             addFriendBtn.setOnClickListener {
                 findNavController().navigate(R.id.action_socialFragment_to_addFriendFragment)
+            }
+
+            chatListBtn.setOnClickListener {
+                findNavController().navigate(R.id.action_socialFragment_to_chatListFragment)
             }
         }
 

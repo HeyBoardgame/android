@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -42,7 +43,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // 바텀 네비게이션이 표시되는 Fragment
             if(destination.id == R.id.homeFragment || destination.id == R.id.recommendFragment || destination.id == R.id.profileFragment
-                || destination.id == R.id.socialFragment || destination.id == R.id.matchFragment || destination.id == R.id.addFriendFragment){
+                || destination.id == R.id.socialFragment || destination.id == R.id.matchFragment || destination.id == R.id.addFriendFragment
+                || destination.id == R.id.chatListFragment){
                 binding.bottomNavView.visibility = View.VISIBLE
             }
             // 바텀 네비게이션이 표시되지 않는 Fragment

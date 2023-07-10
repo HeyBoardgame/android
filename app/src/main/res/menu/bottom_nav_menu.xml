@@ -26,5 +26,4 @@
         android:icon="@drawable/icon_profile"
         android:menuCategory="secondary"/>
 
-
 </menu>
