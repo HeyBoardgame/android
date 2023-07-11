@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="채팅방 마지막 말이 엄청 길어지면 어떻게 될지 확인이 필요하기 떄문에 쓰는 글"
+            android:text="채팅방 마지막 말이 엄청 길어지면 어떻게 될지 확인이 필요하기 때문에 쓰는 글"
             android:textColor="@color/detailColor"
             android:textSize="12sp"
             android:ellipsize="end"
