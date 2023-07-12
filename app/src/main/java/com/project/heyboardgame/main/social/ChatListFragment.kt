@@ -3,6 +3,7 @@ package com.project.heyboardgame.main.social
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.ChatListRVAdapter
@@ -21,6 +22,12 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentChatListBinding.bind(view)
+
+        binding.apply {
+            addFriendBtn.setOnClickListener {
+                findNavController().navigate(R.id.action_chatListFragment_to_addFriendFragment)
+            }
+        }
 
         var nicknameList = mutableListOf<String>()
         nicknameList.add("닉네임1")

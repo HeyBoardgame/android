@@ -3,6 +3,7 @@ package com.project.heyboardgame.main.social
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.navigation.fragment.findNavController
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentAddFriendBinding
 
@@ -23,6 +24,9 @@ class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
 
             nicknameSearchView.isSubmitButtonEnabled = true // 검색창에 submit 버튼 보여줌
 
+            backBtn.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
     }
 

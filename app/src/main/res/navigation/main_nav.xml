@@ -84,11 +84,7 @@
         android:id="@+id/matchResFragment"
         android:name="com.project.heyboardgame.main.recommend.MatchResFragment"
         android:label="fragment_match_res"
-        tools:layout="@layout/fragment_match_res" >
-        <action
-            android:id="@+id/action_matchResFragment_to_detailFragment"
-            app:destination="@id/detailFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_match_res" />
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.project.heyboardgame.main.home.SearchFragment"
@@ -96,7 +92,7 @@
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.project.heyboardgame.main.DetailFragment"
+        android:name="com.project.heyboardgame.main.home.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" />
     <fragment
@@ -108,5 +104,13 @@
         android:id="@+id/chatListFragment"
         android:name="com.project.heyboardgame.main.social.ChatListFragment"
         android:label="fragment_chat_list"
-        tools:layout="@layout/fragment_chat_list" />
+        tools:layout="@layout/fragment_chat_list" >
+        <action
+            android:id="@+id/action_chatListFragment_to_addFriendFragment"
+            app:destination="@id/addFriendFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 </navigation>

@@ -6,43 +6,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.social.AddFriendFragment">
 
-    <!-- 로고 이미지 -->
-    <ImageView
+    <!-- 뒤로가기 버튼 -->
+    <ImageButton
+        android:id="@+id/backBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/logo_small"
-        app:layout_constraintBottom_toTopOf="@+id/guideline1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="15dp"/>
-
-    <!-- 채팅 리스트 버튼 -->
-    <ImageButton
-        android:id="@+id/chatListBtn"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="15dp"
         android:background="@drawable/button_transparent"
-        android:contentDescription="@string/chat_list"
+        android:contentDescription="@string/go_back"
         android:scaleType="fitXY"
-        android:src="@drawable/icon_chat_list"
+        android:src="@drawable/icon_arrow_back"
         app:layout_constraintBottom_toTopOf="@+id/guideline1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- 친구 추가 버튼 -->
-    <ImageButton
-        android:id="@+id/addFriendBtn"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/button_transparent"
-        android:contentDescription="@string/add_friend"
-        android:scaleType="fitXY"
-        android:src="@drawable/icon_add_friend"
-        app:layout_constraintBottom_toTopOf="@+id/guideline1"
-        app:layout_constraintEnd_toStartOf="@+id/chatListBtn"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout

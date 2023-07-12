@@ -1,4 +1,4 @@
-package com.project.heyboardgame.main
+package com.project.heyboardgame.main.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

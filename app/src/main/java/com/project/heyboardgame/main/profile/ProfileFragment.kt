@@ -71,19 +71,7 @@ class ProfileFragment : Fragment() {
                 findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
             }
 
-            played.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
-            }
-
             evaluated.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
-            }
-
-            recordPlay.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
-            }
-
-            analysis.setOnClickListener {
                 findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
             }
 

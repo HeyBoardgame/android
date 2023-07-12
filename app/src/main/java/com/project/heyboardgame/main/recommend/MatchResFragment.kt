@@ -34,10 +34,6 @@ class MatchResFragment : Fragment(R.layout.fragment_match_res) {
             backBtn.setOnClickListener {
                 findNavController().popBackStack()
             }
-
-            testBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_matchResFragment_to_detailFragment)
-            }
         }
 
         var matchResList = mutableListOf<GroupMatchResult>()
