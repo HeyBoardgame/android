@@ -8,7 +8,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.project.heyboardgame.R
+import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.ActivityMainBinding
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // 바텀 네비게이션이 표시되는 Fragment
             if(destination.id == R.id.homeFragment || destination.id == R.id.recommendFragment || destination.id == R.id.profileFragment
-                || destination.id == R.id.socialFragment || destination.id == R.id.matchFragment || destination.id == R.id.chatListFragment){
+                || destination.id == R.id.socialFragment || destination.id == R.id.matchFragment){
                 binding.bottomNavView.visibility = View.VISIBLE
             }
             // 바텀 네비게이션이 표시되지 않는 Fragment
