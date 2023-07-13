@@ -13,4 +13,7 @@ interface ApiService {
 
     @POST("/auths/refresh")
     fun getNewToken(@Body refreshToken : String) : Call<String>
+
+    @POST("/auths/temp-password")
+    fun requestNewPassword(@Body email : String) : Call<String>
 }

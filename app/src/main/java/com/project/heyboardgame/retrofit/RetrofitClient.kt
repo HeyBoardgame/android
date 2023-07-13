@@ -1,3 +1,6 @@
+package com.project.heyboardgame.retrofit
+
+import TokenInterceptor
 import com.project.heyboardgame.dataStore.MyDataStore
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

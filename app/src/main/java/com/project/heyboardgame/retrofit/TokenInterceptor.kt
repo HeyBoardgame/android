@@ -1,5 +1,6 @@
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.retrofit.ApiService
+import com.project.heyboardgame.retrofit.RetrofitClient
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -17,7 +18,7 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
 
         val request = requestBuilder.build()
 
-        var response = chain.proceed(request)
+        var response = chain.proceed(request) // 헤더만 붙여서 기존 요청 보내기
 
         // 만료된 accessToken으로 인증되지 않은 경우 refreshToken으로 accessToken 재발급
         if (response.code == 401) {
@@ -42,7 +43,6 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
                             .header("Authorization", "Bearer $newAccessToken")
                             .build()
 
-                        response.close()
                         response = chain.proceed(newRequest)
                     }
                 }

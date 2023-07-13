@@ -1,6 +1,5 @@
 package com.project.heyboardgame.auth
 
-import AuthViewModel
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
