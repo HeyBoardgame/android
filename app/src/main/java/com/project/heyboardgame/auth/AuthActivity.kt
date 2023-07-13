@@ -1,5 +1,6 @@
 package com.project.heyboardgame.auth
 
+import AuthViewModel
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -26,7 +27,7 @@ class AuthActivity : AppCompatActivity() {
 
         viewModel.checkAccessToken()
         viewModel.token.observe(this, Observer {
-            if(it == "empty"){ // 로그인이 안된 유저
+            if(it.isEmpty()){ // 로그인이 안된 유저
                 binding.authNavContainerView.visibility = View.VISIBLE
             } else { // 로그인이 되어있는 유저
                 val intent = Intent(this, MainActivity::class.java)

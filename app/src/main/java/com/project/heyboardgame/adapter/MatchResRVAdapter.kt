@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.heyboardgame.R
-import com.project.heyboardgame.dataModel.GroupMatchResult
+import com.project.heyboardgame.retrofit.dataModel.GroupMatchResult
 
 class MatchResRVAdapter(val context : Context, val matchResList : List<GroupMatchResult>)
     : RecyclerView.Adapter<MatchResRVAdapter.ViewHolder>() {

@@ -1,7 +1,7 @@
 package com.project.heyboardgame.auth
 
+import AuthViewModel
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentLoginBinding
-import com.project.heyboardgame.main.MainActivity
+import com.project.heyboardgame.retrofit.dataModel.LoginData
 
 
 class LoginFragment : Fragment() {
@@ -71,10 +71,18 @@ class LoginFragment : Fragment() {
 
         // 로그인 버튼 누를 때 발생하는 이벤트
         binding.loginBtn.setOnClickListener {
-            authViewModel.setAccessToken("soyeon")
-            val intent = Intent(requireContext(), MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
+            val userId = binding.emailLogin.text.toString()
+            val userPw = binding.pwdLogin.text.toString()
+
+            // 이메일과 비밀번호 유효성 검사
+            if (userId.isEmpty()) {
+                Toast.makeText(requireContext(), "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else if (userPw.isEmpty()) {
+                Toast.makeText(requireContext(), "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                val loginData = LoginData(userId, userPw)
+                authViewModel.requestLogin(loginData)
+            }
         }
     }
 

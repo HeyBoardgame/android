@@ -14,7 +14,7 @@ class App : Application() {
 
         private var instance : App? = null
 
-        fun context() : Context {
+        fun getContext() : Context {
             return instance!!.applicationContext
         }
     }
