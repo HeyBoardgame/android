@@ -36,6 +36,8 @@
     <string name="accept">친구 요청 받기</string>
     <string name="decline">친구 요청 거절</string>
     <string name="add_friend_description">닉네임을 검색해 친구 요청을 보내세요!</string>
+    <string name="forgot_pwd_success">이메일이 성공적으로 전송되었습니다.</string>
+    <string name="forgot_pwd_fail">가입되지 않은 이메일입니다.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".auth.ForgotPwdFragment">
 
+    <!-- 로딩중 -->
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:indeterminateDrawable="@drawable/custom_loading"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!-- 뒤로가기 버튼 -->
     <ImageButton
         android:id="@+id/backBtn"
@@ -69,6 +81,29 @@
             android:inputType="textEmailAddress"
             android:paddingStart="20dp"
             android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/sendPwdSuccess"
+            android:text="@string/forgot_pwd_success"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="12sp"
+            android:textColor="@color/blue"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/sendPwdFail"
+            android:text="@string/forgot_pwd_fail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="12sp"
+            android:textColor="@color/red"
+            android:visibility="gone"/>
+
 
         <!-- 임시 비밀번호 전송 버튼 -->
         <Button

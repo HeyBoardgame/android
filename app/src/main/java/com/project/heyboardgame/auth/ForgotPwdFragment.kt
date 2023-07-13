@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.project.heyboardgame.databinding.FragmentForgotPwdBinding
 
@@ -15,9 +17,12 @@ class ForgotPwdFragment : Fragment() {
     private var _binding : FragmentForgotPwdBinding? = null
     private val binding get() = _binding!!
 
+    // View Model
+    private lateinit var authViewModel: AuthViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,6 +36,36 @@ class ForgotPwdFragment : Fragment() {
         // 뒤로가기 아이콘 누를 때 발생하는 이벤트
         binding.backBtn.setOnClickListener {
             Navigation.findNavController(view).popBackStack()
+        }
+
+        binding.sendPwdBtn.setOnClickListener {
+            val email = binding.emailForgotPwd.text.toString()
+
+            if (email.isEmpty()) {
+                Toast.makeText(requireContext(), "이메일을 입력해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                // 로딩 화면 표시
+                binding.loading.visibility = View.VISIBLE
+
+                authViewModel.requestNewPassword(email,
+                    onSuccess = {
+                        binding.sendPwdSuccess.visibility = View.VISIBLE
+                        binding.sendPwdFail.visibility = View.GONE
+                        // 로딩 화면 숨김
+                        binding.loading.visibility = View.GONE
+                    },
+                    onFailure = {
+                        binding.sendPwdSuccess.visibility = View.GONE
+                        binding.sendPwdFail.visibility = View.VISIBLE
+                        // 로딩 화면 숨김
+                        binding.loading.visibility = View.GONE
+                    },
+                    onErrorAction = {
+                        // 로딩 화면 숨김
+                        binding.loading.visibility = View.GONE
+                    }
+                )
+            }
         }
     }
 

@@ -10,4 +10,6 @@
     <color name="greyPressed">#BFBFBF</color>
     <color name="lightGrey">#DADADA</color>
     <color name="transparent">#00ff0000</color>
+    <color name="red">#D0312D</color>
+    <color name="blue">#187BCD</color>
 </resources>
