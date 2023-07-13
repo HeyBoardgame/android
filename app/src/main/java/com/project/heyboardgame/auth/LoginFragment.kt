@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentLoginBinding
@@ -24,6 +25,9 @@ class LoginFragment : Fragment() {
     // View Binding
     private var _binding : FragmentLoginBinding? = null
     private val binding get() = _binding!!
+
+    // View Model
+    private lateinit var authViewModel: AuthViewModel
 
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
     override fun onAttach(context: Context) {
@@ -43,6 +47,7 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
     }
 
@@ -66,8 +71,9 @@ class LoginFragment : Fragment() {
 
         // 로그인 버튼 누를 때 발생하는 이벤트
         binding.loginBtn.setOnClickListener {
+            authViewModel.setAccessToken("soyeon")
             val intent = Intent(requireContext(), MainActivity::class.java)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
     }
