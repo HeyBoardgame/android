@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.project.heyboardgame.App
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.main.MainActivity
-import com.project.heyboardgame.retrofit.ApiService
+import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
 import com.project.heyboardgame.retrofit.dataModel.LoginData
 import com.project.heyboardgame.retrofit.dataModel.LoginResult
@@ -26,9 +26,9 @@ class AuthViewModel : ViewModel() {
     val token : LiveData<String>
         get() = _token
     // DataStore
-    private val myDataStore: MyDataStore = MyDataStore()
+    private val myDataStore : MyDataStore = MyDataStore()
     // Api
-    private val apiService: ApiService = RetrofitClient.getInstance(myDataStore).create(ApiService::class.java)
+    private val api : Api = RetrofitClient.getInstance(myDataStore).create(Api::class.java)
 
 
     fun checkAccessToken() = viewModelScope.launch {
@@ -40,7 +40,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun requestLogin(loginData: LoginData) {
-        val call = apiService.requestLogin(loginData)
+        val call = api.requestLogin(loginData)
         call.enqueue(object : retrofit2.Callback<LoginResult> {
             override fun onResponse(call: Call<LoginResult>, response: Response<LoginResult>) {
                 if (response.isSuccessful) {
@@ -75,6 +75,23 @@ class AuthViewModel : ViewModel() {
         })
     }
 
+    fun requestNewPassword(email: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) {
+        val call = api.requestNewPassword(email)
+        call.enqueue(object : retrofit2.Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
+                if (response.isSuccessful) {
+                    onSuccess.invoke()
+                } else {
+                    onFailure.invoke()
+                }
+            }
 
+            override fun onFailure(call: Call<String>, t: Throwable) { // 네트워크 오류 처리
+                onErrorAction.invoke()
+                val errorMessage = "네트워크 오류가 발생했습니다."
+                Toast.makeText(App.getContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 
 }

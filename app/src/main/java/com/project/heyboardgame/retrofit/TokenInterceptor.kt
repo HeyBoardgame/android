@@ -1,5 +1,5 @@
 import com.project.heyboardgame.dataStore.MyDataStore
-import com.project.heyboardgame.retrofit.ApiService
+import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -25,10 +25,10 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
             val refreshToken = runBlocking { dataStore.getRefreshToken() }
 
             if (refreshToken.isNotEmpty()) {
-                val apiService = RetrofitClient.getInstance(dataStore).create(ApiService::class.java)
+                val api = RetrofitClient.getInstance(dataStore).create(Api::class.java)
 
                 // refreshToken을 사용하여 accessToken 재발급하는 API 요청 수행
-                val refreshResponse = runBlocking { apiService.getNewToken(refreshToken).execute() }
+                val refreshResponse = runBlocking { api.getNewToken(refreshToken).execute() }
 
                 if (refreshResponse.isSuccessful) {
                     // 재발급된 accessToken 가져오기
@@ -43,6 +43,7 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
                             .header("Authorization", "Bearer $newAccessToken")
                             .build()
 
+                        response.close()
                         response = chain.proceed(newRequest)
                     }
                 }
