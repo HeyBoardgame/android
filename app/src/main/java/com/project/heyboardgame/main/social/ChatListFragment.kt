@@ -27,6 +27,10 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
             addFriendBtn.setOnClickListener {
                 findNavController().navigate(R.id.action_chatListFragment_to_addFriendFragment)
             }
+
+            backBtn.setOnClickListener {
+                findNavController().popBackStack()
+            }
         }
 
         var nicknameList = mutableListOf<String>()
