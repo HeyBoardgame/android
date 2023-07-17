@@ -82,6 +82,7 @@
             android:paddingStart="20dp"
             android:textSize="12sp" />
 
+        <!-- 전송 성공 메세지 -->
         <TextView
             android:id="@+id/sendPwdSuccess"
             android:text="@string/forgot_pwd_success"
@@ -93,6 +94,7 @@
             android:textColor="@color/blue"
             android:visibility="gone"/>
 
+        <!-- 전송 실패 메세지 -->
         <TextView
             android:id="@+id/sendPwdFail"
             android:text="@string/forgot_pwd_fail"
@@ -103,7 +105,6 @@
             android:textSize="12sp"
             android:textColor="@color/red"
             android:visibility="gone"/>
-
 
         <!-- 임시 비밀번호 전송 버튼 -->
         <Button

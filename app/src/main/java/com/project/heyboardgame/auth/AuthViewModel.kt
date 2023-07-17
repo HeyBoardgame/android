@@ -15,6 +15,7 @@ import com.project.heyboardgame.retrofit.dataModel.LoginData
 import com.project.heyboardgame.retrofit.dataModel.LoginResult
 import kotlinx.coroutines.launch
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
@@ -47,8 +48,8 @@ class AuthViewModel : ViewModel() {
                     val loginResult = response.body()
                     loginResult?.let {
                         // LoginResult에서 accessToken과 refreshToken 가져오기
-                        val accessToken = it.accessToken
-                        val refreshToken = it.refreshToken
+                        val accessToken = it.result.accessToken
+                        val refreshToken = it.result.refreshToken
 
                         // DataStore에 저장
                         viewModelScope.launch {
@@ -77,8 +78,8 @@ class AuthViewModel : ViewModel() {
 
     fun requestNewPassword(email: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) {
         val call = api.requestNewPassword(email)
-        call.enqueue(object : retrofit2.Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     onSuccess.invoke()
                 } else {
@@ -86,8 +87,30 @@ class AuthViewModel : ViewModel() {
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) { // 네트워크 오류 처리
+            override fun onFailure(call: Call<Void>, t: Throwable) { // 네트워크 오류 처리
                 onErrorAction.invoke()
+                val errorMessage = "네트워크 오류가 발생했습니다."
+                Toast.makeText(App.getContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    // 이메일 중복 확인 함수
+    fun checkDuplicateEmail(email : String, onSuccess: () -> Unit, onFailure: () -> Unit) {
+        val call = api.checkDuplicateEmail(email)
+        call.enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    // 이메일 중복이 아닌 경우
+                    onSuccess.invoke()
+                } else {
+                    // 이메일 중복인 경우
+                    onFailure.invoke()
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                // 네트워크 오류 처리
                 val errorMessage = "네트워크 오류가 발생했습니다."
                 Toast.makeText(App.getContext(), errorMessage, Toast.LENGTH_SHORT).show()
             }
