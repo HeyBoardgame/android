@@ -1,5 +1,4 @@
-package com.project.heyboardgame.retrofit.dataModel
-
+package com.project.heyboardgame.dataModel
 import com.google.gson.annotations.SerializedName
 
 

@@ -7,7 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.MatchResRVAdapter
-import com.project.heyboardgame.retrofit.dataModel.GroupMatchResult
+import com.project.heyboardgame.dataModel.GroupMatchResult
 import com.project.heyboardgame.databinding.FragmentMatchResBinding
 
 

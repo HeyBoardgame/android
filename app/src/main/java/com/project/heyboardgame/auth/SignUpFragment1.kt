@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import com.project.heyboardgame.R
+import androidx.navigation.fragment.findNavController
+import com.project.heyboardgame.dataModel.SignUpData
 import com.project.heyboardgame.databinding.FragmentSignUp1Binding
 
 
@@ -70,9 +70,16 @@ class SignUpFragment1 : Fragment() {
 
         // 다음 단계 버튼 누를 때 발생하는 이벤트
         binding.nextBtn.setOnClickListener {
-            if (!isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && !isEmailDuplicated) {
-                // 모든 에러가 없는 경우에만 다음 단계로 이동
-                Navigation.findNavController(view).navigate(R.id.action_signUpFragment1_to_signUpFragment2)
+            if (!isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid) {
+                val email = binding.email.text.toString()
+                val password = binding.password.text.toString()
+                val nickname = binding.nickname.text.toString()
+                val id = listOf<String>()
+
+                val signUpData = SignUpData(email, password, nickname, id)
+
+                val action = SignUpFragment1Directions.actionSignUpFragment1ToSignUpFragment2(signUpData)
+                findNavController().navigate(action)
             }
         }
 
@@ -192,7 +199,7 @@ class SignUpFragment1 : Fragment() {
 
     // 다음 버튼 상태 업데이트
     private fun updateNextButtonState() {
-        binding.nextBtn.isEnabled = isInputValid() && !isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && !isEmailDuplicated
+        binding.nextBtn.isEnabled = isInputValid() && !isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid
     }
 
     override fun onDestroyView() {

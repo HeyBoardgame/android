@@ -11,8 +11,8 @@ import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.main.MainActivity
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
-import com.project.heyboardgame.retrofit.dataModel.LoginData
-import com.project.heyboardgame.retrofit.dataModel.LoginResult
+import com.project.heyboardgame.dataModel.LoginData
+import com.project.heyboardgame.dataModel.LoginResult
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,7 +68,6 @@ class AuthViewModel : ViewModel() {
                     Toast.makeText(App.getContext(), errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
-
             override fun onFailure(call: Call<LoginResult>, t: Throwable) { // 네트워크 오류 처리
                 val errorMessage = "네트워크 오류가 발생했습니다."
                 Toast.makeText(App.getContext(), errorMessage, Toast.LENGTH_SHORT).show()
@@ -86,7 +85,6 @@ class AuthViewModel : ViewModel() {
                     onFailure.invoke()
                 }
             }
-
             override fun onFailure(call: Call<Void>, t: Throwable) { // 네트워크 오류 처리
                 onErrorAction.invoke()
                 val errorMessage = "네트워크 오류가 발생했습니다."
@@ -108,7 +106,6 @@ class AuthViewModel : ViewModel() {
                     onFailure.invoke()
                 }
             }
-
             override fun onFailure(call: Call<Void>, t: Throwable) {
                 // 네트워크 오류 처리
                 val errorMessage = "네트워크 오류가 발생했습니다."

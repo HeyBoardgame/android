@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.project.heyboardgame.R
-import com.project.heyboardgame.retrofit.dataModel.BoardgameList
+import com.project.heyboardgame.dataModel.BoardgameList
 
 class HomeRVAdapter(val context : Context, val boardgameList : List<BoardgameList>)
     : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {

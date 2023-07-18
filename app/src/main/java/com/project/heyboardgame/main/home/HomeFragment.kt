@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.HomeRVAdapter
-import com.project.heyboardgame.retrofit.dataModel.BoardgameList
+import com.project.heyboardgame.dataModel.BoardgameList
 import com.project.heyboardgame.databinding.FragmentHomeBinding
 
 

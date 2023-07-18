@@ -1,4 +1,4 @@
-package com.project.heyboardgame.retrofit.dataModel
+package com.project.heyboardgame.dataModel
 
 data class GroupMatchResult (
     val gameImg : String,

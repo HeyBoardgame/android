@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentLoginBinding
-import com.project.heyboardgame.retrofit.dataModel.LoginData
+import com.project.heyboardgame.dataModel.LoginData
 
 
 class LoginFragment : Fragment() {
