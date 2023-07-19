@@ -70,11 +70,11 @@ class SignUpFragment1 : Fragment() {
 
         // 다음 단계 버튼 누를 때 발생하는 이벤트
         binding.nextBtn.setOnClickListener {
-            if (!isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid) {
+            if (!isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && !isEmailDuplicated) {
                 val email = binding.email.text.toString()
                 val password = binding.password.text.toString()
                 val nickname = binding.nickname.text.toString()
-                val id = listOf<String>()
+                val id = listOf<Int>()
 
                 val signUpData = SignUpData(email, password, nickname, id)
 
@@ -199,7 +199,7 @@ class SignUpFragment1 : Fragment() {
 
     // 다음 버튼 상태 업데이트
     private fun updateNextButtonState() {
-        binding.nextBtn.isEnabled = isInputValid() && !isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid
+        binding.nextBtn.isEnabled = isInputValid() && !isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && !isEmailDuplicated
     }
 
     override fun onDestroyView() {

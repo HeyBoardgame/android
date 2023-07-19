@@ -6,8 +6,10 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val accessToken = runBlocking { dataStore.getAccessToken() }
+
+    override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
+
+        val accessToken = dataStore.getAccessToken()
 
         val requestBuilder = chain.request().newBuilder()
 
@@ -22,13 +24,13 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
 
         // 만료된 accessToken으로 인증되지 않은 경우 refreshToken으로 accessToken 재발급
         if (response.code == 401) {
-            val refreshToken = runBlocking { dataStore.getRefreshToken() }
+            val refreshToken = dataStore.getRefreshToken()
 
             if (refreshToken.isNotEmpty()) {
                 val api = RetrofitClient.getInstance(dataStore).create(Api::class.java)
 
                 // refreshToken을 사용하여 accessToken 재발급하는 API 요청 수행
-                val refreshResponse = runBlocking { api.getNewToken(refreshToken).execute() }
+                val refreshResponse = api.getNewToken(refreshToken)
 
                 if (refreshResponse.isSuccessful) {
                     // 재발급된 accessToken 가져오기
@@ -36,7 +38,7 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
 
                     if (newAccessToken != null) {
                         // 재발급된 accessToken을 dataStore에 저장
-                        runBlocking { dataStore.setAccessToken(newAccessToken) }
+                        dataStore.setAccessToken(newAccessToken)
 
                         // 재발급된 accessToken으로 기존 요청 다시 실행
                         val newRequest = request.newBuilder()
@@ -50,6 +52,6 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
             }
         }
 
-        return response
+        response
     }
 }

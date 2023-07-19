@@ -24,8 +24,8 @@ class SignUpRVAdapter(val context : Context, val genreList : List<SignUpItem>)
     }
 
     // 선택된 장르들의 ID를 반환하는 함수
-    fun getSelectedItems(): List<String> {
-        val selectedItems = mutableListOf<String>()
+    fun getSelectedItems(): List<Int> {
+        val selectedItems = mutableListOf<Int>()
         for (item in genreList) {
             if (item.isClicked) {
                 selectedItems.add(item.getItemId())

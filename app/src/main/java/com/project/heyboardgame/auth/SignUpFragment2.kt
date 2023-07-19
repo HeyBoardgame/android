@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,8 +15,6 @@ import com.project.heyboardgame.adapter.SignUpRVAdapter
 import com.project.heyboardgame.dataModel.SignUpData
 import com.project.heyboardgame.dataModel.SignUpItem
 import com.project.heyboardgame.databinding.FragmentSignUp2Binding
-import timber.log.Timber
-
 
 class SignUpFragment2 : Fragment() {
 
@@ -24,10 +23,12 @@ class SignUpFragment2 : Fragment() {
     private val binding get() = _binding!!
     // Adapter
     private lateinit var signUpRVAdapter : SignUpRVAdapter
+    // View Model
+    private lateinit var authViewModel: AuthViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,23 +41,23 @@ class SignUpFragment2 : Fragment() {
 
         // safe args 사용해서 SignUpFragment1에서 email, password, nickname 받아오기
         val args: SignUpFragment2Args by navArgs()
-        val signUpData: SignUpData = args.signUpData
+        val signUpTmpData: SignUpData = args.signUpData
 
-        val email = signUpData.email
-        val password = signUpData.password
-        val nickname = signUpData.nickname
+        val email = signUpTmpData.email
+        val password = signUpTmpData.password
+        val nickname = signUpTmpData.nickname
 
         Toast.makeText(requireContext(), "${email}, ${password}, ${nickname}", Toast.LENGTH_SHORT).show()
 
         val genreList = mutableListOf<SignUpItem>()
-        genreList.add(SignUpItem(R.drawable.icon_strategy, "전략", "1", false))
-        genreList.add(SignUpItem(R.drawable.icon_party, "파티", "2", false))
-        genreList.add(SignUpItem(R.drawable.icon_simple, "단순", "3", false))
-        genreList.add(SignUpItem(R.drawable.icon_card, "카드", "4", false))
-        genreList.add(SignUpItem(R.drawable.icon_family, "가족", "5", false))
-        genreList.add(SignUpItem(R.drawable.icon_kids, "키즈", "6", false))
-        genreList.add(SignUpItem(R.drawable.icon_war, "전쟁", "7", false))
-        genreList.add(SignUpItem(R.drawable.icon_world, "세계관", "8", false))
+        genreList.add(SignUpItem(R.drawable.icon_strategy, "전략", 1, false))
+        genreList.add(SignUpItem(R.drawable.icon_party, "파티", 2, false))
+        genreList.add(SignUpItem(R.drawable.icon_simple, "단순", 3, false))
+        genreList.add(SignUpItem(R.drawable.icon_card, "카드", 4, false))
+        genreList.add(SignUpItem(R.drawable.icon_family, "가족", 5, false))
+        genreList.add(SignUpItem(R.drawable.icon_kids, "키즈", 6, false))
+        genreList.add(SignUpItem(R.drawable.icon_war, "전쟁", 7, false))
+        genreList.add(SignUpItem(R.drawable.icon_world, "세계관", 8, false))
 
         signUpRVAdapter = SignUpRVAdapter(requireContext(), genreList)
         binding.genreListRV.adapter = signUpRVAdapter
@@ -71,8 +72,19 @@ class SignUpFragment2 : Fragment() {
         binding.signUpBtn.setOnClickListener {
             val selectedItems = signUpRVAdapter.getSelectedItems()
             val signUpData = SignUpData(email, password, nickname, selectedItems)
-            Timber.d("$signUpData")
-//            Navigation.findNavController(view).navigate(R.id.action_signUpFragment2_to_loginFragment)
+            if (selectedItems.size < 3) {
+                Toast.makeText(requireContext(), "3개 이상 골라주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                authViewModel.requestRegister(signUpData,
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "회원 가입 성공!", Toast.LENGTH_SHORT).show()
+                        Navigation.findNavController(view).navigate(R.id.action_signUpFragment2_to_loginFragment)
+                    },
+                    onFailure = {
+                        Toast.makeText(requireContext(), "회원 가입 실패", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
         }
     }
 
@@ -80,5 +92,4 @@ class SignUpFragment2 : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }
