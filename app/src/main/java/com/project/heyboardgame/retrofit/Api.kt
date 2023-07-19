@@ -1,5 +1,6 @@
 package com.project.heyboardgame.retrofit
 
+import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.LoginData
 import com.project.heyboardgame.dataModel.LoginResult
 import com.project.heyboardgame.dataModel.SignUpData
@@ -35,6 +36,6 @@ interface Api {
     suspend fun requestUnregister() : Response<Void>
 
     @PATCH("/auths/new-password") // 비밀번호 재설정
-    suspend fun requestNewPassword() : Response<Void>
+    suspend fun requestNewPassword(@Body userInfo: ChangePasswordData) : Response<Void>
 
 }

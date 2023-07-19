@@ -14,7 +14,6 @@ import com.project.heyboardgame.main.MainViewModel
 
 
 class UnregisterFragment : Fragment(R.layout.fragment_unregister) {
-
     // View Binding
     private var _binding : FragmentUnregisterBinding? = null
     private val binding get() = _binding!!
@@ -24,7 +23,6 @@ class UnregisterFragment : Fragment(R.layout.fragment_unregister) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

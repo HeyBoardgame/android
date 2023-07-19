@@ -91,6 +91,9 @@ class ProfileFragment : Fragment() {
                     }
                 )
             }
+            changePassword.setOnClickListener {
+                findNavController().navigate(R.id.action_profileFragment_to_changePwdFragment)
+            }
             unregister.setOnClickListener {
                 findNavController().navigate(R.id.action_profileFragment_to_unregisterFragment)
             }

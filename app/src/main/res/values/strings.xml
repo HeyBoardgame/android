@@ -52,6 +52,10 @@
     <string name="unregister_guideline3">3. 탈퇴 후 동일한 메일로 재가입이 가능하지만, 탈퇴한 이전 계정과 연동되지 않습니다.</string>
     <string name="unregister_guideline4">4. 구글 로그인 회원의 경우, 모든 개인 정보가 삭제되며, 같은 구글 아이디로 재가입 시 신규 회원으로 가입됩니다.</string>
     <string name="unregister_guideline5">5. "회원 탈퇴" 버튼을 누르시면 회원 탈퇴가 완료됩니다. 탈퇴하기를 누르시면 되돌릴 수 없으니 신중히 눌러주세요.</string>
+    <string name="change_password_title">비밀번호 변경</string>
+    <string name="current_password">현재 비밀번호</string>
+    <string name="new_password">새 비밀번호</string>
+    <string name="new_password_check">새 비밀번호 확인</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

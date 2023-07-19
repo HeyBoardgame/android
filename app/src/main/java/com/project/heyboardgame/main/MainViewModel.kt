@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
@@ -19,32 +20,46 @@ class MainViewModel : ViewModel() {
     // Api
     private val api : Api = RetrofitClient.getInstance(myDataStore).create(Api::class.java)
 
+    // 로그아웃 함수
     fun requestLogout(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestLogout()
-            if (response.isSuccessful) { // 로그아웃 성공
+            if (response.isSuccessful) {
                 myDataStore.setAccessToken("")
                 myDataStore.setRefreshToken("")
                 onSuccess.invoke()
-            } else { // 로그아웃 실패
+            } else {
                 onFailure.invoke()
             }
-        } catch(e: Exception) { // 네트워크 오류
+        } catch(e: Exception) {
             onErrorAction.invoke()
         }
     }
-
+    // 회원 탈퇴 함수
     fun requestUnregister(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestUnregister()
-            if (response.isSuccessful) { // 회원 탈퇴 성공
+            if (response.isSuccessful) {
                 myDataStore.setAccessToken("")
                 myDataStore.setRefreshToken("")
                 onSuccess.invoke()
-            } else { // 회원 탈퇴 실패
+            } else {
                 onFailure.invoke()
             }
-        } catch(e: Exception) { // 네트워크 오류
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 비밀번호 변경 함수
+    fun requestNewPassword(changePasswordData: ChangePasswordData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestNewPassword(changePasswordData)
+            if (response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
             onErrorAction.invoke()
         }
     }
