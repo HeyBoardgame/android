@@ -94,6 +94,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_color"
                 android:textSize="12sp"
+                android:textStyle="bold"
                 android:enabled="false"/>
 
         </LinearLayout>
@@ -250,6 +251,7 @@
             android:background="@drawable/button_color"
             android:text="@string/next"
             android:textSize="15sp"
+            android:textStyle="bold"
             android:enabled="false"
             android:layout_marginTop="10dp"/>
 

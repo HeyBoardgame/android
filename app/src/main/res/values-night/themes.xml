@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/mainColor</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:statusBarColor">@color/mainColor</item>
-        <item name="android:fontFamily">@font/cafesurround</item>
+        <item name="android:fontFamily">@font/dovemayo_gothic</item>
     </style>
 
     <style name="Theme.Heyboardgame" parent="Base.Theme.Heyboardgame" />

@@ -58,9 +58,9 @@ class AuthViewModel : ViewModel() {
         }
     }
     // 임시 비밀번호 발급 요청 함수
-    fun requestNewPassword(email: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun requestTempPassword(email: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
-            val response = api.requestNewPassword(email)
+            val response = api.requestTempPassword(email)
             if (response.isSuccessful) { // 요청 성공
                 onSuccess.invoke()
             } else { // 요청 실패

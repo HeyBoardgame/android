@@ -67,7 +67,8 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_color"
             android:text="@string/login"
-            android:textSize="15sp"/>
+            android:textSize="15sp"
+            android:textStyle="bold"/>
 
         <!-- 구글 로그인 버튼 -->
         <Button
@@ -78,7 +79,8 @@
             android:background="@drawable/button_white"
             android:drawableStart="@drawable/logo_google"
             android:paddingHorizontal="80dp"
-            android:text="@string/google_login" />
+            android:text="@string/google_login"
+            android:textStyle="bold"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -91,6 +93,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_transparent"
                 android:text="@string/find_password"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_transparent"
                 android:text="@string/sign_up"
+                android:textStyle="bold"
                 android:textColor="@color/mainColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

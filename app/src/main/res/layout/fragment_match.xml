@@ -60,6 +60,7 @@
             android:background="@drawable/button_color"
             android:paddingHorizontal="30dp"
             android:text="@string/group_recommend"
+            android:textStyle="bold"
             android:layout_marginBottom="10dp"/>
 
         <!-- 다시 매칭하기 버튼 -->
@@ -69,7 +70,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_white"
             android:paddingHorizontal="30dp"
-            android:text="@string/rematch" />
+            android:text="@string/rematch"
+            android:textStyle="bold"/>
 
     </LinearLayout>
 

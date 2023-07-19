@@ -48,7 +48,7 @@ class ForgotPwdFragment : Fragment() {
                 // 로딩 화면 표시
                 binding.loading.visibility = View.VISIBLE
 
-                authViewModel.requestNewPassword(email,
+                authViewModel.requestTempPassword(email,
                     onSuccess = {
                         binding.sendPwdSuccess.visibility = View.VISIBLE
                         binding.sendPwdFail.visibility = View.GONE

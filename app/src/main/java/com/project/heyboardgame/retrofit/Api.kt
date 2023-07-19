@@ -20,7 +20,7 @@ interface Api {
     suspend fun getNewToken(@Body refreshToken : String) : Response<String>
 
     @GET("/auths/temp-password") // 임시 비밀번호 발급
-    suspend fun requestNewPassword(@Query("email") email: String): Response<Void>
+    suspend fun requestTempPassword(@Query("email") email: String): Response<Void>
 
     @GET("/auths/email-duplicate") // 이메일 중복 확인
     suspend fun checkDuplicateEmail(@Query("email") email: String): Response<Void>
@@ -33,5 +33,8 @@ interface Api {
 
     @DELETE("/auths/unregister") // 회원 탈퇴
     suspend fun requestUnregister() : Response<Void>
+
+    @PATCH("/auths/new-password") // 비밀번호 재설정
+    suspend fun requestNewPassword() : Response<Void>
 
 }
