@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.project.heyboardgame.App
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.SignUpRVAdapter
 import com.project.heyboardgame.dataModel.SignUpData
@@ -77,11 +78,14 @@ class SignUpFragment2 : Fragment() {
             } else {
                 authViewModel.requestRegister(signUpData,
                     onSuccess = {
-                        Toast.makeText(requireContext(), "회원 가입 성공!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
                         Navigation.findNavController(view).navigate(R.id.action_signUpFragment2_to_loginFragment)
                     },
                     onFailure = {
                         Toast.makeText(requireContext(), "회원 가입 실패", Toast.LENGTH_SHORT).show()
+                    },
+                    onErrorAction = {
+                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 )
             }

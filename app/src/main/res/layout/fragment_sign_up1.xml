@@ -155,7 +155,20 @@
             android:hint="@string/password"
             android:inputType="textPassword"
             android:paddingStart="20dp"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:maxLength="100"/>
+
+        <!-- 비밀번호 최소 길이 메세지 -->
+        <TextView
+            android:id="@+id/passwordMinLength"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/password_min_length"
+            android:textColor="@color/red"
+            android:textSize="11sp"
+            android:visibility="gone"/>
 
         <!-- 비밀번호 확인 타이틀 -->
         <TextView
@@ -214,7 +227,8 @@
             android:hint="@string/nickname"
             android:inputType="text"
             android:paddingStart="20dp"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:maxLength="10"/>
 
         <!-- 닉네임 형식 에러 -->
         <TextView

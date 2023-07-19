@@ -44,6 +44,14 @@
     <string name="nickname_invalid">닉네임을 다시 입력해주세요. (특수문자, 띄어쓰기, 자음, 모음 불가)</string>
     <string name="password_check_fail">비밀번호가 일치하지 않습니다.</string>
     <string name="email_invalid">이메일 형식이 맞지 않습니다.</string>
+    <string name="password_min_length">최소 8자 이상 입력해주세요.</string>
+    <string name="unregister_title">회원 탈퇴</string>
+    <string name="unregister_guideline_title">&lt; 탈퇴 안내 및 유의사항 &gt;</string>
+    <string name="unregister_guideline1">1. 탈퇴 시 개인 정보는 일괄적으로 삭제되며, 복구할 수 없습니다.</string>
+    <string name="unregister_guideline2">2. 찜한 보드게임, 평가한 보드게임, 친구 목록, 채팅 목록 등 모두 삭제되며, 삭제된 데이터는 복구할 수 없습니다.</string>
+    <string name="unregister_guideline3">3. 탈퇴 후 동일한 메일로 재가입이 가능하지만, 탈퇴한 이전 계정과 연동되지 않습니다.</string>
+    <string name="unregister_guideline4">4. 구글 로그인 회원의 경우, 모든 개인 정보가 삭제되며, 같은 구글 아이디로 재가입 시 신규 회원으로 가입됩니다.</string>
+    <string name="unregister_guideline5">5. "회원 탈퇴" 버튼을 누르시면 회원 탈퇴가 완료됩니다. 탈퇴하기를 누르시면 되돌릴 수 없으니 신중히 눌러주세요.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

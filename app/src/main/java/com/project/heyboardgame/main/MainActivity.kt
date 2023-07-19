@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.checkAccessToken()
         // 네비게이션 연결
         navHostFragment = supportFragmentManager.findFragmentById(R.id.mainNavContainerView) as NavHostFragment
         navController = navHostFragment.navController

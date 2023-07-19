@@ -327,7 +327,7 @@
 
                 <!-- 회원 탈퇴 -->
                 <LinearLayout
-                    android:id="@+id/deleteAccount"
+                    android:id="@+id/unregister"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="3dp"

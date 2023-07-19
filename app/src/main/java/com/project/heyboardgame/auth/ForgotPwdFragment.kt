@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.project.heyboardgame.App
 import com.project.heyboardgame.databinding.FragmentForgotPwdBinding
 
 
@@ -63,6 +64,7 @@ class ForgotPwdFragment : Fragment() {
                     onErrorAction = {
                         // 로딩 화면 숨김
                         binding.loading.visibility = View.GONE
+                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -73,5 +75,4 @@ class ForgotPwdFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 }

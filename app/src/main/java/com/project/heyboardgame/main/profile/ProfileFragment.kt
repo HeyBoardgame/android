@@ -1,6 +1,7 @@
 package com.project.heyboardgame.main.profile
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.BadgeRVAdapter
+import com.project.heyboardgame.auth.AuthActivity
 import com.project.heyboardgame.databinding.FragmentProfileBinding
+import com.project.heyboardgame.main.MainViewModel
 
 
 class ProfileFragment : Fragment() {
@@ -26,6 +30,8 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     // Adapter
     private lateinit var badgeRVAdapter: BadgeRVAdapter
+    // View Model
+    private lateinit var mainViewModel: MainViewModel
 
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
     override fun onAttach(context: Context) {
@@ -45,6 +51,7 @@ class ProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
     }
 
@@ -67,18 +74,32 @@ class ProfileFragment : Fragment() {
         binding.badgeRV.layoutManager = GridLayoutManager(requireContext(), 3)
 
         binding.apply {
-            favorite.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
-            }
+            logout.setOnClickListener {
+                mainViewModel.requestLogout(
+                    onSuccess = {
+                        val intent = Intent(requireContext(), AuthActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
 
-            evaluated.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
+                        Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                    },
+                    onFailure = {
+                        Toast.makeText(requireContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show()
+                    },
+                    onErrorAction = {
+                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
-
-            challenge.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
+            unregister.setOnClickListener {
+                findNavController().navigate(R.id.action_profileFragment_to_unregisterFragment)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     // 뒤로 가기 두 번을 위해 추가
@@ -86,6 +107,4 @@ class ProfileFragment : Fragment() {
         super.onDetach()
         callback.remove()
     }
-
-
 }

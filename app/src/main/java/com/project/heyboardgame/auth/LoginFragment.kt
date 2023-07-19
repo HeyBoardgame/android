@@ -1,6 +1,7 @@
 package com.project.heyboardgame.auth
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,9 +11,13 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import com.project.heyboardgame.App
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentLoginBinding
 import com.project.heyboardgame.dataModel.LoginData
+import com.project.heyboardgame.main.MainActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
 class LoginFragment : Fragment() {
@@ -80,7 +85,21 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
             } else {
                 val loginData = LoginData(userId, userPw)
-                authViewModel.requestLogin(loginData)
+                authViewModel.requestLogin(loginData,
+                    onSuccess = {
+                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+
+                        Toast.makeText(requireContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+                    },
+                    onFailure = {
+                        Toast.makeText(requireContext(), "아이디 또는 비밀번호를 다시 한 번 확인해주세요.", Toast.LENGTH_SHORT).show()
+                    },
+                    onErrorAction = {
+                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
         }
     }
@@ -94,5 +113,4 @@ class LoginFragment : Fragment() {
         super.onDetach()
         callback.remove()
     }
-
 }

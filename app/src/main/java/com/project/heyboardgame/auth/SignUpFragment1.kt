@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -26,6 +27,7 @@ class SignUpFragment1 : Fragment() {
     private var isNicknameInvalid = false
     private var isEmailInvalid = false
     private var isEmailDuplicated = false
+    private var isPasswordValid = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,13 +66,16 @@ class SignUpFragment1 : Fragment() {
                     binding.emailCheckFail.visibility = View.VISIBLE
                     isEmailDuplicated = true
                     updateNextButtonState()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                 }
             )
         }
 
         // 다음 단계 버튼 누를 때 발생하는 이벤트
         binding.nextBtn.setOnClickListener {
-            if (!isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && !isEmailDuplicated) {
+            if (!isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && isPasswordValid && !isEmailDuplicated) {
                 val email = binding.email.text.toString()
                 val password = binding.password.text.toString()
                 val nickname = binding.nickname.text.toString()
@@ -108,6 +113,13 @@ class SignUpFragment1 : Fragment() {
     private val passwordTextWatcher = object : TextWatcher {
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             validatePasswordCheck()
+            if (binding.password.text.toString().length < 8) {
+                binding.passwordMinLength.visibility = View.VISIBLE
+                isPasswordValid = false
+            } else {
+                binding.passwordMinLength.visibility = View.GONE
+                isPasswordValid = true
+            }
         }
         override fun afterTextChanged(s: Editable?) {
             validatePasswordCheck()
@@ -199,7 +211,7 @@ class SignUpFragment1 : Fragment() {
 
     // 다음 버튼 상태 업데이트
     private fun updateNextButtonState() {
-        binding.nextBtn.isEnabled = isInputValid() && !isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && !isEmailDuplicated
+        binding.nextBtn.isEnabled = isInputValid() && !isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && isPasswordValid && !isEmailDuplicated
     }
 
     override fun onDestroyView() {
