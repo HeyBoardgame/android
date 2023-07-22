@@ -1,15 +1,15 @@
+package com.project.heyboardgame.retrofit
+
 import com.project.heyboardgame.dataStore.MyDataStore
-import com.project.heyboardgame.retrofit.Api
-import com.project.heyboardgame.retrofit.RetrofitClient
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import timber.log.Timber
 
 class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
 
-    override fun intercept(chain: Interceptor.Chain): Response = runBlocking {
-
-        val accessToken = dataStore.getAccessToken()
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val accessToken = runBlocking { dataStore.getAccessToken() }
 
         val requestBuilder = chain.request().newBuilder()
 
@@ -24,34 +24,37 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
 
         // 만료된 accessToken으로 인증되지 않은 경우 refreshToken으로 accessToken 재발급
         if (response.code == 401) {
-            val refreshToken = dataStore.getRefreshToken()
+            val refreshToken = runBlocking { dataStore.getRefreshToken() }
 
             if (refreshToken.isNotEmpty()) {
                 val api = RetrofitClient.getInstance(dataStore).create(Api::class.java)
 
                 // refreshToken을 사용하여 accessToken 재발급하는 API 요청 수행
-                val refreshResponse = api.getNewToken(refreshToken)
+                val refreshResponse = runBlocking { api.getNewToken(refreshToken) }
 
                 if (refreshResponse.isSuccessful) {
                     // 재발급된 accessToken 가져오기
-                    val newAccessToken = refreshResponse.body()
+                    val refreshResult = refreshResponse.body()
+                    refreshResult?.let {
+                        val newAccessToken = it.result.accessToken
+                        val newRefreshToken = it.result.refreshToken
 
-                    if (newAccessToken != null) {
-                        // 재발급된 accessToken을 dataStore에 저장
-                        dataStore.setAccessToken(newAccessToken)
+                        runBlocking {
+                            dataStore.setAccessToken(newAccessToken)
+                            dataStore.setRefreshToken(newRefreshToken)
+                        }
 
-                        // 재발급된 accessToken으로 기존 요청 다시 실행
                         val newRequest = request.newBuilder()
                             .header("Authorization", "Bearer $newAccessToken")
                             .build()
 
-                        response.close()
                         response = chain.proceed(newRequest)
                     }
+                } else {
+                    Timber.d("refresh 실패")
                 }
             }
         }
-
-        response
+        return response
     }
 }

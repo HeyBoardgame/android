@@ -10,13 +10,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.BadgeRVAdapter
 import com.project.heyboardgame.auth.AuthActivity
+import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.FragmentProfileBinding
 import com.project.heyboardgame.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ProfileFragment : Fragment() {
@@ -32,6 +37,8 @@ class ProfileFragment : Fragment() {
     private lateinit var badgeRVAdapter: BadgeRVAdapter
     // View Model
     private lateinit var mainViewModel: MainViewModel
+    // DataStore
+    private val myDataStore : MyDataStore = MyDataStore()
 
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
     override fun onAttach(context: Context) {
@@ -63,11 +70,26 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        lifecycleScope.launch {
+            val profileImg = withContext(Dispatchers.IO) {
+                myDataStore.getProfileImageUri()
+            }
+            val nickname = withContext(Dispatchers.IO) {
+                myDataStore.getNickname()
+            }
+            val friendCode = withContext(Dispatchers.IO) {
+                myDataStore.getFriendCode()
+            }
+            binding.myProfileImg.setImageURI(profileImg)
+            binding.myNickname.text = nickname
+            binding.myFriendCode.text = friendCode
+        }
+
+
         var badgeList = mutableListOf<String>()
         badgeList.add("뱃지")
         badgeList.add("뱃지")
         badgeList.add("뱃지")
-
 
         badgeRVAdapter = BadgeRVAdapter(requireContext(), badgeList)
         binding.badgeRV.adapter = badgeRVAdapter
@@ -90,6 +112,9 @@ class ProfileFragment : Fragment() {
                         Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 )
+            }
+            changeProfile.setOnClickListener {
+                findNavController().navigate(R.id.action_profileFragment_to_changeProfileFragment)
             }
             changePassword.setOnClickListener {
                 findNavController().navigate(R.id.action_profileFragment_to_changePwdFragment)

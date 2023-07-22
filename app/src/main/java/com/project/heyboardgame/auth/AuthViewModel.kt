@@ -32,10 +32,10 @@ class AuthViewModel : ViewModel() {
 
         Timber.d(getToken)
     }
-    // 로그인 요청 함수
+    // 로그인 요청 함수 (LoginFragment)
     fun requestLogin(loginData: LoginData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
-            val response: Response<LoginResult> = api.requestLogin(loginData)
+            val response = api.requestLogin(loginData)
             if (response.isSuccessful) { // 로그인 성공
                 val loginResult = response.body()
                 loginResult?.let {
@@ -57,7 +57,7 @@ class AuthViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 임시 비밀번호 발급 요청 함수
+    // 임시 비밀번호 발급 요청 함수 (ForgotPwdFragment)
     fun requestTempPassword(email: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestTempPassword(email)
@@ -70,7 +70,7 @@ class AuthViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 이메일 중복 확인 요청 함수
+    // 이메일 중복 확인 요청 함수 (SignUpFragment1)
     fun checkDuplicateEmail(email : String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.checkDuplicateEmail(email)
@@ -83,7 +83,7 @@ class AuthViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 회원 가입 요청 함수
+    // 회원 가입 요청 함수 (SignUpFragment2)
     fun requestRegister(signUpData : SignUpData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestRegister(signUpData)

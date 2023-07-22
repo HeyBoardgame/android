@@ -21,7 +21,6 @@
 
             <ImageView
                 android:id="@+id/genreIcon"
-                android:src="@drawable/icon_strategy"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:scaleType="fitXY"
@@ -29,7 +28,7 @@
 
             <TextView
                 android:id="@+id/genreName"
-                android:text="장르 이름"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:layout_width="wrap_content"

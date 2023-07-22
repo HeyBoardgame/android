@@ -1,0 +1,10 @@
+package com.project.heyboardgame.dataModel
+
+import com.google.gson.annotations.SerializedName
+
+data class ChangeProfileData (
+    @SerializedName("profileImg")
+    val profileImg : String,
+    @SerializedName("nickname")
+    val nickname : String
+)

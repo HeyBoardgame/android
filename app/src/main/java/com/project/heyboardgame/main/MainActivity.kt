@@ -3,14 +3,13 @@ package com.project.heyboardgame.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.project.heyboardgame.R
-import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.ActivityMainBinding
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +33,9 @@ class MainActivity : AppCompatActivity() {
 
         showHideBottomNav()
 
+        viewModel.requestMyProfile(onErrorAction = {
+            Toast.makeText(this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun onSupportNavigateUp(): Boolean {

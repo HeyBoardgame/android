@@ -63,7 +63,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <!-- 프로필 사진 -->
@@ -74,21 +73,60 @@
                         app:cardCornerRadius="35dp">
 
                         <ImageView
+                            android:id="@+id/myProfileImg"
                             android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:src="@drawable/tmp_profile_img" />
+                            android:layout_height="70dp"/>
 
                     </androidx.cardview.widget.CardView>
 
-                    <!-- 닉네임 -->
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="시나모롤"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold"/>
+                        android:orientation="vertical"
+                        android:layout_gravity="center">
+
+                        <!-- 닉네임 -->
+                        <TextView
+                            android:id="@+id/myNickname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/black"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="5dp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <!-- 친구코드 타이틀 -->
+                            <TextView
+                                android:id="@+id/myFriendCodeTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="친구코드:"
+                                android:textColor="@color/detailColor"
+                                android:textSize="15sp"
+                                android:textStyle="bold"
+                                android:layout_marginEnd="5dp"/>
+
+                            <!-- 친구코드 -->
+                            <TextView
+                                android:id="@+id/myFriendCode"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text=""
+                                android:textColor="@color/detailColor"
+                                android:textSize="15sp"
+                                android:textStyle="bold"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

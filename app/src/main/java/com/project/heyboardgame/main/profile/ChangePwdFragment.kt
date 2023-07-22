@@ -45,7 +45,7 @@ class ChangePwdFragment : Fragment(R.layout.fragment_change_pwd) {
                 val currentPassword = binding.currentPassword.text.toString()
                 val newPassword = binding.newPassword.text.toString()
                 val changePasswordData = ChangePasswordData(currentPassword, newPassword)
-                mainViewModel.requestNewPassword(changePasswordData,
+                mainViewModel.changePassword(changePasswordData,
                     onSuccess = { // 비밀번호 변경 성공
                         Toast.makeText(requireContext(), "비밀번호가 성공적으로 변경되었습니다", Toast.LENGTH_SHORT).show()
                         findNavController().popBackStack()

@@ -1,8 +1,11 @@
 package com.project.heyboardgame.retrofit
 
 import com.project.heyboardgame.dataModel.ChangePasswordData
+import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataModel.LoginData
 import com.project.heyboardgame.dataModel.LoginResult
+import com.project.heyboardgame.dataModel.MyProfileResult
+import com.project.heyboardgame.dataModel.RefreshResult
 import com.project.heyboardgame.dataModel.SignUpData
 import retrofit2.Response
 import retrofit2.http.Body
@@ -18,10 +21,10 @@ interface Api {
     suspend fun requestLogin(@Body userInfo: LoginData): Response<LoginResult>
 
     @POST("/auths/refresh") // refreshToken 요청
-    suspend fun getNewToken(@Body refreshToken : String) : Response<String>
+    suspend fun getNewToken(@Body refreshToken : String) : Response<RefreshResult>
 
-    @GET("/auths/temp-password") // 임시 비밀번호 발급
-    suspend fun requestTempPassword(@Query("email") email: String): Response<Void>
+    @POST("/auths/temp-password") // 임시 비밀번호 발급
+    suspend fun requestTempPassword(@Body email: String): Response<Void>
 
     @GET("/auths/email-duplicate") // 이메일 중복 확인
     suspend fun checkDuplicateEmail(@Query("email") email: String): Response<Void>
@@ -36,6 +39,12 @@ interface Api {
     suspend fun requestUnregister() : Response<Void>
 
     @PATCH("/auths/new-password") // 비밀번호 재설정
-    suspend fun requestNewPassword(@Body userInfo: ChangePasswordData) : Response<Void>
+    suspend fun changePassword(@Body userInfo: ChangePasswordData) : Response<Void>
+
+    @GET("/my") // 프로필 조회
+    suspend fun requestMyProfile() : Response<MyProfileResult>
+
+    @PATCH("/my") // 프로필 수정
+    suspend fun changeMyProfile(@Body userInfo: ChangeProfileData) : Response<Void>
 
 }

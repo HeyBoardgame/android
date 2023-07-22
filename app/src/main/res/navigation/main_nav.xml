@@ -77,6 +77,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_profileFragment_to_changeProfileFragment"
+            app:destination="@id/changeProfileFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/matchFragment"
@@ -134,4 +141,9 @@
         android:name="com.project.heyboardgame.main.profile.ChangePwdFragment"
         android:label="fragment_change_pwd"
         tools:layout="@layout/fragment_change_pwd" />
+    <fragment
+        android:id="@+id/changeProfileFragment"
+        android:name="com.project.heyboardgame.main.profile.ChangeProfileFragment"
+        android:label="fragment_change_profile"
+        tools:layout="@layout/fragment_change_profile" />
 </navigation>

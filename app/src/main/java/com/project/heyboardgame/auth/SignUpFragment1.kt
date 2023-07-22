@@ -96,9 +96,6 @@ class SignUpFragment1 : Fragment() {
 
     // 이메일 TextWatcher
     private val emailTextWatcher = object : TextWatcher {
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            validateEmail(s.toString())
-        }
         override fun afterTextChanged(s: Editable?) {
             validateEmail(s.toString())
             binding.emailCheckSuccess.visibility = View.GONE
@@ -108,10 +105,13 @@ class SignUpFragment1 : Fragment() {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             // 생략
         }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // 생략
+        }
     }
     // 비밀번호 TextWatcher
     private val passwordTextWatcher = object : TextWatcher {
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        override fun afterTextChanged(s: Editable?) {
             validatePasswordCheck()
             if (binding.password.text.toString().length < 8) {
                 binding.passwordMinLength.visibility = View.VISIBLE
@@ -121,34 +121,34 @@ class SignUpFragment1 : Fragment() {
                 isPasswordValid = true
             }
         }
-        override fun afterTextChanged(s: Editable?) {
-            validatePasswordCheck()
-        }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // 생략
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             // 생략
         }
     }
     // 비밀번호 확인 TextWatcher
     private val passwordCheckTextWatcher = object : TextWatcher {
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            validatePasswordCheck()
-        }
         override fun afterTextChanged(s: Editable?) {
             validatePasswordCheck()
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             // 생략
         }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // 생략
+        }
     }
     // 닉네임 TextWatcher
     private val nicknameTextWatcher = object : TextWatcher {
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            validateNickname(s.toString())
-        }
         override fun afterTextChanged(s: Editable?) {
             validateNickname(s.toString())
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // 생략
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             // 생략
         }
     }
