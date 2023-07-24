@@ -6,5 +6,7 @@ data class ChangeProfileData (
     @SerializedName("profileImg")
     val profileImg : String,
     @SerializedName("nickname")
-    val nickname : String
+    val nickname : String,
+    @SerializedName("isChanged")
+    var isChanged : Boolean
 )

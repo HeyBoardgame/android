@@ -41,9 +41,9 @@ class MyDataStore {
         }
     }
 
-    suspend fun setProfileImageUri(uri: Uri?) {
+    suspend fun setProfileImage(profileImg: String) {
         mDataStore.edit { preferences ->
-            preferences[PROFILE_IMAGE_URI] = uri?.toString() ?: ""
+            preferences[PROFILE_IMAGE_URI] = profileImg
         }
     }
 
@@ -86,7 +86,7 @@ class MyDataStore {
     }
 
     // 프로필 이미지 URI 불러오기
-    suspend fun getProfileImageUri(): Uri? {
+    suspend fun getProfileImage(): Uri? {
         var currentValue: String? = ""
         mDataStore.edit { preferences ->
             currentValue = preferences[PROFILE_IMAGE_URI]

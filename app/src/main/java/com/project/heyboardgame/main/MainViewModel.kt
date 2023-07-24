@@ -4,6 +4,8 @@ package com.project.heyboardgame.main
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.project.heyboardgame.App
+import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataStore.MyDataStore
@@ -72,14 +74,15 @@ class MainViewModel : ViewModel() {
                     val nickname = it.result.nickname
                     val friendCode = it.result.friendCode
 
-                    myDataStore.setProfileImageUri(Uri.parse(profileImg))
+                    myDataStore.setProfileImage(profileImg)
                     myDataStore.setNickname(nickname)
                     myDataStore.setFriendCode(friendCode)
 
                     Timber.d("프로필 조회 성공")
                 }
             } else {
-//                myDataStore.setProfileImageUri(Uri.parse("android.resource://${App.getContext().packageName}/${R.drawable.tmp_profile_img}"))
+                //myDataStore.setProfileImage("android.resource://${App.getContext().packageName}/${R.drawable.default_profile_img}")
+//                myDataStore.setProfileImage("")
 //                myDataStore.setNickname("새로운닉네임")
 //                myDataStore.setFriendCode("G40123")
                 Timber.d("프로필 조회 실패")
@@ -93,6 +96,10 @@ class MainViewModel : ViewModel() {
         try {
             val response = api.changeMyProfile(changeProfileData)
             if (response.isSuccessful) {
+                if (changeProfileData.isChanged) {
+                    myDataStore.setProfileImage(changeProfileData.profileImg)
+                }
+                myDataStore.setNickname(changeProfileData.nickname)
                 onSuccess.invoke()
             } else {
                 onFailure.invoke()

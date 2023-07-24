@@ -37,6 +37,9 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
     private val myDataStore : MyDataStore = MyDataStore()
     // 에러 변수
     private var isNicknameInvalid = false
+    // 변경 체크 변수
+    private var isImageChanged = false
+    // 프로필 이미지 변수
     private var finalImageUri: Uri? = null
 
 
@@ -50,13 +53,17 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         _binding = FragmentChangeProfileBinding.bind(view)
         lifecycleScope.launch {
             val profileImg = withContext(Dispatchers.IO) {
-                myDataStore.getProfileImageUri()
+                myDataStore.getProfileImage()
             }
             val nickname = withContext(Dispatchers.IO) {
                 myDataStore.getNickname()
             }
             binding.nickname.setText(nickname)
-            binding.profileImg.setImageURI(profileImg)
+            if (profileImg != null) {
+                binding.profileImg.setImageURI(profileImg)
+            } else {
+                binding.profileImg.setImageResource(R.drawable.default_profile_img)
+            }
         }
 
         binding.nickname.addTextChangedListener(nicknameTextWatcher) // 닉네임 입력창에 TextWatcher 추가
@@ -73,20 +80,25 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
                     galleryPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
 
+            defaultImgBtn.setOnClickListener {
+                binding.profileImg.setImageResource(R.drawable.default_profile_img)
+                finalImageUri = null
+                isImageChanged = true
+            }
+
             changeProfileBtn.setOnClickListener {
-                val profileImg = finalImageUri.toString()
+                val profileImg : String
+                if (finalImageUri == null) {
+                    profileImg = ""
+                } else {
+                    profileImg = finalImageUri.toString()
+                }
                 val nickname = binding.nickname.text.toString()
-                val changeProfileData = ChangeProfileData(profileImg, nickname)
+                val changeProfileData = ChangeProfileData(profileImg, nickname, isImageChanged)
                 mainViewModel.changeMyProfile(changeProfileData,
                     onSuccess = {
-                        lifecycleScope.launch {
-                            if (finalImageUri != null) {
-                                myDataStore.setProfileImageUri(finalImageUri)
-                            }
-                            myDataStore.setNickname(nickname)
-                        }
                         findNavController().popBackStack()
-                        Toast.makeText(requireContext(), "변경 완료!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "프로필이 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()
                     },
                     onFailure = {
                         Toast.makeText(requireContext(), "프로필 변경 실패", Toast.LENGTH_SHORT).show()
@@ -118,6 +130,7 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
                 val imageUri = result.data?.data
                 binding.profileImg.setImageURI(imageUri)
                 finalImageUri = imageUri
+                isImageChanged = true
             }
         }
 

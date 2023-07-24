@@ -2,6 +2,7 @@ package com.project.heyboardgame.main.profile
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -72,7 +73,7 @@ class ProfileFragment : Fragment() {
 
         lifecycleScope.launch {
             val profileImg = withContext(Dispatchers.IO) {
-                myDataStore.getProfileImageUri()
+                myDataStore.getProfileImage()
             }
             val nickname = withContext(Dispatchers.IO) {
                 myDataStore.getNickname()
@@ -80,11 +81,14 @@ class ProfileFragment : Fragment() {
             val friendCode = withContext(Dispatchers.IO) {
                 myDataStore.getFriendCode()
             }
-            binding.myProfileImg.setImageURI(profileImg)
+            if (profileImg != null) {
+                binding.myProfileImg.setImageURI(profileImg)
+            } else {
+                binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
+            }
             binding.myNickname.text = nickname
             binding.myFriendCode.text = friendCode
         }
-
 
         var badgeList = mutableListOf<String>()
         badgeList.add("뱃지")
