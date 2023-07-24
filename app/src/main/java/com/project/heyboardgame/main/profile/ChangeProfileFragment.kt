@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataStore.MyDataStore
@@ -60,7 +61,9 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
             }
             binding.nickname.setText(nickname)
             if (profileImg != null) {
-                binding.profileImg.setImageURI(profileImg)
+                Glide.with(requireContext())
+                    .load(profileImg)
+                    .into(binding.profileImg)
             } else {
                 binding.profileImg.setImageResource(R.drawable.default_profile_img)
             }

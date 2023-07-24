@@ -2,7 +2,6 @@ package com.project.heyboardgame.main.profile
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.BadgeRVAdapter
 import com.project.heyboardgame.auth.AuthActivity
@@ -82,7 +82,9 @@ class ProfileFragment : Fragment() {
                 myDataStore.getFriendCode()
             }
             if (profileImg != null) {
-                binding.myProfileImg.setImageURI(profileImg)
+                Glide.with(requireContext())
+                    .load(profileImg)
+                    .into(binding.myProfileImg)
             } else {
                 binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
             }
