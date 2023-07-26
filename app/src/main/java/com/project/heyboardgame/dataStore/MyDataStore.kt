@@ -24,7 +24,7 @@ class MyDataStore {
     // 프로필 정보
     private val PROFILE_IMAGE_URI = stringPreferencesKey("PROFILE_IMAGE_URI")
     private val NICKNAME = stringPreferencesKey("NICKNAME")
-    private val FRIEND_CODE = stringPreferencesKey("FRIEND_CODE")
+    private val USER_CODE = stringPreferencesKey("USER_CODE")
 
 
     // 로그인 성공 시 액세스 토큰 저장
@@ -53,9 +53,9 @@ class MyDataStore {
         }
     }
 
-    suspend fun setFriendCode(friendCode : String) {
+    suspend fun setUserCode(userCode : String) {
         mDataStore.edit { preferences ->
-            preferences[FRIEND_CODE] = friendCode
+            preferences[USER_CODE] = userCode
         }
     }
 
@@ -106,11 +106,11 @@ class MyDataStore {
         return currentValue
     }
 
-    suspend fun getFriendCode() : String {
+    suspend fun getUserCode() : String {
         var currentValue = ""
         mDataStore.edit { preferences ->
-            currentValue = if (preferences[FRIEND_CODE] != null) {
-                preferences[FRIEND_CODE].toString()
+            currentValue = if (preferences[USER_CODE] != null) {
+                preferences[USER_CODE].toString()
             } else {
                 ""
             }

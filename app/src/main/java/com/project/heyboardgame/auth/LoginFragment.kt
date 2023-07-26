@@ -1,5 +1,6 @@
 package com.project.heyboardgame.auth
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,29 +10,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import com.project.heyboardgame.App
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentLoginBinding
 import com.project.heyboardgame.dataModel.LoginData
 import com.project.heyboardgame.main.MainActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 
 class LoginFragment : Fragment() {
-
     // 뒤로 가기 이벤트를 위한 변수
     private lateinit var callback : OnBackPressedCallback
     private var backPressedTime : Long = 0
-
     // View Binding
     private var _binding : FragmentLoginBinding? = null
     private val binding get() = _binding!!
-
     // View Model
     private lateinit var authViewModel: AuthViewModel
+    // Google Login
+    private lateinit var googleSignInClient: GoogleSignInClient
+
 
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
     override fun onAttach(context: Context) {
@@ -101,6 +107,42 @@ class LoginFragment : Fragment() {
                     }
                 )
             }
+        }
+        // GoogleSignInOptions 설정
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.google_client_id)) // Google API Console에서 생성한 클라이언트 ID
+            .requestEmail()
+            .requestProfile()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+
+        binding.googleLoginBtn.setOnClickListener {
+            val signInIntent = googleSignInClient.signInIntent
+            resultLauncher.launch(signInIntent)
+        }
+    }
+    // 구글 로그인 결과 반환
+    private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        } else {
+            Toast.makeText(requireContext(), "구글 로그인을 취소하셨습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // 구글 로그인 결과 처리
+    private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>){
+        try {
+            val account = completedTask.getResult(ApiException::class.java)
+            val email = account.email
+            val userName = account.displayName
+            Timber.d("$email, $userName")
+            
+        } catch (e: ApiException){
+            Timber.d("구글 로그인 실패")
         }
     }
 

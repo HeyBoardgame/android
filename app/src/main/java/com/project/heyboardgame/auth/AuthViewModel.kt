@@ -8,10 +8,9 @@ import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
 import com.project.heyboardgame.dataModel.LoginData
-import com.project.heyboardgame.dataModel.LoginResult
 import com.project.heyboardgame.dataModel.SignUpData
+import com.project.heyboardgame.dataModel.TempPasswordData
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import timber.log.Timber
 
 class AuthViewModel : ViewModel() {
@@ -22,7 +21,7 @@ class AuthViewModel : ViewModel() {
     // DataStore
     private val myDataStore : MyDataStore = MyDataStore()
     // Api
-    private val api : Api = RetrofitClient.getInstance(myDataStore).create(Api::class.java)
+    private val api : Api = RetrofitClient.getInstanceWithTokenInterceptor(myDataStore).create(Api::class.java)
 
     // accessToken가 있는 지 확인하는 함수
     fun checkAccessToken() = viewModelScope.launch {
@@ -58,9 +57,9 @@ class AuthViewModel : ViewModel() {
         }
     }
     // 임시 비밀번호 발급 요청 함수 (ForgotPwdFragment)
-    fun requestTempPassword(email: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun requestTempPassword(tempPasswordData: TempPasswordData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
-            val response = api.requestTempPassword(email)
+            val response = api.requestTempPassword(tempPasswordData)
             if (response.isSuccessful) { // 요청 성공
                 onSuccess.invoke()
             } else { // 요청 실패

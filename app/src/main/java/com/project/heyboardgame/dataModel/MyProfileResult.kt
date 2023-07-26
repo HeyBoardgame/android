@@ -1,6 +1,5 @@
 package com.project.heyboardgame.dataModel
 
-import android.net.Uri
 import com.google.gson.annotations.SerializedName
 
 data class MyProfileResult(
@@ -9,10 +8,10 @@ data class MyProfileResult(
 )
 
 data class MyProfileResultData (
-    @SerializedName("profileImg")
+    @SerializedName("profileImagePath")
     val profileImg : String,
     @SerializedName("nickname")
     val nickname : String,
-    @SerializedName("friendCode")
-    val friendCode : String
+    @SerializedName("userCode")
+    val userCode : String
 )

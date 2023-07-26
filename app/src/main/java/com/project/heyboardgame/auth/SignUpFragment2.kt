@@ -48,8 +48,6 @@ class SignUpFragment2 : Fragment() {
         val password = signUpTmpData.password
         val nickname = signUpTmpData.nickname
 
-        Toast.makeText(requireContext(), "${email}, ${password}, ${nickname}", Toast.LENGTH_SHORT).show()
-
         val genreList = mutableListOf<SignUpItem>()
         genreList.add(SignUpItem(R.drawable.icon_strategy, "전략", 1, false))
         genreList.add(SignUpItem(R.drawable.icon_party, "파티", 2, false))

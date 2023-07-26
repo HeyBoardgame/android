@@ -11,5 +11,7 @@ data class LoginResultData(
     @SerializedName("accessToken")
     val accessToken: String?,
     @SerializedName("refreshToken")
-    val refreshToken: String?
+    val refreshToken: String?,
+    @SerializedName("message")
+    val errorMessage: String
 )

@@ -1,24 +1,27 @@
 package com.project.heyboardgame.main
 
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.heyboardgame.App
-import com.project.heyboardgame.R
+import com.google.gson.Gson
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
 import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
 
 class MainViewModel : ViewModel() {
     // DataStore
     private val myDataStore : MyDataStore = MyDataStore()
     // Api
-    private val api : Api = RetrofitClient.getInstance(myDataStore).create(Api::class.java)
+    private val api : Api = RetrofitClient.getInstanceWithTokenInterceptor(myDataStore).create(Api::class.java)
 
     // 로그아웃 함수 (ProfileFragment)
     fun requestLogout(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
@@ -72,32 +75,31 @@ class MainViewModel : ViewModel() {
                 profileResult?.let {
                     val profileImg = it.result.profileImg
                     val nickname = it.result.nickname
-                    val friendCode = it.result.friendCode
+                    val userCode = it.result.userCode
 
                     myDataStore.setProfileImage(profileImg)
                     myDataStore.setNickname(nickname)
-                    myDataStore.setFriendCode(friendCode)
+                    myDataStore.setUserCode(userCode)
 
                     Timber.d("프로필 조회 성공")
                 }
             } else {
-                //myDataStore.setProfileImage("android.resource://${App.getContext().packageName}/${R.drawable.default_profile_img}")
-//                myDataStore.setProfileImage("")
-//                myDataStore.setNickname("새로운닉네임")
-//                myDataStore.setFriendCode("G40123")
                 Timber.d("프로필 조회 실패")
             }
         } catch (e: Exception) {
             onErrorAction.invoke()
         }
     }
-
-    fun changeMyProfile(changeProfileData: ChangeProfileData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    // 프로필 수정 함수
+    fun changeMyProfile(profileImg : String, file : MultipartBody.Part?, changeProfileData: ChangeProfileData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        val json = Gson().toJson(changeProfileData) // ChangeProfileData를 JSON으로 직렬화
+        // ChangeProfileData를 RequestBody로 변환
+        val requestBody = json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
+        val response = api.changeMyProfile(file, requestBody)
         try {
-            val response = api.changeMyProfile(changeProfileData)
             if (response.isSuccessful) {
                 if (changeProfileData.isChanged) {
-                    myDataStore.setProfileImage(changeProfileData.profileImg)
+                    myDataStore.setProfileImage(profileImg)
                 }
                 myDataStore.setNickname(changeProfileData.nickname)
                 onSuccess.invoke()

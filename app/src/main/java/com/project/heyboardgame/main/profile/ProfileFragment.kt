@@ -30,7 +30,6 @@ class ProfileFragment : Fragment() {
     // 뒤로 가기 이벤트를 위한 변수
     private lateinit var callback : OnBackPressedCallback
     private var backPressedTime : Long = 0
-
     // View Binding
     private var _binding : FragmentProfileBinding? = null
     private val binding get() = _binding!!
@@ -78,8 +77,8 @@ class ProfileFragment : Fragment() {
             val nickname = withContext(Dispatchers.IO) {
                 myDataStore.getNickname()
             }
-            val friendCode = withContext(Dispatchers.IO) {
-                myDataStore.getFriendCode()
+            val userCode = withContext(Dispatchers.IO) {
+                myDataStore.getUserCode()
             }
             if (profileImg != null) {
                 Glide.with(requireContext())
@@ -89,7 +88,7 @@ class ProfileFragment : Fragment() {
                 binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
             }
             binding.myNickname.text = nickname
-            binding.myFriendCode.text = friendCode
+            binding.myUserCode.text = userCode
         }
 
         var badgeList = mutableListOf<String>()

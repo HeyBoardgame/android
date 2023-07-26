@@ -3,6 +3,10 @@ buildscript {
         def nav_version = "2.5.0"
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version")
     }
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
 plugins {

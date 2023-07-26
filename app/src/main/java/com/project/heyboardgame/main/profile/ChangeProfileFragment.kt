@@ -3,7 +3,9 @@ package com.project.heyboardgame.main.profile
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +28,12 @@ import com.project.heyboardgame.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 
 
 class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
@@ -90,15 +98,22 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
             }
 
             changeProfileBtn.setOnClickListener {
+                val filePart : MultipartBody.Part?
                 val profileImg : String
                 if (finalImageUri == null) {
                     profileImg = ""
+                    filePart = null
                 } else {
                     profileImg = finalImageUri.toString()
+                    val file = File(absolutelyPath(finalImageUri, requireContext()))
+                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                    filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
                 }
                 val nickname = binding.nickname.text.toString()
-                val changeProfileData = ChangeProfileData(profileImg, nickname, isImageChanged)
-                mainViewModel.changeMyProfile(changeProfileData,
+                val changeProfileData = ChangeProfileData(nickname, isImageChanged)
+
+
+                mainViewModel.changeMyProfile(profileImg, filePart, changeProfileData,
                     onSuccess = {
                         findNavController().popBackStack()
                         Toast.makeText(requireContext(), "프로필이 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()
@@ -112,6 +127,17 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
                 )
             }
         }
+    }
+
+    fun absolutelyPath(path: Uri?, context : Context): String {
+        val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        val c: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
+        val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c?.moveToFirst()
+
+        val result = c?.getString(index!!)
+
+        return result!!
     }
 
     private val galleryPermissionLauncher =

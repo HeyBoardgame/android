@@ -3,8 +3,8 @@ package com.project.heyboardgame.dataModel
 import com.google.gson.annotations.SerializedName
 
 data class ChangePasswordData (
-    @SerializedName("currentPassword")
+    @SerializedName("existingPassword")
     val currentPassword : String,
-    @SerializedName("newPassword")
+    @SerializedName("updatedPassword")
     val newPassword : String
 )

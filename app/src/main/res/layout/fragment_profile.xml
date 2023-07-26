@@ -103,11 +103,11 @@
 
                             <!-- 친구코드 타이틀 -->
                             <TextView
-                                android:id="@+id/myFriendCodeTitle"
+                                android:id="@+id/myUserCodeTitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:text="친구코드:"
+                                android:text="유저코드:"
                                 android:textColor="@color/detailColor"
                                 android:textSize="15sp"
                                 android:textStyle="bold"
@@ -115,7 +115,7 @@
 
                             <!-- 친구코드 -->
                             <TextView
-                                android:id="@+id/myFriendCode"
+                                android:id="@+id/myUserCode"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"

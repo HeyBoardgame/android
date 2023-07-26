@@ -9,11 +9,11 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.project.heyboardgame.App
+import com.project.heyboardgame.dataModel.TempPasswordData
 import com.project.heyboardgame.databinding.FragmentForgotPwdBinding
 
 
 class ForgotPwdFragment : Fragment() {
-
     // View Binding
     private var _binding : FragmentForgotPwdBinding? = null
     private val binding get() = _binding!!
@@ -47,8 +47,8 @@ class ForgotPwdFragment : Fragment() {
             } else {
                 // 로딩 화면 표시
                 binding.loading.visibility = View.VISIBLE
-
-                authViewModel.requestTempPassword(email,
+                val tempPasswordData = TempPasswordData(email)
+                authViewModel.requestTempPassword(tempPasswordData,
                     onSuccess = {
                         binding.sendPwdSuccess.visibility = View.VISIBLE
                         binding.sendPwdFail.visibility = View.GONE

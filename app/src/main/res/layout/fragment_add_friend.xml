@@ -32,7 +32,7 @@
         <!-- 친구 추가 요청 이미지 -->
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="130dp"
             android:src="@drawable/add_friend"
             android:layout_marginBottom="15dp"/>
 
@@ -57,7 +57,7 @@
             app:queryBackground="@color/transparent"
             android:focusable="true"
             app:goIcon="@drawable/icon_send"
-            app:queryHint="닉네임을 검색하세요" />
+            app:queryHint="친구의 유저 코드를 입력하세요" />
 
     </LinearLayout>
 
