@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.project.heyboardgame.dataModel.GoogleLoginData
+import com.project.heyboardgame.dataModel.GoogleRegisterData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
@@ -43,8 +45,9 @@ class AuthViewModel : ViewModel() {
                     val refreshToken = it.result.refreshToken
 
                     // DataStore에 저장
-                    myDataStore.setAccessToken(accessToken ?: "")
-                    myDataStore.setRefreshToken(refreshToken ?: "")
+                    myDataStore.setAccessToken(accessToken)
+                    myDataStore.setRefreshToken(refreshToken)
+                    myDataStore.setGoogleLogined(false)
 
                     // MainActivity로 이동 + Toast 메세지
                     onSuccess.invoke()
@@ -92,6 +95,60 @@ class AuthViewModel : ViewModel() {
                 onFailure.invoke()
             }
         } catch(e: Exception) { // 네트워크 오류
+            onErrorAction.invoke()
+        }
+    }
+
+    // 구글 로그인 요청 함수 (LoginFragment)
+    fun requestGoogleLogin(googleLoginData: GoogleLoginData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestGoogleLogin(googleLoginData)
+            if (response.isSuccessful) {
+                val googleLoginResult = response.body()
+                googleLoginResult?.let {
+                    // LoginResult에서 accessToken과 refreshToken 가져오기
+                    val accessToken = it.result.accessToken
+                    val refreshToken = it.result.refreshToken
+
+                    // DataStore에 저장
+                    myDataStore.setAccessToken(accessToken)
+                    myDataStore.setRefreshToken(refreshToken)
+                    myDataStore.setGoogleLogined(true)
+
+                    // MainActivity로 이동 + Toast 메세지
+                    onSuccess.invoke()
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+
+    // 구글 회원가입 요청 함수
+    fun requestGoogleRegister(googleRegisterData: GoogleRegisterData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestGoogleRegister(googleRegisterData)
+            if (response.isSuccessful) {
+                val googleLoginResult = response.body()
+                googleLoginResult?.let {
+                    // LoginResult에서 accessToken과 refreshToken 가져오기
+                    val accessToken = it.result.accessToken
+                    val refreshToken = it.result.refreshToken
+
+                    // DataStore에 저장
+                    myDataStore.setAccessToken(accessToken)
+                    myDataStore.setRefreshToken(refreshToken)
+                    myDataStore.setGoogleLogined(true)
+
+                    // MainActivity로 이동 + Toast 메세지
+                    onSuccess.invoke()
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
             onErrorAction.invoke()
         }
     }

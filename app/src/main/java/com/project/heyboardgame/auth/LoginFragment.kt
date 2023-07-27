@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -20,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.project.heyboardgame.R
+import com.project.heyboardgame.dataModel.GoogleLoginData
 import com.project.heyboardgame.databinding.FragmentLoginBinding
 import com.project.heyboardgame.dataModel.LoginData
 import com.project.heyboardgame.main.MainActivity
@@ -93,11 +95,10 @@ class LoginFragment : Fragment() {
                 val loginData = LoginData(userId, userPw)
                 authViewModel.requestLogin(loginData,
                     onSuccess = {
+                        Toast.makeText(requireContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                         val intent = Intent(requireContext(), MainActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
-
-                        Toast.makeText(requireContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
                     },
                     onFailure = {
                         Toast.makeText(requireContext(), "아이디 또는 비밀번호를 다시 한 번 확인해주세요.", Toast.LENGTH_SHORT).show()
@@ -108,28 +109,26 @@ class LoginFragment : Fragment() {
                 )
             }
         }
-        // GoogleSignInOptions 설정
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.google_client_id)) // Google API Console에서 생성한 클라이언트 ID
-            .requestEmail()
-            .requestProfile()
-            .build()
-
-        googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
         binding.googleLoginBtn.setOnClickListener {
+            // GoogleSignInOptions 설정
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+
+            googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+
             val signInIntent = googleSignInClient.signInIntent
             resultLauncher.launch(signInIntent)
         }
     }
     // 구글 로그인 결과 반환
     private var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        Timber.d("$result")
         if (result.resultCode == Activity.RESULT_OK) {
             val data: Intent? = result.data
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
             handleSignInResult(task)
-        } else {
-            Toast.makeText(requireContext(), "구글 로그인을 취소하셨습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -137,12 +136,30 @@ class LoginFragment : Fragment() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>){
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            val email = account.email
-            val userName = account.displayName
-            Timber.d("$email, $userName")
-            
+            val googleEmail = account.email
+            if (completedTask.isSuccessful) {
+                val googleLoginData = GoogleLoginData(googleEmail!!)
+                authViewModel.requestGoogleLogin(googleLoginData,
+                    onSuccess = {
+                        Toast.makeText(requireContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    },
+                    onFailure = {
+                        Toast.makeText(requireContext(), "회원가입이 필요합니다.", Toast.LENGTH_SHORT).show()
+                        val action = LoginFragmentDirections.actionLoginFragmentToGoogleSignUpFragment(googleEmail)
+                        findNavController().navigate(action)
+                    },
+                    onErrorAction = {
+                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            } else {
+                Toast.makeText(requireContext(), "구글 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         } catch (e: ApiException){
-            Timber.d("구글 로그인 실패")
+            Toast.makeText(requireContext(), "구글 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 

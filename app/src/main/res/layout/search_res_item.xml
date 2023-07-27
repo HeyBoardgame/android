@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <!-- 보드게임 이미지 -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/tmp_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="10dp"
+        android:weightSum="4.5"
+        android:layout_gravity="center">
+
+        <!-- 보드게임 제목 -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="보드게임 제목"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_weight="1.5"/>
+
+
+        <!-- 보드게임 장르 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="장르:"
+                android:textColor="@color/detailColor"
+                android:textSize="15sp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:id="@+id/genre"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="전략, 단순"
+                android:textColor="@color/detailColor"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <!-- 보드게임 난이도 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="난이도:"
+                android:textColor="@color/detailColor"
+                android:textSize="15sp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:id="@+id/difficulty"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="보통"
+                android:textColor="@color/detailColor"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <!-- 보드게임 인원 수 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="인원 수:"
+                android:textColor="@color/detailColor"
+                android:textSize="15sp"
+                android:layout_marginEnd="5dp"/>
+
+            <TextView
+                android:id="@+id/numOfPeople"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="3~5인"
+                android:textColor="@color/detailColor"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

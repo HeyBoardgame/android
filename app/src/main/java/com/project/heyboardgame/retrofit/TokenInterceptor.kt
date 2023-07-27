@@ -19,40 +19,41 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
         }
 
         val request = requestBuilder.build()
-        val response = chain.proceed(request) // 헤더만 붙여서 기존 요청 보내기
+        var response = chain.proceed(request) // 헤더만 붙여서 기존 요청 보내기
 
         // 만료된 accessToken으로 인증되지 않은 경우 refreshToken으로 accessToken 재발급
         if (response.code == 401) {
-            var newAccessToken = ""
             val refreshToken = runBlocking { dataStore.getRefreshToken() }
 
             if (refreshToken.isNotEmpty()) {
                 val api = RetrofitClient.getInstanceWithoutTokenInterceptor(dataStore).create(Api::class.java)
                 val refreshData = RefreshData(accessToken, refreshToken)
 
-                runBlocking {
-                    val refreshResponse = api.getNewToken(refreshData)
 
-                    if (refreshResponse.isSuccessful) {
-                        // 재발급된 accessToken 가져오기
-                        val refreshResult = refreshResponse.body()
-                        refreshResult?.let {
-                            newAccessToken = it.result.accessToken
-                            val newRefreshToken = it.result.refreshToken
+                val refreshResponse = runBlocking { api.getNewToken(refreshData) }
 
+                if (refreshResponse.isSuccessful) {
+                    // 재발급된 accessToken 가져오기
+                    val refreshResult = refreshResponse.body()
+                    refreshResult?.let {
+                        val newAccessToken = it.result.accessToken
+                        val newRefreshToken = it.result.refreshToken
+
+                        runBlocking {
                             dataStore.setAccessToken(newAccessToken)
                             dataStore.setRefreshToken(newRefreshToken)
                         }
-                    } else {
-                        Timber.d("refresh 실패")
-                    }
-                }
-                response.close()
 
-                val newRequest = request.newBuilder()
-                    .header("Authorization", "Bearer $newAccessToken")
-                    .build()
-                return chain.proceed(newRequest)
+                        response.close()
+
+                        val newRequest = request.newBuilder()
+                            .header("Authorization", "Bearer $newAccessToken")
+                            .build()
+                        response = chain.proceed(newRequest)
+                    }
+                } else {
+                    Timber.d("refresh 실패")
+                }
             }
         }
         return response

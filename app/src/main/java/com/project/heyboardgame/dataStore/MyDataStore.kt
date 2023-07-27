@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -25,6 +26,7 @@ class MyDataStore {
     private val PROFILE_IMAGE_URI = stringPreferencesKey("PROFILE_IMAGE_URI")
     private val NICKNAME = stringPreferencesKey("NICKNAME")
     private val USER_CODE = stringPreferencesKey("USER_CODE")
+    private val GOOGLE_LOGINED = booleanPreferencesKey("GOOGLE_LOGINED")
 
 
     // 로그인 성공 시 액세스 토큰 저장
@@ -56,6 +58,12 @@ class MyDataStore {
     suspend fun setUserCode(userCode : String) {
         mDataStore.edit { preferences ->
             preferences[USER_CODE] = userCode
+        }
+    }
+
+    suspend fun setGoogleLogined(googleLogined : Boolean) {
+        mDataStore.edit { preferences ->
+            preferences[GOOGLE_LOGINED] = googleLogined
         }
     }
 
@@ -114,6 +122,14 @@ class MyDataStore {
             } else {
                 ""
             }
+        }
+        return currentValue
+    }
+
+    suspend fun getGoogleLogined(): Boolean {
+        var currentValue = false
+        mDataStore.edit { preferences ->
+            currentValue = preferences[GOOGLE_LOGINED] ?: false
         }
         return currentValue
     }

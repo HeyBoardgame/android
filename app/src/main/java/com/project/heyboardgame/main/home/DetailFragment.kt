@@ -26,8 +26,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         binding.apply {
             backBtn.setOnClickListener {
-                // 이전 화면으로 이동
-                //findNavController().popBackStack(findNavController().previousBackStackEntry?.destination!!.id, false)
                 findNavController().popBackStack()
             }
         }

@@ -1,6 +1,9 @@
 package com.project.heyboardgame.retrofit
 
 import com.project.heyboardgame.dataModel.ChangePasswordData
+import com.project.heyboardgame.dataModel.GoogleLoginData
+import com.project.heyboardgame.dataModel.GoogleLoginResult
+import com.project.heyboardgame.dataModel.GoogleRegisterData
 import com.project.heyboardgame.dataModel.LoginData
 import com.project.heyboardgame.dataModel.LoginResult
 import com.project.heyboardgame.dataModel.MyProfileResult
@@ -24,8 +27,7 @@ import retrofit2.http.Query
 interface Api {
 
     @POST("/auths/login") // 로그인
-    suspend fun requestLogin(@Body userInfo: LoginData): Response<LoginResult>
-
+    suspend fun requestLogin(@Body loginData: LoginData): Response<LoginResult>
 
     @POST("/auths/refresh") // refreshToken 요청
     suspend fun getNewToken(@Body refreshData : RefreshData) : Response<RefreshResult>
@@ -37,7 +39,7 @@ interface Api {
     suspend fun checkDuplicateEmail(@Query("email") email: String): Response<Void>
 
     @POST("/auths/register") // 회원가입
-    suspend fun requestRegister(@Body userInfo: SignUpData) : Response<Void>
+    suspend fun requestRegister(@Body signUpData: SignUpData) : Response<Void>
 
     @PATCH("/auths/logout") // 로그아웃
     suspend fun requestLogout() : Response<Void>
@@ -46,7 +48,7 @@ interface Api {
     suspend fun requestUnregister() : Response<Void>
 
     @PATCH("/auths/new-password") // 비밀번호 재설정
-    suspend fun changePassword(@Body userInfo: ChangePasswordData) : Response<Void>
+    suspend fun changePassword(@Body changePasswordData: ChangePasswordData) : Response<Void>
 
     @GET("/my") // 프로필 조회
     suspend fun requestMyProfile() : Response<MyProfileResult>
@@ -54,5 +56,11 @@ interface Api {
     @Multipart
     @PATCH("/my") // 프로필 수정
     suspend fun changeMyProfile(@Part file: MultipartBody.Part?, @Part("data") changeProfileData: RequestBody) : Response<Void>
+
+    @POST("/oauths/login") // 구글 로그인
+    suspend fun requestGoogleLogin(@Body googleLoginData: GoogleLoginData) : Response<GoogleLoginResult>
+
+    @POST("/oauths/register") // 구글 회원가입
+    suspend fun requestGoogleRegister(@Body googleRegisterData: GoogleRegisterData) : Response<GoogleLoginResult>
 
 }

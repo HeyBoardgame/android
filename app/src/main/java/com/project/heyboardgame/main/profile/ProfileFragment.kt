@@ -14,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.BadgeRVAdapter
 import com.project.heyboardgame.auth.AuthActivity
@@ -23,6 +25,7 @@ import com.project.heyboardgame.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 
 class ProfileFragment : Fragment() {
@@ -39,6 +42,8 @@ class ProfileFragment : Fragment() {
     private lateinit var mainViewModel: MainViewModel
     // DataStore
     private val myDataStore : MyDataStore = MyDataStore()
+    // 구글 로그인 유저인 지 확인하는 변수
+    private var isGoogleLogined : Boolean = false
 
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
     override fun onAttach(context: Context) {
@@ -70,6 +75,10 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.favorite.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
+        }
+
         lifecycleScope.launch {
             val profileImg = withContext(Dispatchers.IO) {
                 myDataStore.getProfileImage()
@@ -80,6 +89,9 @@ class ProfileFragment : Fragment() {
             val userCode = withContext(Dispatchers.IO) {
                 myDataStore.getUserCode()
             }
+            val googleLogined = withContext(Dispatchers.IO) {
+                myDataStore.getGoogleLogined()
+            }
             if (profileImg != null) {
                 Glide.with(requireContext())
                     .load(profileImg)
@@ -89,6 +101,7 @@ class ProfileFragment : Fragment() {
             }
             binding.myNickname.text = nickname
             binding.myUserCode.text = userCode
+            isGoogleLogined = googleLogined
         }
 
         var badgeList = mutableListOf<String>()
@@ -102,13 +115,13 @@ class ProfileFragment : Fragment() {
 
         binding.apply {
             logout.setOnClickListener {
+                logoutGoogle()
                 mainViewModel.requestLogout(
                     onSuccess = {
+                        Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
                         val intent = Intent(requireContext(), AuthActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
-
-                        Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
                     },
                     onFailure = {
                         Toast.makeText(requireContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show()
@@ -126,6 +139,22 @@ class ProfileFragment : Fragment() {
             }
             unregister.setOnClickListener {
                 findNavController().navigate(R.id.action_profileFragment_to_unregisterFragment)
+            }
+        }
+    }
+
+    private fun logoutGoogle() {
+        if (isGoogleLogined) {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+
+            val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+
+            googleSignInClient.signOut().addOnCompleteListener {
+                lifecycleScope.launch {
+                    myDataStore.setGoogleLogined(false)
+                }
             }
         }
     }

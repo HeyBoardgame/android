@@ -21,7 +21,7 @@
 
     <!-- SearchView -->
     <style name="SearchViewTheme" parent="Base.Theme.Heyboardgame">
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColorHint">@color/greyPressed</item>
     </style>
 

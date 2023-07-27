@@ -1,13 +1,13 @@
 package com.project.heyboardgame.dataModel
+
 import com.google.gson.annotations.SerializedName
 
-
-data class LoginResult(
+data class GoogleLoginResult(
     @SerializedName("result")
-    val result: LoginResultData
+    val result: GoogleLoginResultData
 )
 
-data class LoginResultData(
+data class GoogleLoginResultData(
     @SerializedName("accessToken")
     val accessToken: String,
     @SerializedName("refreshToken")

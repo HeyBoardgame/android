@@ -1,5 +1,6 @@
 package com.project.heyboardgame.auth
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,21 +11,24 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.SignUpRVAdapter
-import com.project.heyboardgame.dataModel.SignUpData
+import com.project.heyboardgame.dataModel.GoogleRegisterData
 import com.project.heyboardgame.dataModel.SignUpItem
-import com.project.heyboardgame.databinding.FragmentSignUp2Binding
+import com.project.heyboardgame.databinding.FragmentGoogleSignUpBinding
+import com.project.heyboardgame.main.MainActivity
 
-class SignUpFragment2 : Fragment() {
 
+class GoogleSignUpFragment : Fragment() {
     // View Binding
-    private var _binding : FragmentSignUp2Binding? = null
+    private var _binding : FragmentGoogleSignUpBinding? = null
     private val binding get() = _binding!!
-    // Adapter
-    private lateinit var signUpRVAdapter : SignUpRVAdapter
-    // View Model
+    // ViewModel
     private lateinit var authViewModel: AuthViewModel
+    // Adapter
+    private lateinit var googleSignUpRVAdapter : SignUpRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,20 +36,15 @@ class SignUpFragment2 : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentSignUp2Binding.inflate(inflater, container, false)
+        _binding = FragmentGoogleSignUpBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // safe args 사용해서 SignUpFragment1에서 email, password, nickname 받아오기
-        val args: SignUpFragment2Args by navArgs()
-        val signUpTmpData: SignUpData = args.signUpData
-
-        val email = signUpTmpData.email
-        val password = signUpTmpData.password
-        val nickname = signUpTmpData.nickname
+        val args: GoogleSignUpFragmentArgs by navArgs()
+        val email = args.googleEmail
 
         val genreList = mutableListOf<SignUpItem>()
         genreList.add(SignUpItem(R.drawable.icon_strategy, "전략", 1, false))
@@ -57,8 +56,8 @@ class SignUpFragment2 : Fragment() {
         genreList.add(SignUpItem(R.drawable.icon_war, "전쟁", 7, false))
         genreList.add(SignUpItem(R.drawable.icon_world, "세계관", 8, false))
 
-        signUpRVAdapter = SignUpRVAdapter(requireContext(), genreList)
-        binding.genreListRV.adapter = signUpRVAdapter
+        googleSignUpRVAdapter = SignUpRVAdapter(requireContext(), genreList)
+        binding.genreListRV.adapter = googleSignUpRVAdapter
         binding.genreListRV.layoutManager = GridLayoutManager(requireContext(), 2)
 
         // 뒤로가기 아이콘 누를 때 발생하는 이벤트
@@ -68,15 +67,17 @@ class SignUpFragment2 : Fragment() {
 
         // 회원가입 버튼 누를 때 발생하는 이벤트
         binding.signUpBtn.setOnClickListener {
-            val selectedItems = signUpRVAdapter.getSelectedItems()
-            val signUpData = SignUpData(email, password, nickname, selectedItems)
+            val selectedItems = googleSignUpRVAdapter.getSelectedItems()
+            val googleRegisterData = GoogleRegisterData(email, selectedItems)
             if (selectedItems.size < 3) {
                 Toast.makeText(requireContext(), "3개 이상 골라주세요.", Toast.LENGTH_SHORT).show()
             } else {
-                authViewModel.requestRegister(signUpData,
+                authViewModel.requestGoogleRegister(googleRegisterData,
                     onSuccess = {
-                        Toast.makeText(requireContext(), "회원 가입이 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                        Navigation.findNavController(view).navigate(R.id.action_signUpFragment2_to_loginFragment)
+                        Toast.makeText(requireContext(), "로그인 되었습니다.", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(requireContext(), MainActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
                     },
                     onFailure = {
                         Toast.makeText(requireContext(), "회원 가입 실패", Toast.LENGTH_SHORT).show()
@@ -91,6 +92,14 @@ class SignUpFragment2 : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+
+        googleSignInClient.signOut()
         _binding = null
     }
+
 }
