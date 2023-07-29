@@ -108,10 +108,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             strategy.setOnClickListener {
                 isStrategyClicked = if (isStrategyClicked) {
                     strategy.setBackgroundColor(Color.parseColor("#DADADA"))
+                    strategyIcon.setImageResource(R.drawable.icon_strategy)
                     strategyText.setTextColor(Color.parseColor("#FF000000"))
                     false
                 } else {
                     strategy.setBackgroundColor(Color.parseColor("#DEB4FF"))
+                    strategyIcon.setImageResource(R.drawable.icon_strategy_color)
                     strategyText.setTextColor(Color.parseColor("#A93CFF"))
                     true
                 }
@@ -148,10 +150,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             card.setOnClickListener {
                 isCardClicked = if (isCardClicked) {
                     card.setBackgroundColor(Color.parseColor("#DADADA"))
+                    cardIcon.setImageResource(R.drawable.icon_card)
                     cardText.setTextColor(Color.parseColor("#FF000000"))
                     false
                 } else {
                     card.setBackgroundColor(Color.parseColor("#DEB4FF"))
+                    cardIcon.setImageResource(R.drawable.icon_card_color)
                     cardText.setTextColor(Color.parseColor("#A93CFF"))
                     true
                 }
@@ -188,10 +192,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             war.setOnClickListener {
                 isWarClicked = if (isWarClicked) {
                     war.setBackgroundColor(Color.parseColor("#DADADA"))
+                    warIcon.setImageResource(R.drawable.icon_war)
                     warText.setTextColor(Color.parseColor("#FF000000"))
                     false
                 } else {
                     war.setBackgroundColor(Color.parseColor("#DEB4FF"))
+                    warIcon.setImageResource(R.drawable.icon_war_color)
                     warText.setTextColor(Color.parseColor("#A93CFF"))
                     true
                 }
@@ -200,10 +206,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             world.setOnClickListener {
                 isWorldClicked = if (isWorldClicked) {
                     world.setBackgroundColor(Color.parseColor("#DADADA"))
+                    worldIcon.setImageResource(R.drawable.icon_world)
                     worldText.setTextColor(Color.parseColor("#FF000000"))
                     false
                 } else {
                     world.setBackgroundColor(Color.parseColor("#DEB4FF"))
+                    worldIcon.setImageResource(R.drawable.icon_world_color)
                     worldText.setTextColor(Color.parseColor("#A93CFF"))
                     true
                 }
