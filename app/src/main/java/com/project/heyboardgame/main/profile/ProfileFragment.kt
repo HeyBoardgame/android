@@ -75,10 +75,6 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.favorite.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_detailFragment)
-        }
-
         lifecycleScope.launch {
             val profileImg = withContext(Dispatchers.IO) {
                 myDataStore.getProfileImage()

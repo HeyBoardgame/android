@@ -63,6 +63,16 @@
     <string name="number_of_people">인원 수</string>
     <string name="detail_description">상세 설명</string>
     <string name="detail_strategy">사용 전략</string>
+    <string name="filter">필터</string>
+    <string name="genre">장르</string>
+    <string name="strategy">전략</string>
+    <string name="party">파티</string>
+    <string name="simple">단순</string>
+    <string name="card">카드</string>
+    <string name="family">가족</string>
+    <string name="kids">키즈</string>
+    <string name="war">전쟁</string>
+    <string name="world">세계관</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

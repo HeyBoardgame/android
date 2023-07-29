@@ -7,15 +7,17 @@ data class SearchResult(
     val result: SearchResultData
 )
 
-data class SearchResultData (
+data class SearchResultData(
+    @SerializedName("boardGameId")
+    val boardGameId: Int,
     @SerializedName("boardGameImg")
-    val boardGameImg : String,
+    val boardGameImg: String,
     @SerializedName("boardGameTitle")
-    val boardGameTitle : String,
+    val boardGameTitle: String,
     @SerializedName("boardGameGenre")
-    val boardGameGenre : List<String>,
+    val boardGameGenre: List<String>,
     @SerializedName("boardGameDifficulty")
-    val boardGameDifficulty : String,
+    val boardGameDifficulty: String,
     @SerializedName("boardGameNumOfPeople")
-    val boardGameNumOfPeople : String
+    val boardGameNumOfPeople: String
 )
