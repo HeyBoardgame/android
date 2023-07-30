@@ -25,8 +25,8 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
-            android:id="@+id/action_loginFragment_to_googleSignUpFragment"
-            app:destination="@id/googleSignUpFragment"
+            android:id="@+id/action_loginFragment_to_googleSignUpFragment1"
+            app:destination="@id/googleSignUpFragment1"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -77,12 +77,32 @@
             app:argType="com.project.heyboardgame.dataModel.SignUpData" />
     </fragment>
     <fragment
-        android:id="@+id/googleSignUpFragment"
-        android:name="com.project.heyboardgame.auth.GoogleSignUpFragment"
-        android:label="fragment_google_sign_up"
-        tools:layout="@layout/fragment_google_sign_up" >
+        android:id="@+id/googleSignUpFragment1"
+        android:name="com.project.heyboardgame.auth.GoogleSignUpFragment1"
+        android:label="fragment_google_sign_up1"
+        tools:layout="@layout/fragment_google_sign_up1" >
         <argument
             android:name="googleEmail"
-            app:argType="string"/>
+            app:argType="string" />
+        <action
+            android:id="@+id/action_googleSignUpFragment1_to_googleSignUpFragment2"
+            app:destination="@id/googleSignUpFragment2"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="googleRegisterTempData"
+                app:argType="com.project.heyboardgame.dataModel.GoogleRegisterTempData" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/googleSignUpFragment2"
+        android:name="com.project.heyboardgame.auth.GoogleSignUpFragment2"
+        android:label="fragment_google_sign_up2"
+        tools:layout="@layout/fragment_google_sign_up2" >
+        <argument
+            android:name="googleRegisterTempData"
+            app:argType="com.project.heyboardgame.dataModel.GoogleRegisterTempData" />
     </fragment>
 </navigation>

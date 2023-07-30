@@ -11,19 +11,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.SignUpRVAdapter
 import com.project.heyboardgame.dataModel.GoogleRegisterData
 import com.project.heyboardgame.dataModel.SignUpItem
-import com.project.heyboardgame.databinding.FragmentGoogleSignUpBinding
+import com.project.heyboardgame.databinding.FragmentGoogleSignUp2Binding
 import com.project.heyboardgame.main.MainActivity
 
 
-class GoogleSignUpFragment : Fragment() {
+class GoogleSignUpFragment2 : Fragment() {
     // View Binding
-    private var _binding : FragmentGoogleSignUpBinding? = null
+    private var _binding : FragmentGoogleSignUp2Binding? = null
     private val binding get() = _binding!!
     // ViewModel
     private lateinit var authViewModel: AuthViewModel
@@ -36,15 +34,18 @@ class GoogleSignUpFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentGoogleSignUpBinding.inflate(inflater, container, false)
+        _binding = FragmentGoogleSignUp2Binding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args: GoogleSignUpFragmentArgs by navArgs()
-        val email = args.googleEmail
+        val args : GoogleSignUpFragment2Args by navArgs()
+        val googleRegisterTempData = args.googleRegisterTempData
+
+        val email = googleRegisterTempData.email
+        val nickname = googleRegisterTempData.nickname
 
         val genreList = mutableListOf<SignUpItem>()
         genreList.add(SignUpItem(R.drawable.icon_strategy, "전략", 1, false))
@@ -68,7 +69,7 @@ class GoogleSignUpFragment : Fragment() {
         // 회원가입 버튼 누를 때 발생하는 이벤트
         binding.signUpBtn.setOnClickListener {
             val selectedItems = googleSignUpRVAdapter.getSelectedItems()
-            val googleRegisterData = GoogleRegisterData(email, selectedItems)
+            val googleRegisterData = GoogleRegisterData(email, nickname, selectedItems)
             if (selectedItems.size < 3) {
                 Toast.makeText(requireContext(), "3개 이상 골라주세요.", Toast.LENGTH_SHORT).show()
             } else {
@@ -92,13 +93,6 @@ class GoogleSignUpFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build()
-
-        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-
-        googleSignInClient.signOut()
         _binding = null
     }
 

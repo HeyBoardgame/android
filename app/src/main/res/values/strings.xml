@@ -73,6 +73,8 @@
     <string name="kids">키즈</string>
     <string name="war">전쟁</string>
     <string name="world">세계관</string>
+    <string name="google_nickname">닉네임을 입력해주세요!</string>
+    <string name="google_nickname_text">앱에서 사용하실 닉네임을 10자 이내로 입력해주세요.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

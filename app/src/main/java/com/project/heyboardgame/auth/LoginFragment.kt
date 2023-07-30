@@ -148,7 +148,7 @@ class LoginFragment : Fragment() {
                     },
                     onFailure = {
                         Toast.makeText(requireContext(), "회원가입이 필요합니다.", Toast.LENGTH_SHORT).show()
-                        val action = LoginFragmentDirections.actionLoginFragmentToGoogleSignUpFragment(googleEmail)
+                        val action = LoginFragmentDirections.actionLoginFragmentToGoogleSignUpFragment1(googleEmail)
                         findNavController().navigate(action)
                     },
                     onErrorAction = {

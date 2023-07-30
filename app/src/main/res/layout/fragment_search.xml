@@ -105,7 +105,7 @@
                 android:progressDrawable="@drawable/custom_seekbar"
                 android:splitTrack="false"
                 android:max="10"
-                android:progress="4"
+                android:progress="0"
                 android:tickMark="@drawable/custom_tickmark"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginBottom="20dp"/>
