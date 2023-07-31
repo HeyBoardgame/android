@@ -20,7 +20,7 @@ data class DetailResultData (
     val difficulty : String,
     @SerializedName("timeRequired")
     val timeRequired : String,
-    @SerializedName("numOfPeople")
+    @SerializedName("numOfPlayer")
     val numOfPeople : String,
     @SerializedName("description")
     val description : String,

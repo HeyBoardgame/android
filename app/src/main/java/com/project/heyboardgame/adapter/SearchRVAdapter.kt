@@ -6,16 +6,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.SearchResultData
-import java.util.Locale
 
-class SearchRVAdapter(val context : Context, val searchResList  : List<SearchResultData>)
+class SearchRVAdapter(val context : Context, var searchResList  : List<SearchResultData>)
     : RecyclerView.Adapter<SearchRVAdapter.ViewHolder>() {
 
 
@@ -25,8 +23,14 @@ class SearchRVAdapter(val context : Context, val searchResList  : List<SearchRes
         val boardGameTitle = view.findViewById<TextView>(R.id.title)
         val boardGameGenre = view.findViewById<TextView>(R.id.genre)
         val boardGameDifficulty = view.findViewById<TextView>(R.id.difficulty)
-        val boardGameNumOfPeople = view.findViewById<TextView>(R.id.numOfPeople)
+        val boardGameNumOfPlayer = view.findViewById<TextView>(R.id.numOfPlayer)
 
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setNewData(newData: List<SearchResultData>) {
+        searchResList = newData
+        notifyDataSetChanged()
     }
 
     interface ItemClick {
@@ -43,10 +47,11 @@ class SearchRVAdapter(val context : Context, val searchResList  : List<SearchRes
     override fun onBindViewHolder(holder: SearchRVAdapter.ViewHolder, position: Int) {
         val item = searchResList[position]
 
+        Glide.with(context).load(item.boardGameImg).into(holder.boardGameImg)
         holder.boardGameTitle.text = item.boardGameTitle
         holder.boardGameGenre.text = item.boardGameGenre.toCommaSeparatedString()
         holder.boardGameDifficulty.text = item.boardGameDifficulty
-        holder.boardGameNumOfPeople.text = item.boardGameNumOfPeople
+        holder.boardGameNumOfPlayer.text = item.boardGameNumOfPlayer
 
         if (itemClick != null) {
             holder.itemView.setOnClickListener { v ->

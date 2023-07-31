@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
+import com.project.heyboardgame.dataModel.SearchResultData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
@@ -92,7 +93,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 프로필 수정 함수
-    fun changeMyProfile(profileImg : String, file : MultipartBody.Part?, changeProfileData: ChangeProfileData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun changeMyProfile(profileImg: String, file: MultipartBody.Part?, changeProfileData: ChangeProfileData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         val json = Gson().toJson(changeProfileData) // ChangeProfileData를 JSON으로 직렬화
         // ChangeProfileData를 RequestBody로 변환
         val requestBody = json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
@@ -104,6 +105,21 @@ class MainViewModel : ViewModel() {
                 }
                 myDataStore.setNickname(changeProfileData.nickname)
                 onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+
+    // 보드게임 검색 함수
+    fun requestSearchResult(keyword: String, genreIdList: List<Int>, numOfPlayer: Int, onSuccess: (searchResultList: List<SearchResultData>?) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestSearchResult(keyword, genreIdList, numOfPlayer)
+            if (response.isSuccessful) {
+                val searchResultList = response.body()
+                onSuccess.invoke(searchResultList?.result)
             } else {
                 onFailure.invoke()
             }

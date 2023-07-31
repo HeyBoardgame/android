@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SearchResult(
     @SerializedName("result")
-    val result: SearchResultData
+    val result: List<SearchResultData>
 )
 
 data class SearchResultData(
@@ -18,6 +18,6 @@ data class SearchResultData(
     val boardGameGenre: List<String>,
     @SerializedName("boardGameDifficulty")
     val boardGameDifficulty: String,
-    @SerializedName("boardGameNumOfPeople")
-    val boardGameNumOfPeople: String
+    @SerializedName("boardGameNumOfPlayer")
+    val boardGameNumOfPlayer: String
 )

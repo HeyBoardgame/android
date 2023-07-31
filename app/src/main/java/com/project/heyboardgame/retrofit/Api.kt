@@ -1,6 +1,7 @@
 package com.project.heyboardgame.retrofit
 
 import com.project.heyboardgame.dataModel.ChangePasswordData
+import com.project.heyboardgame.dataModel.DetailResult
 import com.project.heyboardgame.dataModel.GoogleLoginData
 import com.project.heyboardgame.dataModel.GoogleLoginResult
 import com.project.heyboardgame.dataModel.GoogleRegisterData
@@ -9,6 +10,7 @@ import com.project.heyboardgame.dataModel.LoginResult
 import com.project.heyboardgame.dataModel.MyProfileResult
 import com.project.heyboardgame.dataModel.RefreshData
 import com.project.heyboardgame.dataModel.RefreshResult
+import com.project.heyboardgame.dataModel.SearchResult
 import com.project.heyboardgame.dataModel.SignUpData
 import com.project.heyboardgame.dataModel.TempPasswordData
 import okhttp3.MultipartBody
@@ -22,6 +24,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Api {
@@ -62,5 +65,16 @@ interface Api {
 
     @POST("/oauths/register") // 구글 회원가입
     suspend fun requestGoogleRegister(@Body googleRegisterData: GoogleRegisterData) : Response<GoogleLoginResult>
+
+    @GET("/boardgames/{id}")
+    suspend fun  requestDetail(@Path("id") id : Int) : Response<DetailResult>
+
+    @GET("/boardgames/") // 보드게임 검색
+    suspend fun requestSearchResult(
+        @Query("keyword") keyword: String,
+        @Query("genreIdList") genreIdList: List<Int>,
+        @Query("numOfPlayer") numOfPlayer: Int
+    ): Response<SearchResult>
+
 
 }
