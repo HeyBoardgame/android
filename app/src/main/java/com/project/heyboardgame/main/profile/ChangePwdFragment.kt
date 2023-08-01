@@ -24,14 +24,11 @@ class ChangePwdFragment : Fragment(R.layout.fragment_change_pwd) {
     private var isPasswordValid = false
     private var isPasswordCheckFail = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangePwdBinding.bind(view)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         binding.currentPassword.addTextChangedListener(currentPasswordCheckTextWatcher) // 현재 비밀번호 입력창에 TextWatcher 추가
         binding.newPassword.addTextChangedListener(newPasswordTextWatcher) // 새 비밀번호 입력창에 TextWatcher 추가

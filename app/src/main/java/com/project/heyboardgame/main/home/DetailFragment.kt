@@ -30,15 +30,11 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private var currentRating = 0f
     private var isRatingCanceled = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         _binding = FragmentDetailBinding.bind(view)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         val args : DetailFragmentArgs by navArgs()
         id = args.id

@@ -15,7 +15,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.FragmentRecommendBinding
-import com.project.heyboardgame.main.MainActivity
 import kotlin.math.sqrt
 
 

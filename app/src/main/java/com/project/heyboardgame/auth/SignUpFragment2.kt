@@ -26,10 +26,6 @@ class SignUpFragment2 : Fragment() {
     // View Model
     private lateinit var authViewModel: AuthViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSignUp2Binding.inflate(inflater, container, false)
@@ -38,6 +34,7 @@ class SignUpFragment2 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         // safe args 사용해서 SignUpFragment1에서 email, password, nickname 받아오기
         val args: SignUpFragment2Args by navArgs()

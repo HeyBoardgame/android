@@ -19,10 +19,6 @@ class MatchResFragment : Fragment(R.layout.fragment_match_res) {
     // Adapter
     private lateinit var matchResRVAdapter: MatchResRVAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

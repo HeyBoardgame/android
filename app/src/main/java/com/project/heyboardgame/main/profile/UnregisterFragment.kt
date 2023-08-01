@@ -20,14 +20,11 @@ class UnregisterFragment : Fragment(R.layout.fragment_unregister) {
     // ViewModel
     private lateinit var mainViewModel: MainViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentUnregisterBinding.bind(view)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()

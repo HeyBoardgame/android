@@ -28,10 +28,8 @@ import com.project.heyboardgame.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 
@@ -52,14 +50,11 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
     private var finalImageUri: Uri? = null
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeProfileBinding.bind(view)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
         lifecycleScope.launch {
             val profileImg = withContext(Dispatchers.IO) {
                 myDataStore.getProfileImage()

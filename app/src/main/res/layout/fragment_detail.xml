@@ -137,6 +137,15 @@
 
                     </LinearLayout>
 
+                    <!-- 한글판 정발 여부 -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="한글판"
+                        android:textColor="@color/detailColor"
+                        android:textSize="13sp"
+                        android:layout_marginBottom="5dp"/>
+
                 </LinearLayout>
 
             </LinearLayout>

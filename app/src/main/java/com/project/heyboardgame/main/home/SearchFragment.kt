@@ -42,14 +42,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     // 검색 결과 리스트
     private var searchResultList = mutableListOf<SearchResultData>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSearchBinding.bind(view)
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         binding.search.setOnQueryTextListener(searchViewTextListener)
         binding.search.isSubmitButtonEnabled = true

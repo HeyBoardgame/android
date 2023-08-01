@@ -21,11 +21,6 @@ class ForgotPwdFragment : Fragment() {
     // View Model
     private lateinit var authViewModel: AuthViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentForgotPwdBinding.inflate(inflater, container, false)
         return binding.root
@@ -33,6 +28,7 @@ class ForgotPwdFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         // 뒤로가기 아이콘 누를 때 발생하는 이벤트
         binding.backBtn.setOnClickListener {

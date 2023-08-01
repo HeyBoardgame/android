@@ -29,10 +29,6 @@ class SignUpFragment1 : Fragment() {
     private var isEmailDuplicated = false
     private var isPasswordValid = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentSignUp1Binding.inflate(inflater, container, false)
@@ -41,6 +37,7 @@ class SignUpFragment1 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         binding.password.addTextChangedListener(passwordTextWatcher) // 비밀번호 입력창에 TextWatcher 추가
         binding.passwordCheck.addTextChangedListener(passwordCheckTextWatcher) // 비밀번호 확인 입력창에 TextWatcher 추가

@@ -28,10 +28,6 @@ class GoogleSignUpFragment2 : Fragment() {
     // Adapter
     private lateinit var googleSignUpRVAdapter : SignUpRVAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentGoogleSignUp2Binding.inflate(inflater, container, false)
@@ -40,6 +36,7 @@ class GoogleSignUpFragment2 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
 
         val args : GoogleSignUpFragment2Args by navArgs()
         val googleRegisterTempData = args.googleRegisterTempData
