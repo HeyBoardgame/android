@@ -79,11 +79,11 @@ class HomeFragment : Fragment() {
         binding.homeRV4.adapter = homeRVAdapter
         binding.homeRV4.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        binding.apply {
-            searchBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
-            }
+
+        binding.searchBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
         }
+
 
     }
 

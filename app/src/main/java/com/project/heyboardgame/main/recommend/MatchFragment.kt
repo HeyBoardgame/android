@@ -23,17 +23,17 @@ class MatchFragment : Fragment(R.layout.fragment_match) {
 
         _binding = FragmentMatchBinding.bind(view)
 
-        binding.apply {
-            // 첫 번째 화면(추천 받는 화면)으로 이동
-            rematchBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
 
-            // 세 번째 화면(추천 결과 화면)으로 이동
-            getRecommendBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_matchFragment_to_matchResFragment)
-            }
+        // 첫 번째 화면(추천 받는 화면)으로 이동
+        binding.rematchBtn.setOnClickListener {
+            findNavController().popBackStack()
         }
+
+        // 세 번째 화면(추천 결과 화면)으로 이동
+        binding.getRecommendBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_matchFragment_to_matchResFragment)
+        }
+
 
         var nicknameList = mutableListOf<String>()
         nicknameList.add("닉네임1")

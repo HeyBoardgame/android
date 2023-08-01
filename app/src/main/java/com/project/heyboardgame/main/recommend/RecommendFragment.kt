@@ -77,11 +77,10 @@ class RecommendFragment : Fragment(), SensorEventListener {
             SensorManager.SENSOR_DELAY_NORMAL
         )
 
-        binding.apply {
-            addFriendBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_recommendFragment_to_addFriendFragment)
-            }
+        binding.addFriendBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_recommendFragment_to_addFriendFragment)
         }
+
     }
 
     override fun onResume() {

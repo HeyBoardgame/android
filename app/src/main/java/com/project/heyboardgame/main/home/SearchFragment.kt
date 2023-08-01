@@ -263,7 +263,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     }
                 },
                 onFailure = {
-                    Toast.makeText(requireContext(), "검색 실패", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "검색에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                 },
                 onErrorAction = {
                     Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()

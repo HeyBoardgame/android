@@ -29,11 +29,9 @@ class MatchResFragment : Fragment(R.layout.fragment_match_res) {
 
         _binding = FragmentMatchResBinding.bind(view)
 
-        binding.apply {
-            // 두 번째 화면(추천 완료 화면)으로 이동
-            backBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
+        // 두 번째 화면(추천 완료 화면)으로 이동
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
         }
 
         var matchResList = mutableListOf<GroupMatchResult>()

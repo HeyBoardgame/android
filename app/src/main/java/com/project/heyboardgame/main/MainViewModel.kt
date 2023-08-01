@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
+import com.project.heyboardgame.dataModel.DetailResultData
+import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataModel.SearchResultData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.retrofit.Api
@@ -112,7 +114,6 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-
     // 보드게임 검색 함수
     fun requestSearchResult(keyword: String, genreIdList: List<Int>, numOfPlayer: Int, onSuccess: (searchResultList: List<SearchResultData>?) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
@@ -127,5 +128,46 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-
+    // 보드게임 상세 조회
+    fun requestDetail(id: Int, onSuccess: (detailResult: DetailResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestDetail(id)
+            if (response.isSuccessful) {
+                val detailResult = response.body()
+                detailResult?.let {
+                    onSuccess(it.result)
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 보드게임 평가하기
+    fun requestRating(id: Int, ratingData: RatingData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestRating(id, ratingData)
+            if (response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 보드게임 찜하기
+    fun requestBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestBookmark(id)
+            if(response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
 }

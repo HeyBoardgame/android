@@ -79,53 +79,52 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
 
         binding.nickname.addTextChangedListener(nicknameTextWatcher) // 닉네임 입력창에 TextWatcher 추가
 
-        binding.apply {
-            backBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
 
-            changeProfileImg.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    galleryPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-                else
-                    galleryPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
-            defaultImgBtn.setOnClickListener {
-                binding.profileImg.setImageResource(R.drawable.default_profile_img)
-                finalImageUri = null
-                isImageChanged = true
-            }
+        binding.changeProfileImg.setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                galleryPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
+            else
+                galleryPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
 
-            changeProfileBtn.setOnClickListener {
-                val filePart : MultipartBody.Part?
-                val profileImg : String
-                if (finalImageUri == null) {
-                    profileImg = ""
-                    filePart = null
-                } else {
-                    profileImg = finalImageUri.toString()
-                    val file = File(absolutelyPath(finalImageUri, requireContext()))
-                    val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-                    filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+        binding.defaultImgBtn.setOnClickListener {
+            binding.profileImg.setImageResource(R.drawable.default_profile_img)
+            finalImageUri = null
+            isImageChanged = true
+        }
+
+        binding.changeProfileBtn.setOnClickListener {
+            val filePart : MultipartBody.Part?
+            val profileImg : String
+            if (finalImageUri == null) {
+                profileImg = ""
+                filePart = null
+            } else {
+                profileImg = finalImageUri.toString()
+                val file = File(absolutelyPath(finalImageUri, requireContext()))
+                val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+                filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
+            }
+            val nickname = binding.nickname.text.toString()
+            val changeProfileData = ChangeProfileData(nickname, isImageChanged)
+
+
+            mainViewModel.changeMyProfile(profileImg, filePart, changeProfileData,
+                onSuccess = {
+                    findNavController().popBackStack()
+                    Toast.makeText(requireContext(), "프로필이 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "프로필 변경 실패", Toast.LENGTH_SHORT).show()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                 }
-                val nickname = binding.nickname.text.toString()
-                val changeProfileData = ChangeProfileData(nickname, isImageChanged)
-
-
-                mainViewModel.changeMyProfile(profileImg, filePart, changeProfileData,
-                    onSuccess = {
-                        findNavController().popBackStack()
-                        Toast.makeText(requireContext(), "프로필이 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()
-                    },
-                    onFailure = {
-                        Toast.makeText(requireContext(), "프로필 변경 실패", Toast.LENGTH_SHORT).show()
-                    },
-                    onErrorAction = {
-                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
+            )
         }
     }
 

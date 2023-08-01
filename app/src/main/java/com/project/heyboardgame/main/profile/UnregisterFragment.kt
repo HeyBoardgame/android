@@ -29,28 +29,28 @@ class UnregisterFragment : Fragment(R.layout.fragment_unregister) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentUnregisterBinding.bind(view)
 
-        binding.apply {
-            backBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
-            unregisterBtn.setOnClickListener {
-                mainViewModel.requestUnregister(
-                    onSuccess = {
-                        val intent = Intent(requireContext(), AuthActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-
-                        Toast.makeText(requireContext(), "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                    },
-                    onFailure = {
-                        Toast.makeText(requireContext(), "회원 탈퇴 실패", Toast.LENGTH_SHORT).show()
-                    },
-                    onErrorAction = {
-                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
         }
+
+        binding.unregisterBtn.setOnClickListener {
+            mainViewModel.requestUnregister(
+                onSuccess = {
+                    val intent = Intent(requireContext(), AuthActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+
+                    Toast.makeText(requireContext(), "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "회원 탈퇴 실패", Toast.LENGTH_SHORT).show()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+
     }
 
     override fun onDestroyView() {

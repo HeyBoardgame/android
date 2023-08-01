@@ -20,14 +20,13 @@ class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
 
         _binding = FragmentAddFriendBinding.bind(view)
 
-        binding.apply {
 
-            nicknameSearchView.isSubmitButtonEnabled = true // 검색창에 submit 버튼 보여줌
+        binding.nicknameSearchView.isSubmitButtonEnabled = true // 검색창에 submit 버튼 보여줌
 
-            backBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
         }
+
     }
 
     override fun onDestroyView() {

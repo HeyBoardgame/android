@@ -47,7 +47,7 @@
             android:orientation="vertical"
             android:layout_margin="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp">
@@ -58,27 +58,21 @@
                     android:layout_width="170dp"
                     android:layout_height="150dp"
                     android:src="@drawable/tmp_img"
-                    android:scaleType="fitCenter"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:scaleType="fitCenter" />
 
                 <!-- 보드게임 별점, 장르, 테마 -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/detailImg"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginStart="10dp">
+                    android:gravity="bottom">
 
                     <!-- 별점 -->
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="center">
+                        android:layout_marginBottom="5dp">
 
                         <ImageView
                             android:src="@drawable/icon_star"
@@ -90,29 +84,62 @@
                             android:id="@+id/starRating"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="4.3"
                             android:textColor="@color/detailColor"
-                            android:textSize="15sp"/>
+                            android:textSize="15sp" />
 
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <!-- 장르 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="전략, 단순"
-                        android:textColor="@color/detailColor"
-                        android:textSize="12sp" />
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:text="장르: "
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/genre"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <!-- 테마 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="기차"
-                        android:textColor="@color/detailColor"
-                        android:textSize="12sp" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:text="테마: "
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/theme"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <!-- 보드게임 이름 -->
             <TextView
@@ -146,13 +173,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/difficulty" />
+                        android:text="@string/difficulty"
+                        android:textSize="15sp"
+                        android:textColor="@color/detailColor"/>
 
                     <TextView
                         android:id="@+id/difficulty"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="보통" />
+                        android:textSize="15sp"
+                        android:textColor="@color/detailColor"/>
 
                 </LinearLayout>
 
@@ -172,13 +202,30 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/time_required" />
+                        android:text="@string/time_required"
+                        android:textSize="15sp"
+                        android:textColor="@color/detailColor"/>
 
-                    <TextView
-                        android:id="@+id/timeRequired"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1시간" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/timeRequired"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/detailColor"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="분"
+                            android:textSize="15sp"
+                            android:textColor="@color/detailColor"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -198,13 +245,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/number_of_people"  />
+                        android:text="@string/number_of_player"
+                        android:textSize="15sp"
+                        android:textColor="@color/detailColor"/>
 
                     <TextView
-                        android:id="@+id/numOfPeople"
+                        android:id="@+id/numOfPlayer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3~5인" />
+                        android:textSize="15sp"
+                        android:textColor="@color/detailColor"/>
 
                 </LinearLayout>
 
@@ -216,7 +266,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
-                android:rating="0"
+                android:stepSize="0.5"
                 android:layout_gravity="center"
                 android:contentDescription="@string/progress_bar"
                 android:progressTint="@color/mainColor"

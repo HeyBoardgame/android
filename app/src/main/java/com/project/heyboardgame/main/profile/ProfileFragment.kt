@@ -109,34 +109,37 @@ class ProfileFragment : Fragment() {
         binding.badgeRV.adapter = badgeRVAdapter
         binding.badgeRV.layoutManager = GridLayoutManager(requireContext(), 3)
 
-        binding.apply {
-            logout.setOnClickListener {
-                logoutGoogle()
-                mainViewModel.requestLogout(
-                    onSuccess = {
-                        Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(requireContext(), AuthActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                    },
-                    onFailure = {
-                        Toast.makeText(requireContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show()
-                    },
-                    onErrorAction = {
-                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
-            changeProfile.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_changeProfileFragment)
-            }
-            changePassword.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_changePwdFragment)
-            }
-            unregister.setOnClickListener {
-                findNavController().navigate(R.id.action_profileFragment_to_unregisterFragment)
-            }
+
+        binding.logout.setOnClickListener {
+            logoutGoogle()
+            mainViewModel.requestLogout(
+                onSuccess = {
+                    Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(requireContext(), AuthActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "로그아웃 실패", Toast.LENGTH_SHORT).show()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
+
+        binding.changeProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_changeProfileFragment)
+        }
+
+        binding.changePassword.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_changePwdFragment)
+        }
+
+        binding.unregister.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_unregisterFragment)
+        }
+
     }
 
     private fun logoutGoogle() {

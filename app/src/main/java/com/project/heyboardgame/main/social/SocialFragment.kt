@@ -72,15 +72,15 @@ class SocialFragment : Fragment() {
         binding.friendListRV.adapter = friendListRVAdapter
         binding.friendListRV.layoutManager = LinearLayoutManager(requireContext())
 
-        binding.apply {
-            addFriendBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_socialFragment_to_addFriendFragment)
-            }
 
-            chatListBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_socialFragment_to_chatListFragment)
-            }
+        binding.addFriendBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_socialFragment_to_addFriendFragment)
         }
+
+        binding.chatListBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_socialFragment_to_chatListFragment)
+        }
+
 
     }
 

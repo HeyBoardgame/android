@@ -8,27 +8,30 @@ data class DetailResult(
 )
 
 data class DetailResultData (
-    @SerializedName("starRating")
+    @SerializedName("starRating") // 별점
     val starRating : Double,
-    @SerializedName("genre")
-    var genre : List<String>,
-    @SerializedName("theme")
-    var theme : List<String>,
-    @SerializedName("title")
+    @SerializedName("genre") // 장르
+    val genre : List<String>,
+    @SerializedName("theme") // 테마
+    val theme : List<String>,
+    @SerializedName("imagePath") // 이미지
+    val image : String,
+    @SerializedName("title") // 보드게임 이름
     val title : String,
-    @SerializedName("difficulty")
+    @SerializedName("difficulty") // 보드게임 난이도
     val difficulty : String,
-    @SerializedName("timeRequired")
-    val timeRequired : String,
-    @SerializedName("numOfPlayer")
-    val numOfPeople : String,
-    @SerializedName("description")
+    @SerializedName("timeRequired") // 보드게임 소요시간
+    val timeRequired : Int,
+    @SerializedName("playerMax") // 최대 인원 수
+    val playerMax : Int,
+    @SerializedName("playerMin") // 최소 인원 수
+    val playerMin : Int,
+    @SerializedName("description") // 상세 설명
     val description : String,
-    @SerializedName("strategy")
+    @SerializedName("strategy") // 사용 전략
     val strategy : String,
-    @SerializedName("isBookmarked")
+    @SerializedName("isBookmarked") // 찜하기 여부
     val isBookmarked : Boolean,
-    @SerializedName("myRating")
-    val myRating : Int
-
+    @SerializedName("myRating") // 내가 남긴 별점
+    val myRating : Double
 )

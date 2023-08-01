@@ -23,15 +23,15 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
         _binding = FragmentChatListBinding.bind(view)
 
-        binding.apply {
-            addFriendBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_chatListFragment_to_addFriendFragment)
-            }
 
-            backBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
+        binding.addFriendBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_chatListFragment_to_addFriendFragment)
         }
+
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
 
         var nicknameList = mutableListOf<String>()
         nicknameList.add("닉네임1")

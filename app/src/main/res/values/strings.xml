@@ -60,7 +60,7 @@
     <string name="google_client_id">395302683566-paa1nctsn51t3b1c4g7kvmg18fv0ljst.apps.googleusercontent.com</string>
     <string name="difficulty">난이도</string>
     <string name="time_required">소요 시간</string>
-    <string name="number_of_people">인원 수</string>
+    <string name="number_of_player">인원 수</string>
     <string name="detail_description">상세 설명</string>
     <string name="detail_strategy">사용 전략</string>
     <string name="filter">필터</string>

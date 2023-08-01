@@ -37,27 +37,27 @@ class ChangePwdFragment : Fragment(R.layout.fragment_change_pwd) {
         binding.newPassword.addTextChangedListener(newPasswordTextWatcher) // 새 비밀번호 입력창에 TextWatcher 추가
         binding.newPasswordCheck.addTextChangedListener(newPasswordCheckTextWatcher) // 새 비밀번호 확인 입력창에 TextWatcher 추가
 
-        binding.apply {
-            backBtn.setOnClickListener {
-                findNavController().popBackStack()
-            }
-            changePasswordBtn.setOnClickListener {
-                val currentPassword = binding.currentPassword.text.toString()
-                val newPassword = binding.newPassword.text.toString()
-                val changePasswordData = ChangePasswordData(currentPassword, newPassword)
-                mainViewModel.changePassword(changePasswordData,
-                    onSuccess = { // 비밀번호 변경 성공
-                        Toast.makeText(requireContext(), "비밀번호가 성공적으로 변경되었습니다", Toast.LENGTH_SHORT).show()
-                        findNavController().popBackStack()
-                    },
-                    onFailure = { // 비밀번호 변경 실패
-                        Toast.makeText(requireContext(), "현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.", Toast.LENGTH_SHORT).show()
-                    },
-                    onErrorAction = { // 네트워크 오류
-                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                )
-            }
+
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.changePasswordBtn.setOnClickListener {
+            val currentPassword = binding.currentPassword.text.toString()
+            val newPassword = binding.newPassword.text.toString()
+            val changePasswordData = ChangePasswordData(currentPassword, newPassword)
+            mainViewModel.changePassword(changePasswordData,
+                onSuccess = { // 비밀번호 변경 성공
+                    Toast.makeText(requireContext(), "비밀번호가 성공적으로 변경되었습니다", Toast.LENGTH_SHORT).show()
+                    findNavController().popBackStack()
+                },
+                onFailure = { // 비밀번호 변경 실패
+                    Toast.makeText(requireContext(), "현재 비밀번호가 일치하지 않습니다. 다시 입력해주세요.", Toast.LENGTH_SHORT).show()
+                },
+                onErrorAction = { // 네트워크 오류
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
     }
 
