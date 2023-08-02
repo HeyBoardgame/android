@@ -7,7 +7,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://13.125.211.203:8080"
+    private const val BASE_URL = "http://13.125.211.203:8080/api/v1/"
 
     // Singleton으로 관리할 TokenInterceptor 인스턴스
     private var tokenInterceptor: TokenInterceptor? = null

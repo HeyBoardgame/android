@@ -149,7 +149,7 @@
 
                 <!-- 찜한 보드게임 -->
                 <LinearLayout
-                    android:id="@+id/favorite"
+                    android:id="@+id/bookmark"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="3dp"
@@ -176,7 +176,7 @@
 
                 <!-- 평가한 보드게임 -->
                 <LinearLayout
-                    android:id="@+id/evaluated"
+                    android:id="@+id/rated"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="3dp"

@@ -6,11 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.heyboardgame.R
 import com.project.heyboardgame.auth.AuthActivity
+import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.FragmentUnregisterBinding
 import com.project.heyboardgame.main.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class UnregisterFragment : Fragment(R.layout.fragment_unregister) {
@@ -19,6 +26,10 @@ class UnregisterFragment : Fragment(R.layout.fragment_unregister) {
     private val binding get() = _binding!!
     // ViewModel
     private lateinit var mainViewModel: MainViewModel
+    // DataStore
+    private val myDataStore : MyDataStore = MyDataStore()
+    // 구글 로그인 유저인 지 확인하는 변수
+    private var isGoogleLogined : Boolean = false
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -26,11 +37,19 @@ class UnregisterFragment : Fragment(R.layout.fragment_unregister) {
         _binding = FragmentUnregisterBinding.bind(view)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
+        lifecycleScope.launch {
+            val googleLogined = withContext(Dispatchers.IO) {
+                myDataStore.getGoogleLogined()
+            }
+            isGoogleLogined = googleLogined
+        }
+
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
 
         binding.unregisterBtn.setOnClickListener {
+            logoutGoogle()
             mainViewModel.requestUnregister(
                 onSuccess = {
                     val intent = Intent(requireContext(), AuthActivity::class.java)
@@ -48,6 +67,22 @@ class UnregisterFragment : Fragment(R.layout.fragment_unregister) {
             )
         }
 
+    }
+
+    private fun logoutGoogle() {
+        if (isGoogleLogined) {
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build()
+
+            val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+
+            googleSignInClient.signOut().addOnCompleteListener {
+                lifecycleScope.launch {
+                    myDataStore.setGoogleLogined(false)
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

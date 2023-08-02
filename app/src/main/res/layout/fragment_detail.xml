@@ -57,8 +57,8 @@
                     android:id="@+id/detailImg"
                     android:layout_width="170dp"
                     android:layout_height="150dp"
-                    android:src="@drawable/tmp_img"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="10dp"/>
 
                 <!-- 보드게임 별점, 장르, 테마 -->
                 <LinearLayout
@@ -168,7 +168,6 @@
             <!-- 보드게임 이름 -->
             <TextView
                 android:id="@+id/title"
-                android:text="티켓 투 라이드 : 유럽"
                 android:textSize="25sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
@@ -199,14 +198,16 @@
                         android:layout_height="wrap_content"
                         android:text="@string/difficulty"
                         android:textSize="15sp"
-                        android:textColor="@color/detailColor"/>
+                        android:textColor="@color/detailColor"
+                        android:layout_marginBottom="5dp"/>
 
                     <TextView
                         android:id="@+id/difficulty"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15sp"
-                        android:textColor="@color/detailColor"/>
+                        android:textColor="@color/mainColor"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
@@ -227,8 +228,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/time_required"
+                        android:textColor="@color/detailColor"
                         android:textSize="15sp"
-                        android:textColor="@color/detailColor"/>
+                        android:layout_marginBottom="5dp"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -240,14 +242,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15sp"
-                            android:textColor="@color/detailColor"/>
+                            android:textColor="@color/mainColor"
+                            android:textStyle="bold"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="분"
+                            android:textColor="@color/mainColor"
                             android:textSize="15sp"
-                            android:textColor="@color/detailColor"/>
+                            android:textStyle="bold"/>
 
                     </LinearLayout>
 
@@ -271,14 +275,16 @@
                         android:layout_height="wrap_content"
                         android:text="@string/number_of_player"
                         android:textSize="15sp"
-                        android:textColor="@color/detailColor"/>
+                        android:textColor="@color/detailColor"
+                        android:layout_marginBottom="5dp"/>
 
                     <TextView
                         android:id="@+id/numOfPlayer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/mainColor"
                         android:textSize="15sp"
-                        android:textColor="@color/detailColor"/>
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 

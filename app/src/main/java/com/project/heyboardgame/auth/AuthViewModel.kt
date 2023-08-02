@@ -100,7 +100,7 @@ class AuthViewModel : ViewModel() {
     }
 
     // 구글 로그인 요청 함수 (LoginFragment)
-    fun requestGoogleLogin(googleLoginData: GoogleLoginData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun requestGoogleLogin(googleLoginData: GoogleLoginData, onSuccess: () -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestGoogleLogin(googleLoginData)
             if (response.isSuccessful) {
@@ -119,7 +119,7 @@ class AuthViewModel : ViewModel() {
                     onSuccess.invoke()
                 }
             } else {
-                onFailure.invoke()
+                onFailure.invoke(response.code())
             }
         } catch(e: Exception) {
             onErrorAction.invoke()

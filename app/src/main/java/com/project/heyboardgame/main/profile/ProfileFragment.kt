@@ -25,7 +25,6 @@ import com.project.heyboardgame.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 
 
 class ProfileFragment : Fragment() {
@@ -105,6 +104,13 @@ class ProfileFragment : Fragment() {
         binding.badgeRV.adapter = badgeRVAdapter
         binding.badgeRV.layoutManager = GridLayoutManager(requireContext(), 3)
 
+        binding.bookmark.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_bookmarkFragment)
+        }
+
+        binding.rated.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_ratedFragment)
+        }
 
         binding.logout.setOnClickListener {
             logoutGoogle()

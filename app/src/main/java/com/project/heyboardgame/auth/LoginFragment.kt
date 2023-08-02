@@ -142,9 +142,15 @@ class LoginFragment : Fragment() {
                         startActivity(intent)
                     },
                     onFailure = {
-                        Toast.makeText(requireContext(), "회원가입이 필요합니다.", Toast.LENGTH_SHORT).show()
-                        val action = LoginFragmentDirections.actionLoginFragmentToGoogleSignUpFragment1(googleEmail)
-                        findNavController().navigate(action)
+                        if (it == 401) {
+                            Toast.makeText(requireContext(), "이미 가입된 회원입니다. 자체 로그인을 이용해주세요.", Toast.LENGTH_SHORT).show()
+                        } else if (it == 404) {
+                            Toast.makeText(requireContext(), "회원가입이 필요합니다.", Toast.LENGTH_SHORT).show()
+                            val action = LoginFragmentDirections.actionLoginFragmentToGoogleSignUpFragment1(googleEmail)
+                            findNavController().navigate(action)
+                        } else {
+                            Toast.makeText(requireContext(), "구글 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        }
                     },
                     onErrorAction = {
                         Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()

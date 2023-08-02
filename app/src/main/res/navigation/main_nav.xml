@@ -84,6 +84,20 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_profileFragment_to_bookmarkFragment"
+            app:destination="@id/bookmarkFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_profileFragment_to_ratedFragment"
+            app:destination="@id/ratedFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/matchFragment"
@@ -162,4 +176,14 @@
         android:name="com.project.heyboardgame.main.profile.ChangeProfileFragment"
         android:label="fragment_change_profile"
         tools:layout="@layout/fragment_change_profile" />
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.project.heyboardgame.main.profile.BookmarkFragment"
+        android:label="fragment_bookmark"
+        tools:layout="@layout/fragment_bookmark" />
+    <fragment
+        android:id="@+id/ratedFragment"
+        android:name="com.project.heyboardgame.main.profile.RatedFragment"
+        android:label="fragment_rated"
+        tools:layout="@layout/fragment_rated" />
 </navigation>
