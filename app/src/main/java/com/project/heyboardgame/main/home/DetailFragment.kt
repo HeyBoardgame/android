@@ -62,6 +62,11 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 }
                 currentRating = it.myRating.toFloat()
                 binding.myRating.rating = it.myRating.toFloat()
+                if (it.translated == "YES") {
+                    binding.translated.text = "O"
+                } else {
+                    binding.translated.text = "X"
+                }
             },
             onFailure = {
                 Toast.makeText(requireContext(), "상세 조회 실패", Toast.LENGTH_SHORT).show()

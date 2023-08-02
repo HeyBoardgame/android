@@ -33,5 +33,7 @@ data class DetailResultData (
     @SerializedName("isBookmarked") // 찜하기 여부
     val isBookmarked : Boolean,
     @SerializedName("myRating") // 내가 남긴 별점
-    val myRating : Double
+    val myRating : Double,
+    @SerializedName("translated") // 번역 여부
+    val translated : String
 )
