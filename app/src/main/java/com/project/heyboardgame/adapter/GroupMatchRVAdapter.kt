@@ -16,7 +16,7 @@ class GroupMatchRVAdapter(val context : Context, val nicknameList : MutableList<
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupMatchRVAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.group_match_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_group_match, parent, false)
 
         return ViewHolder(view)
     }

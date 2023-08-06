@@ -1,23 +1,29 @@
 package com.project.heyboardgame.main
 
 
-import android.widget.Toast
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.google.gson.Gson
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataModel.DetailResultData
+import com.project.heyboardgame.dataModel.HistoryResultData
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataModel.SearchResultData
 import com.project.heyboardgame.dataStore.MyDataStore
+import com.project.heyboardgame.paging.BookmarkPagingSource
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import timber.log.Timber
 
@@ -26,6 +32,8 @@ class MainViewModel : ViewModel() {
     private val myDataStore : MyDataStore = MyDataStore()
     // Api
     private val api : Api = RetrofitClient.getInstanceWithTokenInterceptor(myDataStore).create(Api::class.java)
+    private val _bookmarkPagingData = MutableLiveData<Flow<PagingData<HistoryResultData>>>()
+    val bookmarkPagingData: LiveData<Flow<PagingData<HistoryResultData>>> = _bookmarkPagingData
 
     // 로그아웃 함수 (ProfileFragment)
     fun requestLogout(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
@@ -175,7 +183,7 @@ class MainViewModel : ViewModel() {
     fun deleteBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.deleteBookmark(id)
-            if(response.isSuccessful) {
+            if (response.isSuccessful) {
                 onSuccess.invoke()
             } else {
                 onFailure.invoke()
@@ -183,5 +191,14 @@ class MainViewModel : ViewModel() {
         } catch(e: Exception) {
             onErrorAction.invoke()
         }
+    }
+
+    fun loadBookmarkPagingData(sort: String) {
+        val pagingDataFlow = Pager(
+            config = PagingConfig(pageSize = 15),
+            pagingSourceFactory = { BookmarkPagingSource(api, sort) }
+        ).flow
+
+        _bookmarkPagingData.value = pagingDataFlow
     }
 }

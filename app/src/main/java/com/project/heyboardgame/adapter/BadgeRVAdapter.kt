@@ -15,7 +15,7 @@ class BadgeRVAdapter(val context : Context, val badgeList : MutableList<String>)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BadgeRVAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.badge_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_badge, parent, false)
 
         return ViewHolder(view)
     }

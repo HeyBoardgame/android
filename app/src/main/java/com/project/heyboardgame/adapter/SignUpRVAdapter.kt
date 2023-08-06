@@ -35,7 +35,7 @@ class SignUpRVAdapter(val context : Context, val genreList : MutableList<SignUpI
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SignUpRVAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.sign_up_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_sign_up, parent, false)
 
         return ViewHolder(view)
     }

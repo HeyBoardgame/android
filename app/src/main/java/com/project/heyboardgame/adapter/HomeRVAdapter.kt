@@ -16,7 +16,7 @@ class HomeRVAdapter(val context : Context, val boardgameList : List<BoardgameLis
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeRVAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.boardgame_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_boardgame, parent, false)
 
         return ViewHolder(view)
     }

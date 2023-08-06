@@ -5,6 +5,7 @@ import com.project.heyboardgame.dataModel.DetailResult
 import com.project.heyboardgame.dataModel.GoogleLoginData
 import com.project.heyboardgame.dataModel.GoogleLoginResult
 import com.project.heyboardgame.dataModel.GoogleRegisterData
+import com.project.heyboardgame.dataModel.HistoryResult
 import com.project.heyboardgame.dataModel.LoginData
 import com.project.heyboardgame.dataModel.LoginResult
 import com.project.heyboardgame.dataModel.MyProfileResult
@@ -85,5 +86,8 @@ interface Api {
 
     @PUT("boardgames/{id}/rate") // 보드게임 평가하기
     suspend fun requestRating(@Path("id") id : Int, @Body ratingData : RatingData) : Response<Void>
+
+    @GET("my/bookmarks") // 찜한 보드게임 목록 조회
+    suspend fun requestBookmarkList(@Query("sort") sort : String, @Query("pageNum") pageNum : Int?) : Response<HistoryResult>
 
 }

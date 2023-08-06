@@ -15,7 +15,7 @@ class FriendListRVAdapter(val context : Context, val nicknameList: MutableList<S
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendListRVAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.friend_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_friend_list, parent, false)
 
         return ViewHolder(view)
     }

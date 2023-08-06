@@ -9,15 +9,15 @@ data class SearchResult(
 
 data class SearchResultData(
     @SerializedName("boardGameId")
-    val boardGameId: Int,
+    val id: Int,
     @SerializedName("boardGameImg")
-    val boardGameImg: String,
+    val image: String,
     @SerializedName("boardGameTitle")
-    val boardGameTitle: String,
+    val title: String,
     @SerializedName("boardGameGenre")
-    val boardGameGenre: List<String>,
+    val genre: List<String>,
     @SerializedName("boardGameDifficulty")
-    val boardGameDifficulty: String,
+    val difficulty: String,
     @SerializedName("boardGameNumOfPlayer")
-    val boardGameNumOfPlayer: String
+    val numOfPlayer: String
 )

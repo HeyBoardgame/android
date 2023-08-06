@@ -16,14 +16,13 @@ import com.project.heyboardgame.dataModel.SearchResultData
 class SearchRVAdapter(val context : Context, var searchResList  : List<SearchResultData>)
     : RecyclerView.Adapter<SearchRVAdapter.ViewHolder>() {
 
-
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
 
-        val boardGameImg = view.findViewById<ImageView>(R.id.gameImg)
-        val boardGameTitle = view.findViewById<TextView>(R.id.title)
-        val boardGameGenre = view.findViewById<TextView>(R.id.genre)
-        val boardGameDifficulty = view.findViewById<TextView>(R.id.difficulty)
-        val boardGameNumOfPlayer = view.findViewById<TextView>(R.id.numOfPlayer)
+        val gameImg = view.findViewById<ImageView>(R.id.gameImg)
+        val title = view.findViewById<TextView>(R.id.title)
+        val genre = view.findViewById<TextView>(R.id.genre)
+        val difficulty = view.findViewById<TextView>(R.id.difficulty)
+        val numOfPlayer = view.findViewById<TextView>(R.id.numOfPlayer)
 
     }
 
@@ -39,7 +38,7 @@ class SearchRVAdapter(val context : Context, var searchResList  : List<SearchRes
     var itemClick : ItemClick? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchRVAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.search_res_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search_res, parent, false)
 
         return ViewHolder(view)
     }
@@ -47,11 +46,11 @@ class SearchRVAdapter(val context : Context, var searchResList  : List<SearchRes
     override fun onBindViewHolder(holder: SearchRVAdapter.ViewHolder, position: Int) {
         val item = searchResList[position]
 
-        Glide.with(context).load(item.boardGameImg).into(holder.boardGameImg)
-        holder.boardGameTitle.text = item.boardGameTitle
-        holder.boardGameGenre.text = item.boardGameGenre.toCommaSeparatedString()
-        holder.boardGameDifficulty.text = item.boardGameDifficulty
-        holder.boardGameNumOfPlayer.text = item.boardGameNumOfPlayer
+        Glide.with(context).load(item.image).into(holder.gameImg)
+        holder.title.text = item.title
+        holder.genre.text = item.genre.toCommaSeparatedString()
+        holder.difficulty.text = item.difficulty
+        holder.numOfPlayer.text = item.numOfPlayer
 
         if (itemClick != null) {
             holder.itemView.setOnClickListener { v ->
