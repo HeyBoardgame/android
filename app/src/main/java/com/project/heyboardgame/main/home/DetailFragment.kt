@@ -83,25 +83,35 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         // 찜하기 버튼
         binding.bookmarkBtn.setOnClickListener {
-            mainViewModel.requestBookmark(id,
-                onSuccess = {
-                    if (isBookmarked) { // 원래 찜하기가 되어 있었던 경우
+            if (isBookmarked) { // 원래 찜하기가 되어 있었던 경우
+                mainViewModel.deleteBookmark(id,
+                    onSuccess = {
                         isBookmarked = false
                         binding.bookmarkBtn.setImageResource(R.drawable.icon_bookmark_empty)
                         Toast.makeText(requireContext(), "찜한 보드게임에서 삭제했습니다.", Toast.LENGTH_SHORT).show()
-                    } else { // 원래 찜하기가 안 되어 있었던 경우
+                    },
+                    onFailure = {
+                        Toast.makeText(requireContext(), "찜하기 취소에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    },
+                    onErrorAction = {
+                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            } else { // 찜하기가 안 되어 있었던 경우
+                mainViewModel.requestBookmark(id,
+                    onSuccess = {
                         isBookmarked = true
                         binding.bookmarkBtn.setImageResource(R.drawable.icon_bookmark_full)
                         Toast.makeText(requireContext(), "찜한 보드게임에 추가했습니다.", Toast.LENGTH_SHORT).show()
+                    },
+                    onFailure = {
+                        Toast.makeText(requireContext(), "찜하기에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                    },
+                    onErrorAction = {
+                        Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                     }
-                },
-                onFailure = {
-                    Toast.makeText(requireContext(), "찜하기에 실패하였습니다.", Toast.LENGTH_SHORT).show()
-                },
-                onErrorAction = {
-                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            )
+                )
+            }
         }
 
         // 별점 남기기

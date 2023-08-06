@@ -80,6 +80,9 @@ interface Api {
     @POST("boardgames/{id}/bookmarks") // 보드게임 찜하기
     suspend fun requestBookmark(@Path("id") id : Int) : Response<Void>
 
+    @DELETE("boardgames/{id}/bookmarks") // 보드게임 찜하기 취소
+    suspend fun deleteBookmark(@Path("id") id : Int) : Response<Void>
+
     @PUT("boardgames/{id}/rate") // 보드게임 평가하기
     suspend fun requestRating(@Path("id") id : Int, @Body ratingData : RatingData) : Response<Void>
 

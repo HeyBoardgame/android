@@ -170,4 +170,18 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
+
+    // 보드게임 찜하기 취소
+    fun deleteBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.deleteBookmark(id)
+            if(response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
 }
