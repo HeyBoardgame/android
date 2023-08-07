@@ -88,6 +88,6 @@ interface Api {
     suspend fun requestRating(@Path("id") id : Int, @Body ratingData : RatingData) : Response<Void>
 
     @GET("my/bookmarks") // 찜한 보드게임 목록 조회
-    suspend fun requestBookmarkList(@Query("sort") sort : String, @Query("pageNum") pageNum : Int?) : Response<HistoryResult>
+    suspend fun requestBookmarkList(@Query("order") sort : String, @Query("page") pageNum : Int?) : Response<HistoryResult>
 
 }

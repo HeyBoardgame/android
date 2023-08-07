@@ -10,9 +10,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
-import com.project.heyboardgame.dataModel.HistoryResultData
+import com.project.heyboardgame.dataModel.BoardGame
 
-class HistoryRVAdapter : PagingDataAdapter<HistoryResultData, HistoryRVAdapter.ViewHolder>(HistoryComparator) {
+class HistoryRVAdapter : PagingDataAdapter<BoardGame, HistoryRVAdapter.ViewHolder>(HistoryComparator) {
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image = view.findViewById<ImageView>(R.id.image)
@@ -20,7 +20,7 @@ class HistoryRVAdapter : PagingDataAdapter<HistoryResultData, HistoryRVAdapter.V
     }
 
     interface OnItemClickListener {
-        fun onItemClick(item: HistoryResultData)
+        fun onItemClick(item: BoardGame)
     }
 
     private var itemClickListener: OnItemClickListener? = null
@@ -29,12 +29,12 @@ class HistoryRVAdapter : PagingDataAdapter<HistoryResultData, HistoryRVAdapter.V
         itemClickListener = listener
     }
 
-    object HistoryComparator : DiffUtil.ItemCallback<HistoryResultData>() {
-        override fun areItemsTheSame(oldItem: HistoryResultData, newItem: HistoryResultData): Boolean {
+    object HistoryComparator : DiffUtil.ItemCallback<BoardGame>() {
+        override fun areItemsTheSame(oldItem: BoardGame, newItem: BoardGame): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: HistoryResultData, newItem: HistoryResultData): Boolean {
+        override fun areContentsTheSame(oldItem: BoardGame, newItem: BoardGame): Boolean {
             return oldItem == newItem
         }
     }

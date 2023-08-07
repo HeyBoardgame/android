@@ -10,6 +10,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.google.gson.Gson
+import com.project.heyboardgame.dataModel.BoardGame
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataModel.DetailResultData
@@ -32,8 +33,8 @@ class MainViewModel : ViewModel() {
     private val myDataStore : MyDataStore = MyDataStore()
     // Api
     private val api : Api = RetrofitClient.getInstanceWithTokenInterceptor(myDataStore).create(Api::class.java)
-    private val _bookmarkPagingData = MutableLiveData<Flow<PagingData<HistoryResultData>>>()
-    val bookmarkPagingData: LiveData<Flow<PagingData<HistoryResultData>>> = _bookmarkPagingData
+    private val _bookmarkPagingData = MutableLiveData<Flow<PagingData<BoardGame>>>()
+    val bookmarkPagingData: LiveData<Flow<PagingData<BoardGame>>> = _bookmarkPagingData
 
     // 로그아웃 함수 (ProfileFragment)
     fun requestLogout(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
@@ -195,10 +196,11 @@ class MainViewModel : ViewModel() {
 
     fun loadBookmarkPagingData(sort: String) {
         val pagingDataFlow = Pager(
-            config = PagingConfig(pageSize = 15),
+            config = PagingConfig(pageSize = 20, initialLoadSize = 10),
             pagingSourceFactory = { BookmarkPagingSource(api, sort) }
         ).flow
 
         _bookmarkPagingData.value = pagingDataFlow
     }
+
 }

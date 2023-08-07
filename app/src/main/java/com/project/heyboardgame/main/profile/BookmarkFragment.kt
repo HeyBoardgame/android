@@ -5,14 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.HistoryRVAdapter
-import com.project.heyboardgame.dataModel.HistoryResultData
+import com.project.heyboardgame.dataModel.BoardGame
 import com.project.heyboardgame.databinding.FragmentBookmarkBinding
 import com.project.heyboardgame.main.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -42,7 +42,7 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
         binding.bookmarkRV.layoutManager = GridLayoutManager(requireContext(), 3)
 
         historyRVAdapter.setOnItemClickListener(object : HistoryRVAdapter.OnItemClickListener {
-            override fun onItemClick(item: HistoryResultData) {
+            override fun onItemClick(item: BoardGame) {
                 val action = BookmarkFragmentDirections.actionBookmarkFragmentToDetailFragment(item.id)
                 findNavController().navigate(action)
             }
@@ -85,12 +85,13 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
         mainViewModel.bookmarkPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
             viewLifecycleOwner.lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
+                    // 데이터를 지우고 다시 로드
+                    historyRVAdapter.submitData(PagingData.empty())
                     historyRVAdapter.submitData(pagingData)
                 }
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
