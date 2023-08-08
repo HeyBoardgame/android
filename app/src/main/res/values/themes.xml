@@ -1,5 +1,28 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Heyboardgame" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/mainColor</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/mainColor</item>
+        <item name="android:fontFamily">@font/dovemayo_gothic</item>
+    </style>
 
-    <style name="Theme.Yeoboge" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.Heyboardgame" parent="Base.Theme.Heyboardgame" />
+
+    <!-- SplashScreen -->
+    <style name="Theme.Heyboardgame.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/mainColor</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_splash</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.Heyboardgame</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+    </style>
+
+    <!-- SearchView -->
+    <style name="SearchViewTheme" parent="Base.Theme.Heyboardgame">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColorHint">@color/greyPressed</item>
+    </style>
+
 </resources>

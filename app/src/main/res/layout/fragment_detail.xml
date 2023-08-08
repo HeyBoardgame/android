@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".main.home.DetailFragment">
+
+    <!-- 뒤로가기 버튼 -->
+    <ImageButton
+        android:id="@+id/backBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/button_transparent"
+        android:contentDescription="@string/go_back"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_arrow_back"
+        app:layout_constraintBottom_toTopOf="@+id/guideline1"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 찜하기 버튼 -->
+    <ImageButton
+        android:id="@+id/bookmarkBtn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/button_transparent"
+        android:contentDescription="@string/bookmark"
+        android:scaleType="fitXY"
+        android:src="@drawable/icon_bookmark_empty"
+        app:layout_constraintBottom_toTopOf="@+id/guideline1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp">
+
+                <!-- 보드게임 이미지 -->
+                <ImageView
+                    android:id="@+id/detailImg"
+                    android:layout_width="170dp"
+                    android:layout_height="150dp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="10dp"/>
+
+                <!-- 보드게임 별점, 장르, 테마 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="bottom">
+
+                    <!-- 별점 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp">
+
+                        <ImageView
+                            android:src="@drawable/icon_star"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="2dp"/>
+
+                        <TextView
+                            android:id="@+id/starRating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:textColor="@color/detailColor"
+                            android:textSize="15sp" />
+
+                    </LinearLayout>
+
+                    <!-- 장르 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:text="장르: "
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/genre"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <!-- 테마 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:text="테마: "
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/theme"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <!-- 번역 여부 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:text="번역: "
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:id="@+id/translated"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="2dp"
+                            android:textColor="@color/detailColor"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- 보드게임 이름 -->
+            <TextView
+                android:id="@+id/title"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- 보드게임 난이도, 소요 시간, 인원수 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:gravity="center"
+                android:layout_marginBottom="10dp">
+
+                <!-- 보드게임 난이도 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/difficulty"
+                        android:textSize="15sp"
+                        android:textColor="@color/detailColor"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:id="@+id/difficulty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:textColor="@color/mainColor"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/grey"/>
+
+                <!-- 보드게임 소요 시간 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time_required"
+                        android:textColor="@color/detailColor"
+                        android:textSize="15sp"
+                        android:layout_marginBottom="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/timeRequired"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:textColor="@color/mainColor"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="분"
+                            android:textColor="@color/mainColor"
+                            android:textSize="15sp"
+                            android:textStyle="bold"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="fill_parent"
+                    android:background="@color/grey"/>
+
+                <!-- 보드게임 인원수 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/number_of_player"
+                        android:textSize="15sp"
+                        android:textColor="@color/detailColor"
+                        android:layout_marginBottom="5dp"/>
+
+                    <TextView
+                        android:id="@+id/numOfPlayer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/mainColor"
+                        android:textSize="15sp"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- 보드게임 별점 매기기 -->
+            <RatingBar
+                android:id="@+id/myRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:layout_gravity="center"
+                android:contentDescription="@string/progress_bar"
+                android:progressTint="@color/mainColor"
+                android:secondaryProgressTint="@color/mainColor"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- 보드게임 상세설명 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:text="@string/detail_description"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/detailDescription"
+                    android:textColor="@color/detailDescription"
+                    android:textSize="15sp"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <!-- 보드게임 사용전략 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:text="@string/detail_strategy"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/detailStrategy"
+                    android:textColor="@color/detailDescription"
+                    android:textSize="15sp"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- 가이드라인 -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.12" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
