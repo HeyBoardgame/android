@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.project.heyboardgame.dataModel.BoardGame
 import com.project.heyboardgame.retrofit.Api
-import timber.log.Timber
 
 class BookmarkPagingSource(private val api: Api, private val sort: String) : PagingSource<Int, BoardGame>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BoardGame> {
@@ -14,10 +13,10 @@ class BookmarkPagingSource(private val api: Api, private val sort: String) : Pag
             if (response.isSuccessful) {
                 val historyResult = response.body()
                 val bookmarkList = historyResult?.result?.boardGames ?: emptyList()
-                Timber.d("$bookmarkList")
                 val nextPage = if (bookmarkList.size < 20) null else pageNum + 1
 
                 LoadResult.Page(data = bookmarkList, prevKey = null, nextKey = nextPage)
+
             } else {
                 LoadResult.Error(Exception("페이징 실패"))
             }

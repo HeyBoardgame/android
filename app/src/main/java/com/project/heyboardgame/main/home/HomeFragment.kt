@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.HomeRVAdapter
+import com.project.heyboardgame.dataModel.BoardGame
 import com.project.heyboardgame.dataModel.BoardgameList
 import com.project.heyboardgame.databinding.FragmentHomeBinding
 
@@ -53,14 +54,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var boardgameList = mutableListOf<BoardgameList>()
-        boardgameList.add(BoardgameList("@drawable/tmp_img", "티켓투라이드"))
-        boardgameList.add(BoardgameList("@drawable/tmp_img", "티켓투라이드"))
-        boardgameList.add(BoardgameList("@drawable/tmp_img", "티켓투라이드"))
-        boardgameList.add(BoardgameList("@drawable/tmp_img", "티켓투라이드"))
-        boardgameList.add(BoardgameList("@drawable/tmp_img", "티켓투라이드"))
-        boardgameList.add(BoardgameList("@drawable/tmp_img", "티켓투라이드"))
-        boardgameList.add(BoardgameList("@drawable/tmp_img", "티켓투라이드"))
+        var boardgameList = mutableListOf<BoardGame>()
+        boardgameList.add(BoardGame(1, "@drawable/tmp_img", "티켓투라이드"))
+        boardgameList.add(BoardGame(2, "@drawable/tmp_img", "티켓투라이드"))
+        boardgameList.add(BoardGame(3, "@drawable/tmp_img", "티켓투라이드"))
+        boardgameList.add(BoardGame(4, "@drawable/tmp_img", "티켓투라이드"))
+        boardgameList.add(BoardGame(5, "@drawable/tmp_img", "티켓투라이드"))
+        boardgameList.add(BoardGame(6, "@drawable/tmp_img", "티켓투라이드"))
+        boardgameList.add(BoardGame(7, "@drawable/tmp_img", "티켓투라이드"))
 
         homeRVAdapter = HomeRVAdapter(requireContext(), boardgameList)
         binding.homeRV1.adapter = homeRVAdapter

@@ -39,7 +39,6 @@ class SearchRVAdapter(val context : Context, var searchResList  : List<SearchRes
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchRVAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search_res, parent, false)
-
         return ViewHolder(view)
     }
 

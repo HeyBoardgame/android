@@ -3,9 +3,10 @@
     android:layout_width="100dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginStart="10dp">
+    android:layout_margin="10dp">
 
     <ImageView
+        android:id="@+id/image"
         android:src="@drawable/tmp_img"
         android:scaleType="fitCenter"
         android:layout_width="100dp"
@@ -13,13 +14,14 @@
         android:layout_gravity="center"/>
 
     <TextView
-        android:text="보드게임이름이너무길어"
+        android:id="@+id/title"
+        android:text="보드게임"
         android:textColor="@color/black"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="5dp"
         android:ellipsize="end"
-        android:maxLines="1"/>
+        android:maxLines="1"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

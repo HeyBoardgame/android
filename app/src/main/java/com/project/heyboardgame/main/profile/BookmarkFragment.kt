@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -85,7 +86,6 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
         mainViewModel.bookmarkPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
             viewLifecycleOwner.lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
-                    // 데이터를 지우고 다시 로드
                     historyRVAdapter.submitData(PagingData.empty())
                     historyRVAdapter.submitData(pagingData)
                 }

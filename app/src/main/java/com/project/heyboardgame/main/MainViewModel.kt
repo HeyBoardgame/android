@@ -8,13 +8,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.google.gson.Gson
 import com.project.heyboardgame.dataModel.BoardGame
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataModel.DetailResultData
-import com.project.heyboardgame.dataModel.HistoryResultData
+import com.project.heyboardgame.dataModel.RatedResultData
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataModel.SearchResultData
 import com.project.heyboardgame.dataStore.MyDataStore
@@ -35,6 +34,7 @@ class MainViewModel : ViewModel() {
     private val api : Api = RetrofitClient.getInstanceWithTokenInterceptor(myDataStore).create(Api::class.java)
     private val _bookmarkPagingData = MutableLiveData<Flow<PagingData<BoardGame>>>()
     val bookmarkPagingData: LiveData<Flow<PagingData<BoardGame>>> = _bookmarkPagingData
+
 
     // 로그아웃 함수 (ProfileFragment)
     fun requestLogout(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
@@ -103,7 +103,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 프로필 수정 함수
+    // 프로필 수정 함수 (ChangeProfileFragment)
     fun changeMyProfile(profileImg: String, file: MultipartBody.Part?, changeProfileData: ChangeProfileData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         val json = Gson().toJson(changeProfileData) // ChangeProfileData를 JSON으로 직렬화
         // ChangeProfileData를 RequestBody로 변환
@@ -123,7 +123,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 보드게임 검색 함수
+    // 보드게임 검색 함수 (SearchFragment)
     fun requestSearchResult(keyword: String, genreIdList: List<Int>, numOfPlayer: Int, onSuccess: (searchResultList: List<SearchResultData>?) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestSearchResult(keyword, genreIdList, numOfPlayer)
@@ -137,7 +137,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 보드게임 상세 조회
+    // 보드게임 상세 조회 (DetailFragment)
     fun requestDetail(id: Int, onSuccess: (detailResult: DetailResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestDetail(id)
@@ -153,7 +153,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 보드게임 평가하기
+    // 보드게임 평가하기 (DetailFragment)
     fun requestRating(id: Int, ratingData: RatingData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestRating(id, ratingData)
@@ -166,7 +166,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 보드게임 찜하기
+    // 보드게임 찜하기 (DetailFragment)
     fun requestBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestBookmark(id)
@@ -179,8 +179,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-
-    // 보드게임 찜하기 취소
+    // 보드게임 찜하기 취소 (DetailFragment)
     fun deleteBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.deleteBookmark(id)
@@ -193,7 +192,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-
+    // 찜한 목록 페이징 (BookmarkFragment)
     fun loadBookmarkPagingData(sort: String) {
         val pagingDataFlow = Pager(
             config = PagingConfig(pageSize = 20, initialLoadSize = 10),
@@ -201,6 +200,22 @@ class MainViewModel : ViewModel() {
         ).flow
 
         _bookmarkPagingData.value = pagingDataFlow
+    }
+    // 평가한 보드게임 목록 조회 (RatedFragment)
+    fun requestRatedList(onSuccess: (ratedResultData: RatedResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestRatedList()
+            if (response.isSuccessful) {
+                val ratedResult = response.body()
+                ratedResult?.let {
+                    onSuccess(it.result)
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
     }
 
 }

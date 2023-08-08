@@ -2,12 +2,12 @@ package com.project.heyboardgame.dataModel
 
 import com.google.gson.annotations.SerializedName
 
-data class HistoryResult (
+data class RatedResult(
     @SerializedName("result")
-    val result: HistoryResultData
+    val result: RatedResultData
 )
 
-data class HistoryResultData (
+data class RatedResultData (
     @SerializedName("boardGames")
-    val boardGames: List<BoardGame>
+    val boardGames: Map<Float, List<BoardGame>>
 )

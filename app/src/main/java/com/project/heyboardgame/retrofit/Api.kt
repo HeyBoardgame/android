@@ -9,6 +9,7 @@ import com.project.heyboardgame.dataModel.HistoryResult
 import com.project.heyboardgame.dataModel.LoginData
 import com.project.heyboardgame.dataModel.LoginResult
 import com.project.heyboardgame.dataModel.MyProfileResult
+import com.project.heyboardgame.dataModel.RatedResult
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataModel.RefreshData
 import com.project.heyboardgame.dataModel.RefreshResult
@@ -89,5 +90,8 @@ interface Api {
 
     @GET("my/bookmarks") // 찜한 보드게임 목록 조회
     suspend fun requestBookmarkList(@Query("order") sort : String, @Query("page") pageNum : Int?) : Response<HistoryResult>
+
+    @GET("my/ratings") // 평가한 보드게임 목록 조회
+    suspend fun requestRatedList() : Response<RatedResult>
 
 }
