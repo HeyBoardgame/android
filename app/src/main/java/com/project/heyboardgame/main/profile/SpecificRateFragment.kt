@@ -6,14 +6,19 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.HistoryRVAdapter
 import com.project.heyboardgame.dataModel.BoardGame
 import com.project.heyboardgame.databinding.FragmentSpecificRateBinding
 import com.project.heyboardgame.main.MainViewModel
+import com.project.heyboardgame.utils.ViewUtils
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class SpecificRateFragment : Fragment(R.layout.fragment_specific_rate) {
@@ -72,10 +77,30 @@ class SpecificRateFragment : Fragment(R.layout.fragment_specific_rate) {
                     else -> "new"
                 }
                 // 페이징 데이터 로드 시작
-//                loadBookmarkPagingData(selectedSort)
+                loadRatedPagingData(score, selectedSort)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // 생략
+            }
+        }
+
+        // Adapter 아이템 개수 리스너 설정
+        historyRVAdapter.addLoadStateListener { loadStates ->
+            val noContentView = binding.noContent
+            ViewUtils.setNoContentListener(loadStates, noContentView, historyRVAdapter.itemCount)
+        }
+    }
+
+    private fun loadRatedPagingData(score: Float, sort: String) {
+        mainViewModel.loadRatedPagingData(score, sort)
+
+        // BookmarkPagingData Flow 관찰
+        mainViewModel.ratedPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                pagingDataFlow.collectLatest { pagingData ->
+                    historyRVAdapter.submitData(PagingData.empty())
+                    historyRVAdapter.submitData(pagingData)
+                }
             }
         }
     }

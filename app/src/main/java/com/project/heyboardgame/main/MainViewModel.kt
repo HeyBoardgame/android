@@ -18,6 +18,7 @@ import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataModel.SearchResultData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.paging.BookmarkPagingSource
+import com.project.heyboardgame.paging.RatedPagingSource
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
 import kotlinx.coroutines.flow.Flow
@@ -32,9 +33,12 @@ class MainViewModel : ViewModel() {
     private val myDataStore : MyDataStore = MyDataStore()
     // Api
     private val api : Api = RetrofitClient.getInstanceWithTokenInterceptor(myDataStore).create(Api::class.java)
+    // 찜한 목록 LiveData
     private val _bookmarkPagingData = MutableLiveData<Flow<PagingData<BoardGame>>>()
     val bookmarkPagingData: LiveData<Flow<PagingData<BoardGame>>> = _bookmarkPagingData
-
+    // 평가한 목록 LiveData
+    private val _ratedPagingData = MutableLiveData<Flow<PagingData<BoardGame>>>()
+    val ratedPagingData: LiveData<Flow<PagingData<BoardGame>>> = _ratedPagingData
 
     // 로그아웃 함수 (ProfileFragment)
     fun requestLogout(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
@@ -200,6 +204,15 @@ class MainViewModel : ViewModel() {
         ).flow
 
         _bookmarkPagingData.value = pagingDataFlow
+    }
+    // 특정 평점 평가한 목록 페이징 (SpecificRateFragment)
+    fun loadRatedPagingData(score: Float, sort: String) {
+        val pagingDataFlow = Pager(
+            config = PagingConfig(pageSize = 20, initialLoadSize = 10),
+            pagingSourceFactory = { RatedPagingSource(api, score, sort) }
+        ).flow
+
+        _ratedPagingData.value = pagingDataFlow
     }
     // 평가한 보드게임 목록 조회 (RatedFragment)
     fun requestRatedList(onSuccess: (ratedResultData: RatedResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {

@@ -6,6 +6,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.profile.SpecificRateFragment">
 
+    <!-- NO CONTENT -->
+    <LinearLayout
+        android:id="@+id/noContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/no_content_rated"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_content_rated_text1"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_content_rated_text2"
+            android:textColor="@color/detailColor"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
     <!-- 뒤로가기 버튼 -->
     <ImageButton
         android:id="@+id/backBtn"
