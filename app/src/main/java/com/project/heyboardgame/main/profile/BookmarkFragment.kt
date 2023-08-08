@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
+import com.project.heyboardgame.utils.ViewUtils
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.HistoryRVAdapter
 import com.project.heyboardgame.dataModel.BoardGame
@@ -75,6 +76,12 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // 생략
             }
+        }
+
+        // Adapter 아이템 개수 리스너 설정
+        historyRVAdapter.addLoadStateListener { loadStates ->
+            val noContentView = binding.noContent
+            ViewUtils.setNoContentListener(loadStates, noContentView, historyRVAdapter.itemCount)
         }
     }
 
