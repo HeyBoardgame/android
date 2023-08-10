@@ -1,5 +1,6 @@
 package com.project.heyboardgame.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,18 @@ import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.BoardGame
 
-class HomeRVAdapter(val context : Context, val boardgameList : List<BoardGame>)
+class HomeRVAdapter(val context : Context, var boardgameList : List<BoardGame>)
     : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         val image = view.findViewById<ImageView>(R.id.image)
         val title = view.findViewById<TextView>(R.id.title)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newData: List<BoardGame>) {
+        boardgameList = newData
+        notifyDataSetChanged()
     }
 
     interface OnItemClickListener {

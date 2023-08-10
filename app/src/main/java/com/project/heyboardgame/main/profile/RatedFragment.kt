@@ -22,7 +22,16 @@ class RatedFragment : Fragment(R.layout.fragment_rated) {
     // ViewModel
     private lateinit var mainViewModel: MainViewModel
     // Adapter
-    private lateinit var homeRVAdapter: HomeRVAdapter
+    private lateinit var rated50Adapter: HomeRVAdapter
+    private lateinit var rated45Adapter: HomeRVAdapter
+    private lateinit var rated40Adapter: HomeRVAdapter
+    private lateinit var rated35Adapter: HomeRVAdapter
+    private lateinit var rated30Adapter: HomeRVAdapter
+    private lateinit var rated25Adapter: HomeRVAdapter
+    private lateinit var rated20Adapter: HomeRVAdapter
+    private lateinit var rated15Adapter: HomeRVAdapter
+    private lateinit var rated10Adapter: HomeRVAdapter
+    private lateinit var rated05Adapter: HomeRVAdapter
     // 각 평점별 보드게임 목록
     private var rated50List: List<BoardGame> = emptyList()
     private var rated45List: List<BoardGame> = emptyList()
@@ -41,16 +50,16 @@ class RatedFragment : Fragment(R.layout.fragment_rated) {
         _binding = FragmentRatedBinding.bind(view)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        var rated50Adapter = HomeRVAdapter(requireContext(), rated50List)
-        var rated45Adapter = HomeRVAdapter(requireContext(), rated45List)
-        var rated40Adapter = HomeRVAdapter(requireContext(), rated40List)
-        var rated35Adapter = HomeRVAdapter(requireContext(), rated35List)
-        var rated30Adapter = HomeRVAdapter(requireContext(), rated30List)
-        var rated25Adapter = HomeRVAdapter(requireContext(), rated25List)
-        var rated20Adapter = HomeRVAdapter(requireContext(), rated20List)
-        var rated15Adapter = HomeRVAdapter(requireContext(), rated15List)
-        var rated10Adapter = HomeRVAdapter(requireContext(), rated10List)
-        var rated05Adapter = HomeRVAdapter(requireContext(), rated05List)
+        rated50Adapter = HomeRVAdapter(requireContext(), rated50List)
+        rated45Adapter = HomeRVAdapter(requireContext(), rated45List)
+        rated40Adapter = HomeRVAdapter(requireContext(), rated40List)
+        rated35Adapter = HomeRVAdapter(requireContext(), rated35List)
+        rated30Adapter = HomeRVAdapter(requireContext(), rated30List)
+        rated25Adapter = HomeRVAdapter(requireContext(), rated25List)
+        rated20Adapter = HomeRVAdapter(requireContext(), rated20List)
+        rated15Adapter = HomeRVAdapter(requireContext(), rated15List)
+        rated10Adapter = HomeRVAdapter(requireContext(), rated10List)
+        rated05Adapter = HomeRVAdapter(requireContext(), rated05List)
 
         mainViewModel.requestRatedList(
             onSuccess = {
@@ -69,90 +78,100 @@ class RatedFragment : Fragment(R.layout.fragment_rated) {
 
                 if (rated50List.isEmpty()) {
                     binding.noRated50.visibility = View.VISIBLE
+                    binding.rated50RV.visibility = View.GONE
                 } else {
                     binding.noRated50.visibility = View.GONE
-                    rated50Adapter = HomeRVAdapter(requireContext(), rated50List)
+                    rated50Adapter.updateData(rated50List)
                     binding.rated50RV.adapter = rated50Adapter
                     binding.rated50RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated45List.isEmpty()) {
                     binding.noRated45.visibility = View.VISIBLE
+                    binding.rated45RV.visibility = View.GONE
                 } else {
                     binding.noRated45.visibility = View.GONE
-                    rated45Adapter = HomeRVAdapter(requireContext(), rated45List)
+                    rated45Adapter.updateData(rated45List)
                     binding.rated45RV.adapter = rated45Adapter
                     binding.rated45RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated40List.isEmpty()) {
                     binding.noRated40.visibility = View.VISIBLE
+                    binding.rated40RV.visibility = View.GONE
                 } else {
                     binding.noRated40.visibility = View.GONE
-                    rated40Adapter = HomeRVAdapter(requireContext(), rated40List)
+                    rated40Adapter.updateData(rated40List)
                     binding.rated40RV.adapter = rated40Adapter
                     binding.rated40RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated35List.isEmpty()) {
                     binding.noRated35.visibility = View.VISIBLE
+                    binding.rated35RV.visibility = View.GONE
                 } else {
                     binding.noRated35.visibility = View.GONE
-                    rated35Adapter = HomeRVAdapter(requireContext(), rated35List)
+                    rated35Adapter.updateData(rated35List)
                     binding.rated35RV.adapter = rated35Adapter
                     binding.rated35RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated30List.isEmpty()) {
                     binding.noRated30.visibility = View.VISIBLE
+                    binding.rated30RV.visibility = View.GONE
                 } else {
                     binding.noRated30.visibility = View.GONE
-                    rated30Adapter = HomeRVAdapter(requireContext(), rated30List)
+                    rated30Adapter.updateData(rated30List)
                     binding.rated30RV.adapter = rated30Adapter
                     binding.rated30RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated25List.isEmpty()) {
                     binding.noRated25.visibility = View.VISIBLE
+                    binding.rated25RV.visibility = View.GONE
                 } else {
                     binding.noRated25.visibility = View.GONE
-                    rated25Adapter = HomeRVAdapter(requireContext(), rated25List)
+                    rated25Adapter.updateData(rated25List)
                     binding.rated25RV.adapter = rated25Adapter
                     binding.rated25RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated20List.isEmpty()) {
                     binding.noRated20.visibility = View.VISIBLE
+                    binding.rated20RV.visibility = View.GONE
                 } else {
                     binding.noRated20.visibility = View.GONE
-                    rated20Adapter = HomeRVAdapter(requireContext(), rated20List)
+                    rated20Adapter.updateData(rated20List)
                     binding.rated20RV.adapter = rated20Adapter
                     binding.rated20RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated15List.isEmpty()) {
                     binding.noRated15.visibility = View.VISIBLE
+                    binding.rated15RV.visibility = View.GONE
                 } else {
                     binding.noRated15.visibility = View.GONE
-                    rated15Adapter = HomeRVAdapter(requireContext(), rated15List)
+                    rated15Adapter.updateData(rated15List)
                     binding.rated15RV.adapter = rated15Adapter
                     binding.rated15RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated10List.isEmpty()) {
                     binding.noRated10.visibility = View.VISIBLE
+                    binding.rated10RV.visibility = View.GONE
                 } else {
                     binding.noRated10.visibility = View.GONE
-                    rated10Adapter = HomeRVAdapter(requireContext(), rated10List)
+                    rated10Adapter.updateData(rated10List)
                     binding.rated10RV.adapter = rated10Adapter
                     binding.rated10RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
 
                 if (rated05List.isEmpty()) {
                     binding.noRated05.visibility = View.VISIBLE
+                    binding.rated05RV.visibility = View.GONE
                 } else {
                     binding.noRated05.visibility = View.GONE
-                    rated05Adapter = HomeRVAdapter(requireContext(), rated05List)
+                    rated05Adapter.updateData(rated05List)
                     binding.rated05RV.adapter = rated05Adapter
                     binding.rated05RV.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 }
