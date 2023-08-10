@@ -10,6 +10,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.google.gson.Gson
 import com.project.heyboardgame.dataModel.BoardGame
+import com.project.heyboardgame.dataModel.BoardGame2
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataModel.DetailResultData
@@ -19,6 +20,7 @@ import com.project.heyboardgame.dataModel.SearchResultData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.paging.BookmarkPagingSource
 import com.project.heyboardgame.paging.RatedPagingSource
+import com.project.heyboardgame.paging.SearchPagingSource
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
 import kotlinx.coroutines.flow.Flow
@@ -39,6 +41,9 @@ class MainViewModel : ViewModel() {
     // 평가한 목록 LiveData
     private val _ratedPagingData = MutableLiveData<Flow<PagingData<BoardGame>>>()
     val ratedPagingData: LiveData<Flow<PagingData<BoardGame>>> = _ratedPagingData
+    // 검색 결과 LiveData
+    private val _searchPagingData = MutableLiveData<Flow<PagingData<BoardGame2>>>()
+    val searchPagingData: LiveData<Flow<PagingData<BoardGame2>>> = _searchPagingData
 
     // 로그아웃 함수 (ProfileFragment)
     fun requestLogout(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
@@ -127,20 +132,6 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 보드게임 검색 함수 (SearchFragment)
-    fun requestSearchResult(keyword: String, genreIdList: List<Int>, numOfPlayer: Int, onSuccess: (searchResultList: List<SearchResultData>?) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
-        try {
-            val response = api.requestSearchResult(keyword, genreIdList, numOfPlayer)
-            if (response.isSuccessful) {
-                val searchResultList = response.body()
-                onSuccess.invoke(searchResultList?.result)
-            } else {
-                onFailure.invoke()
-            }
-        } catch(e: Exception) {
-            onErrorAction.invoke()
-        }
-    }
     // 보드게임 상세 조회 (DetailFragment)
     fun requestDetail(id: Int, onSuccess: (detailResult: DetailResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
@@ -170,6 +161,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
+
     // 보드게임 찜하기 (DetailFragment)
     fun requestBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
@@ -230,5 +222,13 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
+    // 검색 결과 페이징 (SearchFragment)
+    fun loadSearchPagingData(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
+        val pagingDataFlow = Pager(
+            config = PagingConfig(pageSize = 20, initialLoadSize = 10),
+            pagingSourceFactory = { SearchPagingSource(api, keyword, genreIdList, numOfPlayer) }
+        ).flow
 
+        _searchPagingData.value = pagingDataFlow
+    }
 }

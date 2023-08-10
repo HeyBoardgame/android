@@ -16,7 +16,7 @@ class MatchResRVAdapter(val context : Context, val matchResList : List<GroupMatc
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MatchResRVAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_search_res, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_result, parent, false)
 
         return ViewHolder(view)
     }

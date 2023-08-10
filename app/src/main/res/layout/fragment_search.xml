@@ -6,6 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".main.home.SearchFragment">
 
+    <!-- NO CONTENT -->
+    <LinearLayout
+        android:id="@+id/noContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/no_content_search"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_content_search_text1"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_content_search_text2"
+            android:textColor="@color/detailColor"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
     <!-- 뒤로가기 버튼 -->
     <ImageButton
         android:id="@+id/backBtn"
@@ -84,17 +120,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginVertical="10dp">
+            android:layout_marginVertical="10dp"
+            android:visibility="gone">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/number_of_player"
-                android:textSize="15sp"
-                android:textColor="@color/black"
-                android:paddingHorizontal="30dp"
-                android:layout_marginBottom="5dp"/>
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/number_of_player"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:paddingStart="30dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=": "
+                    android:textSize="15sp"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/numberText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"/>
+
+            </LinearLayout>
 
             <!-- 인원 수 시크바 -->
             <SeekBar
@@ -128,6 +186,42 @@
                 android:paddingHorizontal="20dp"
                 android:layout_marginBottom="10dp">
 
+                <!-- 세계관 버튼 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/world"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@color/lightGrey"
+                        android:padding="5dp"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/worldIcon"
+                            android:src="@drawable/icon_world"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="5dp"/>
+
+                        <TextView
+                            android:id="@+id/worldText"
+                            android:text="@string/world"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
                 <!-- 전략 버튼 -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
@@ -158,196 +252,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
-                            android:textSize="12sp"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- 파티 버튼 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/party"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:background="@color/lightGrey"
-                        android:padding="5dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/partyIcon"
-                            android:src="@drawable/icon_party"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="5dp"/>
-
-                        <TextView
-                            android:id="@+id/partyText"
-                            android:text="@string/party"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="12sp"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- 단순 버튼 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/simple"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:background="@color/lightGrey"
-                        android:padding="5dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/simpleIcon"
-                            android:src="@drawable/icon_simple"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="5dp"/>
-
-                        <TextView
-                            android:id="@+id/simpleText"
-                            android:text="@string/simple"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="12sp"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- 카드 버튼 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:id="@+id/card"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:background="@color/lightGrey"
-                        android:padding="5dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/cardIcon"
-                            android:src="@drawable/icon_card"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="5dp"/>
-
-                        <TextView
-                            android:id="@+id/cardText"
-                            android:text="@string/card"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="12sp"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-            <!-- 장르 버튼 두 번째 줄 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="4"
-                android:paddingHorizontal="20dp">
-
-                <!-- 가족 버튼 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/family"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:background="@color/lightGrey"
-                        android:padding="5dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/familyIcon"
-                            android:src="@drawable/icon_family"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="5dp"/>
-
-                        <TextView
-                            android:id="@+id/familyText"
-                            android:text="@string/family"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="12sp"/>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <!-- 키즈 버튼 -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="20dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/kids"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal"
-                        android:background="@color/lightGrey"
-                        android:padding="5dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:id="@+id/kidsIcon"
-                            android:src="@drawable/icon_kids"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="5dp"/>
-
-                        <TextView
-                            android:id="@+id/kidsText"
-                            android:text="@string/kids"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/black"
-                            android:textSize="12sp"/>
+                            android:textSize="13sp"/>
 
                     </LinearLayout>
 
@@ -383,13 +288,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
-                            android:textSize="12sp"/>
+                            android:textSize="13sp"/>
 
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
-                <!-- 세계관 버튼 -->
+                <!-- 가족 버튼 -->
                 <androidx.cardview.widget.CardView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -397,7 +302,7 @@
                     android:layout_weight="1">
 
                     <LinearLayout
-                        android:id="@+id/world"
+                        android:id="@+id/family"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -406,19 +311,172 @@
                         android:gravity="center">
 
                         <ImageView
-                            android:id="@+id/worldIcon"
-                            android:src="@drawable/icon_world"
+                            android:id="@+id/familyIcon"
+                            android:src="@drawable/icon_family"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_marginEnd="5dp"/>
 
                         <TextView
-                            android:id="@+id/worldText"
-                            android:text="@string/world"
+                            android:id="@+id/familyText"
+                            android:text="@string/family"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
-                            android:textSize="12sp"/>
+                            android:textSize="13sp"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+            <!-- 장르 버튼 두 번째 줄 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="4"
+                android:paddingHorizontal="20dp">
+
+                <!-- 라이선스 버튼 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/license"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@color/lightGrey"
+                        android:padding="5dp"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/licenseIcon"
+                            android:src="@drawable/icon_license"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="5dp"/>
+
+                        <TextView
+                            android:id="@+id/licenseText"
+                            android:text="@string/license"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="10sp"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- 단순 버튼 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/simple"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@color/lightGrey"
+                        android:padding="5dp"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/simpleIcon"
+                            android:src="@drawable/icon_simple"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="5dp"/>
+
+                        <TextView
+                            android:id="@+id/simpleText"
+                            android:text="@string/simple"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- 파티 버튼 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp">
+
+                    <LinearLayout
+                        android:id="@+id/party"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@color/lightGrey"
+                        android:padding="5dp"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/partyIcon"
+                            android:src="@drawable/icon_party"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="5dp"/>
+
+                        <TextView
+                            android:id="@+id/partyText"
+                            android:text="@string/party"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"/>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- 키즈 버튼 -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="20dp"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:id="@+id/kids"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:background="@color/lightGrey"
+                        android:padding="5dp"
+                        android:gravity="center">
+
+                        <ImageView
+                            android:id="@+id/kidsIcon"
+                            android:src="@drawable/icon_kids"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="5dp"/>
+
+                        <TextView
+                            android:id="@+id/kidsText"
+                            android:text="@string/kids"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:textSize="13sp"/>
 
                     </LinearLayout>
 

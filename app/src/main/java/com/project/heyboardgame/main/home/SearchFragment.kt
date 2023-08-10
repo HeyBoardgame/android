@@ -10,13 +10,18 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.SearchRVAdapter
-import com.project.heyboardgame.dataModel.SearchResultData
+import com.project.heyboardgame.dataModel.BoardGame2
 import com.project.heyboardgame.databinding.FragmentSearchBinding
 import com.project.heyboardgame.main.MainViewModel
+import com.project.heyboardgame.utils.ViewUtils
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
@@ -32,15 +37,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var isStrategyClicked = false
     private var isPartyClicked = false
     private var isSimpleClicked = false
-    private var isCardClicked = false
+    private var isLicenseClicked = false
     private var isFamilyClicked = false
     private var isKidsClicked = false
     private var isWarClicked = false
     private var isWorldClicked = false
     // 장르 ID 리스트
     private var genreIdList : MutableList<Int> = mutableListOf()
-    // 검색 결과 리스트
-    private var searchResultList = mutableListOf<SearchResultData>()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,19 +51,25 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = FragmentSearchBinding.bind(view)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
+
         binding.search.setOnQueryTextListener(searchViewTextListener)
         binding.search.isSubmitButtonEnabled = true
 
-        searchRVAdapter = SearchRVAdapter(requireContext(), searchResultList)
+        searchRVAdapter = SearchRVAdapter() // RecyclerView Adapter 초기화
         binding.searchRV.adapter = searchRVAdapter
         binding.searchRV.layoutManager = LinearLayoutManager(requireContext())
 
-        searchRVAdapter.itemClick = object : SearchRVAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-                val id = searchResultList[position].id
-                val action = SearchFragmentDirections.actionSearchFragmentToDetailFragment(id)
+        searchRVAdapter.setOnItemClickListener(object : SearchRVAdapter.OnItemClickListener {
+            override fun onItemClick(item: BoardGame2) {
+                val action = SearchFragmentDirections.actionSearchFragmentToDetailFragment(item.id)
                 findNavController().navigate(action)
             }
+        })
+
+        // Adapter 아이템 개수 리스너 설정
+        searchRVAdapter.addLoadStateListener { loadStates ->
+            val noContentView = binding.noContent
+            ViewUtils.setNoContentListener(loadStates, noContentView, searchRVAdapter.itemCount)
         }
 
         binding.apply {
@@ -87,7 +96,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                     val numOfPlayer = seekBar?.progress
-                    Toast.makeText(requireContext(), "인원 수: $numOfPlayer", Toast.LENGTH_SHORT).show()
+                    binding.numberText.text = numOfPlayer.toString()
                 }
 
             })
@@ -134,16 +143,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
             }
 
-            card.setOnClickListener {
-                isCardClicked = if (isCardClicked) {
-                    card.setBackgroundColor(Color.parseColor("#DADADA"))
-                    cardIcon.setImageResource(R.drawable.icon_card)
-                    cardText.setTextColor(Color.parseColor("#FF000000"))
+            license.setOnClickListener {
+                isLicenseClicked = if (isLicenseClicked) {
+                    license.setBackgroundColor(Color.parseColor("#DADADA"))
+                    licenseIcon.setImageResource(R.drawable.icon_license)
+                    licenseText.setTextColor(Color.parseColor("#FF000000"))
                     false
                 } else {
-                    card.setBackgroundColor(Color.parseColor("#DEB4FF"))
-                    cardIcon.setImageResource(R.drawable.icon_card_color)
-                    cardText.setTextColor(Color.parseColor("#A93CFF"))
+                    license.setBackgroundColor(Color.parseColor("#DEB4FF"))
+                    licenseIcon.setImageResource(R.drawable.icon_license_color)
+                    licenseText.setTextColor(Color.parseColor("#A93CFF"))
                     true
                 }
             }
@@ -224,53 +233,52 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 binding.filterArrow.animate().setDuration(200).rotation(0f)
             }
             hideKeyboard()
-            if (isStrategyClicked) {
+            if (isWorldClicked) {
                 genreIdList.add(1)
             }
-            if (isPartyClicked) {
+            if (isStrategyClicked) {
                 genreIdList.add(2)
             }
-            if (isSimpleClicked) {
+            if (isWarClicked) {
                 genreIdList.add(3)
             }
-            if (isCardClicked) {
+            if (isFamilyClicked) {
                 genreIdList.add(4)
             }
-            if (isFamilyClicked) {
+            if (isLicenseClicked) {
                 genreIdList.add(5)
             }
-            if (isKidsClicked) {
+            if (isSimpleClicked) {
                 genreIdList.add(6)
             }
-            if (isWarClicked) {
+            if (isPartyClicked) {
                 genreIdList.add(7)
             }
-            if (isWorldClicked) {
+            if (isKidsClicked) {
                 genreIdList.add(8)
             }
 
-            mainViewModel.requestSearchResult(query!!, genreIdList, numOfPlayer,
-                onSuccess = {
-                    if(it != null) { // 검색어와 일치하는 결과가 있는 경우
-                        searchRVAdapter.setNewData(it)
-                        searchResultList = it.toMutableList()
-                    } else { // 검색어와 일치하는 결과가 없는 경우
-                        Toast.makeText(requireContext(), "검색어와 일치하는 결과가 없습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                },
-                onFailure = {
-                    Toast.makeText(requireContext(), "검색에 실패하였습니다.", Toast.LENGTH_SHORT).show()
-                },
-                onErrorAction = {
-                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            )
+            loadSearchPagingData(query!!, genreIdList, numOfPlayer)
 
             return true
         }
 
         override fun onQueryTextChange(newText: String?): Boolean {
             return false
+        }
+    }
+
+    private fun loadSearchPagingData(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
+        mainViewModel.loadSearchPagingData(keyword, genreIdList, numOfPlayer)
+
+        // SearchagingData Flow 관찰
+        mainViewModel.searchPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                pagingDataFlow.collectLatest { pagingData ->
+                    searchRVAdapter.submitData(PagingData.empty())
+                    searchRVAdapter.submitData(pagingData)
+                }
+            }
         }
     }
 
