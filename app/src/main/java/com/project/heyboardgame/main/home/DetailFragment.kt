@@ -53,7 +53,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 val min = it.playerMin
                 binding.numOfPlayer.text = createPlayerString(min, max) // 인원 수
                 binding.detailDescription.text = it.description // 상세 설명
-                binding.detailStrategy.text = it.strategy // 사용 전략
+                binding.detailStrategy.text = it.strategy.toCommaSeparatedString() // 사용 전략
                 isBookmarked = it.isBookmarked
                 if (it.isBookmarked) {
                     binding.bookmarkBtn.setImageResource(R.drawable.icon_bookmark_full)

@@ -42,9 +42,7 @@ class SpecificRateFragment : Fragment(R.layout.fragment_specific_rate) {
 
         binding.score.text = score.toString()
 
-        // RecyclerView Adapter 초기화
-        historyRVAdapter = HistoryRVAdapter()
-
+        historyRVAdapter = HistoryRVAdapter() // RecyclerView Adapter 초기화
         binding.ratedRV.adapter = historyRVAdapter
         binding.ratedRV.layoutManager = GridLayoutManager(requireContext(), 3)
 
@@ -94,7 +92,7 @@ class SpecificRateFragment : Fragment(R.layout.fragment_specific_rate) {
     private fun loadRatedPagingData(score: Float, sort: String) {
         mainViewModel.loadRatedPagingData(score, sort)
 
-        // BookmarkPagingData Flow 관찰
+        // RatedPagingData Flow 관찰
         mainViewModel.ratedPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
             viewLifecycleOwner.lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
