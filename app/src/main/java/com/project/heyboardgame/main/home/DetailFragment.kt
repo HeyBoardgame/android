@@ -147,7 +147,11 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 val ratingData = RatingData(changedRating)
                 mainViewModel.requestRating(id, ratingData,
                     onSuccess = {
-                        Toast.makeText(requireContext(), "별점이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                        if (changedRating == 0f) {
+                            Toast.makeText(requireContext(), "등록된 별점이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(requireContext(), "별점이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                        }
                         currentRating = changedRating
                         isRatingCanceled = false
                     },

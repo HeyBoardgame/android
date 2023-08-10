@@ -73,7 +73,8 @@ interface Api {
     suspend fun requestSearchResult(
         @Query("keyword") keyword: String,
         @Query("genreIdList") genreIdList: List<Int>,
-        @Query("numOfPlayer") numOfPlayer: Int
+        @Query("numOfPlayer") numOfPlayer: Int,
+        @Query("page") pageNum: Int?
     ): Response<SearchResult>
 
     @GET("boardgames/{id}") // 보드게임 단건 조회
@@ -94,7 +95,7 @@ interface Api {
     @GET("my/ratings") // 평가한 보드게임 목록 조회
     suspend fun requestRatedList() : Response<RatedResult>
 
-    @GET("my/ratings/score")
+    @GET("my/ratings/score") // 특정 평점 보드게임 목록 조회
     suspend fun requestSpecificRatedList(@Query("score") score: Float, @Query("order") sort: String, @Query("page") pageNum: Int?) : Response<HistoryResult>
 
 }
