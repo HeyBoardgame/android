@@ -96,6 +96,7 @@
     <string name="rated_1_0">★1.0 평가함</string>
     <string name="rated_0_5">★0.5 평가함</string>
     <string name="rated_nothing">해당 점수로 평가한 보드게임이 없습니다.</string>
+    <string name="no_friend">아직 친구가 없어요.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

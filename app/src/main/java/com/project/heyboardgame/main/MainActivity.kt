@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         showHideBottomNav()
 
-        viewModel.requestMyProfile(onErrorAction = {
+        viewModel.getMyProfile(onErrorAction = {
             Toast.makeText(this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
         })
     }

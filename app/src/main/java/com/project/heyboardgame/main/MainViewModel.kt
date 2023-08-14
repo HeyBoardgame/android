@@ -14,11 +14,15 @@ import com.project.heyboardgame.dataModel.BoardGame2
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataModel.DetailResultData
+import com.project.heyboardgame.dataModel.Friend
+import com.project.heyboardgame.dataModel.FriendRequestData
 import com.project.heyboardgame.dataModel.RatedResultData
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataModel.SearchResultData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.paging.BookmarkPagingSource
+import com.project.heyboardgame.paging.FriendListPagingSource
+import com.project.heyboardgame.paging.FriendRequestPagingSource
 import com.project.heyboardgame.paging.RatedPagingSource
 import com.project.heyboardgame.paging.SearchPagingSource
 import com.project.heyboardgame.retrofit.Api
@@ -44,6 +48,17 @@ class MainViewModel : ViewModel() {
     // 검색 결과 LiveData
     private val _searchPagingData = MutableLiveData<Flow<PagingData<BoardGame2>>>()
     val searchPagingData: LiveData<Flow<PagingData<BoardGame2>>> = _searchPagingData
+    // 친구 목록 LiveData
+    private val _friendListPagingData = MutableLiveData<Flow<PagingData<Friend>>>()
+    val friendListPagingData: LiveData<Flow<PagingData<Friend>>> = _friendListPagingData
+    // 친구 요청 목록 LiveData
+    private val _friendRequestPagingData = MutableLiveData<Flow<PagingData<Friend>>>()
+    val friendRequestPagingData: LiveData<Flow<PagingData<Friend>>> = _friendRequestPagingData
+    // 검색 결과 유지
+    private var currentSearchKeyword = ""
+    private var currentGenreIdList = emptyList<Int>()
+    private var currentNumOfPlayer = 0
+
 
     // 로그아웃 함수 (ProfileFragment)
     fun requestLogout(onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
@@ -89,9 +104,9 @@ class MainViewModel : ViewModel() {
         }
     }
     // 프로필 정보 요청 함수 (MainActivity)
-    fun requestMyProfile(onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun getMyProfile(onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
-            val response = api.requestMyProfile()
+            val response = api.getMyProfile()
             if (response.isSuccessful) {
                 val profileResult = response.body() // 서버에서 받아온 데이터
                 profileResult?.let {
@@ -133,9 +148,9 @@ class MainViewModel : ViewModel() {
         }
     }
     // 보드게임 상세 조회 (DetailFragment)
-    fun requestDetail(id: Int, onSuccess: (detailResult: DetailResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun getDetail(id: Int, onSuccess: (detailResult: DetailResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
-            val response = api.requestDetail(id)
+            val response = api.getDetail(id)
             if (response.isSuccessful) {
                 val detailResult = response.body()
                 detailResult?.let {
@@ -163,9 +178,9 @@ class MainViewModel : ViewModel() {
     }
 
     // 보드게임 찜하기 (DetailFragment)
-    fun requestBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun addBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
-            val response = api.requestBookmark(id)
+            val response = api.addBookmark(id)
             if(response.isSuccessful) {
                 onSuccess.invoke()
             } else {
@@ -190,26 +205,28 @@ class MainViewModel : ViewModel() {
     }
     // 찜한 목록 페이징 (BookmarkFragment)
     fun loadBookmarkPagingData(sort: String) {
+        val size = 20
         val pagingDataFlow = Pager(
-            config = PagingConfig(pageSize = 20, initialLoadSize = 10),
-            pagingSourceFactory = { BookmarkPagingSource(api, sort) }
+            config = PagingConfig(pageSize = size, initialLoadSize = 10),
+            pagingSourceFactory = { BookmarkPagingSource(api, sort, size) }
         ).flow
 
         _bookmarkPagingData.value = pagingDataFlow
     }
     // 특정 평점 평가한 목록 페이징 (SpecificRateFragment)
     fun loadRatedPagingData(score: Float, sort: String) {
+        val size = 20
         val pagingDataFlow = Pager(
-            config = PagingConfig(pageSize = 20, initialLoadSize = 10),
-            pagingSourceFactory = { RatedPagingSource(api, score, sort) }
+            config = PagingConfig(pageSize = size, initialLoadSize = 10),
+            pagingSourceFactory = { RatedPagingSource(api, score, sort, size) }
         ).flow
 
         _ratedPagingData.value = pagingDataFlow
     }
     // 평가한 보드게임 목록 조회 (RatedFragment)
-    fun requestRatedList(onSuccess: (ratedResultData: RatedResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun getRatedList(onSuccess: (ratedResultData: RatedResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
-            val response = api.requestRatedList()
+            val response = api.getRatedList()
             if (response.isSuccessful) {
                 val ratedResult = response.body()
                 ratedResult?.let {
@@ -224,11 +241,96 @@ class MainViewModel : ViewModel() {
     }
     // 검색 결과 페이징 (SearchFragment)
     fun loadSearchPagingData(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
+        setCurrentSearchQuery(keyword, genreIdList, numOfPlayer)
+        val size = 20
         val pagingDataFlow = Pager(
-            config = PagingConfig(pageSize = 20, initialLoadSize = 10),
-            pagingSourceFactory = { SearchPagingSource(api, keyword, genreIdList, numOfPlayer) }
+            config = PagingConfig(pageSize = size, initialLoadSize = 10),
+            pagingSourceFactory = { SearchPagingSource(api, keyword, genreIdList, numOfPlayer, size) }
         ).flow
 
         _searchPagingData.value = pagingDataFlow
+    }
+    private fun setCurrentSearchQuery(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
+        currentSearchKeyword = keyword
+        currentGenreIdList = genreIdList
+        currentNumOfPlayer = numOfPlayer
+    }
+    fun getCurrentSearchQuery(): Triple<String, List<Int>, Int> {
+        return Triple(currentSearchKeyword, currentGenreIdList, currentNumOfPlayer)
+    }
+    // 친구 요청 보내기 (AddFriendFragment)
+    fun sendFriendRequest(friendRequestData: FriendRequestData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.sendFriendRequest(friendRequestData)
+            if (response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 친구 목록 페이징 (SocialFragment)
+    fun loadFriendListPagingData() {
+        val size = 15
+        val pagingDataFlow = Pager(
+            config = PagingConfig(pageSize = size),
+            pagingSourceFactory = { FriendListPagingSource(api, size) }
+        ).flow
+
+        _friendListPagingData.value = pagingDataFlow
+    }
+    // 친구 요청 목록 페이징 (FriendRequestFragment)
+    fun loadFriendRequestPagingData() {
+        val size = 15
+        val pagingDataFlow = Pager(
+            config = PagingConfig(pageSize = size),
+            pagingSourceFactory = { FriendRequestPagingSource(api, size) }
+        ).flow
+
+        _friendRequestPagingData.value = pagingDataFlow
+    }
+    // 상위 n개 친구 요청 목록 조회
+    fun getFriendRequestList(onSuccess: (friends: List<Friend>) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.getFriendRequestList()
+            if (response.isSuccessful) {
+                val friendResult = response.body()
+                if (friendResult != null) {
+                    onSuccess.invoke(friendResult.result.friends)
+                } else {
+                    onFailure.invoke()
+                }
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 친구 요청 수락
+    fun acceptFriendRequest(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.acceptFriendRequest(id)
+            if (response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 친구 요청 거절
+    fun declineFriendRequest(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.declineFriendRequest(id)
+            if (response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
     }
 }

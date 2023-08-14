@@ -2,6 +2,8 @@ package com.project.heyboardgame.retrofit
 
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.DetailResult
+import com.project.heyboardgame.dataModel.FriendRequestData
+import com.project.heyboardgame.dataModel.FriendResult
 import com.project.heyboardgame.dataModel.GoogleLoginData
 import com.project.heyboardgame.dataModel.GoogleLoginResult
 import com.project.heyboardgame.dataModel.GoogleRegisterData
@@ -57,7 +59,7 @@ interface Api {
     suspend fun changePassword(@Body changePasswordData: ChangePasswordData) : Response<Void>
 
     @GET("my") // 프로필 조회
-    suspend fun requestMyProfile() : Response<MyProfileResult>
+    suspend fun getMyProfile() : Response<MyProfileResult>
 
     @Multipart
     @PATCH("my") // 프로필 수정
@@ -69,19 +71,20 @@ interface Api {
     @POST("oauths/register") // 구글 회원가입
     suspend fun requestGoogleRegister(@Body googleRegisterData: GoogleRegisterData) : Response<GoogleLoginResult>
 
-    @GET("boardgames/") // 보드게임 검색
-    suspend fun requestSearchResult(
-        @Query("keyword") keyword: String,
-        @Query("genreIdList") genreIdList: List<Int>,
-        @Query("numOfPlayer") numOfPlayer: Int,
-        @Query("page") pageNum: Int?
+    @GET("boardgames/search") // 보드게임 검색
+    suspend fun getSearchResult(
+        @Query("searchWord") keyword: String,
+        @Query("genre") genreIdList: List<Int>,
+        @Query("player") numOfPlayer: Int,
+        @Query("page") pageNum: Int?,
+        @Query("size") size: Int
     ): Response<SearchResult>
 
     @GET("boardgames/{id}") // 보드게임 단건 조회
-    suspend fun requestDetail(@Path("id") id : Int) : Response<DetailResult>
+    suspend fun getDetail(@Path("id") id : Int) : Response<DetailResult>
 
     @POST("boardgames/{id}/bookmarks") // 보드게임 찜하기
-    suspend fun requestBookmark(@Path("id") id : Int) : Response<Void>
+    suspend fun addBookmark(@Path("id") id : Int) : Response<Void>
 
     @DELETE("boardgames/{id}/bookmarks") // 보드게임 찜하기 취소
     suspend fun deleteBookmark(@Path("id") id : Int) : Response<Void>
@@ -90,12 +93,34 @@ interface Api {
     suspend fun requestRating(@Path("id") id : Int, @Body ratingData : RatingData) : Response<Void>
 
     @GET("my/bookmarks") // 찜한 보드게임 목록 조회
-    suspend fun requestBookmarkList(@Query("order") sort: String, @Query("page") pageNum: Int?) : Response<HistoryResult>
+    suspend fun getBookmarkList(@Query("sort") sort: String, @Query("page") pageNum: Int?, @Query("size") size: Int) : Response<HistoryResult>
 
     @GET("my/ratings") // 평가한 보드게임 목록 조회
-    suspend fun requestRatedList() : Response<RatedResult>
+    suspend fun getRatedList() : Response<RatedResult>
 
     @GET("my/ratings/score") // 특정 평점 보드게임 목록 조회
-    suspend fun requestSpecificRatedList(@Query("score") score: Float, @Query("order") sort: String, @Query("page") pageNum: Int?) : Response<HistoryResult>
+    suspend fun getSpecificRatedList(
+        @Query("score") score: Float,
+        @Query("sort") sort: String,
+        @Query("page") pageNum: Int?,
+        @Query("size") size: Int
+    ) : Response<HistoryResult>
 
+    @POST("friends/requests") // 친구 요청 보내기
+    suspend fun sendFriendRequest(@Body friendRequestData: FriendRequestData) : Response<Void>
+
+    @GET("friends") // 친구 목록 조회
+    suspend fun getFriendList(@Query("page") pageNum: Int?, @Query("size") size: Int) : Response<FriendResult>
+
+    @GET("friends/requests") // 친구 요청 목록 조회
+    suspend fun getFriendRequestList(@Query("page") pageNum: Int?, @Query("size") size: Int) : Response<FriendResult>
+
+    @GET("friends/requests") // 상위 n개 친구 요청 목록 조회
+    suspend fun getFriendRequestList() : Response<FriendResult>
+
+    @POST("friends/requests/{id}") // 친구 요청 수락
+    suspend fun acceptFriendRequest(@Path("id") id: Int) : Response<Void>
+
+    @DELETE("friends/requests/{id}") // 친구 요청 거절
+    suspend fun declineFriendRequest(@Path("id") id: Int) : Response<Void>
 }
