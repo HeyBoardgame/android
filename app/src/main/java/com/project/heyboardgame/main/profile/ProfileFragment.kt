@@ -12,12 +12,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.heyboardgame.R
-import com.project.heyboardgame.adapter.BadgeRVAdapter
 import com.project.heyboardgame.auth.AuthActivity
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.FragmentProfileBinding
@@ -35,8 +33,6 @@ class ProfileFragment : Fragment() {
     // View Binding
     private var _binding : FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    // Adapter
-    private lateinit var badgeRVAdapter: BadgeRVAdapter
     // View Model
     private lateinit var mainViewModel: MainViewModel
     // DataStore
@@ -60,7 +56,6 @@ class ProfileFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this, callback)
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
@@ -77,9 +72,6 @@ class ProfileFragment : Fragment() {
             val nickname = withContext(Dispatchers.IO) {
                 myDataStore.getNickname()
             }
-            val userCode = withContext(Dispatchers.IO) {
-                myDataStore.getUserCode()
-            }
             val googleLogined = withContext(Dispatchers.IO) {
                 myDataStore.getGoogleLogined()
             }
@@ -91,18 +83,8 @@ class ProfileFragment : Fragment() {
                 binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
             }
             binding.myNickname.text = nickname
-            binding.myUserCode.text = userCode
             isGoogleLogined = googleLogined
         }
-
-        var badgeList = mutableListOf<String>()
-        badgeList.add("뱃지")
-        badgeList.add("뱃지")
-        badgeList.add("뱃지")
-
-        badgeRVAdapter = BadgeRVAdapter(requireContext(), badgeList)
-        binding.badgeRV.adapter = badgeRVAdapter
-        binding.badgeRV.layoutManager = GridLayoutManager(requireContext(), 3)
 
         binding.bookmark.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_bookmarkFragment)

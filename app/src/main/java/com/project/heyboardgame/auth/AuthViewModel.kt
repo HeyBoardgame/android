@@ -25,6 +25,7 @@ class AuthViewModel : ViewModel() {
     // Api
     private val api : Api = RetrofitClient.getInstanceWithTokenInterceptor(myDataStore).create(Api::class.java)
 
+
     // accessToken가 있는 지 확인하는 함수
     fun checkAccessToken() = viewModelScope.launch {
 
@@ -37,7 +38,7 @@ class AuthViewModel : ViewModel() {
     fun requestLogin(loginData: LoginData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestLogin(loginData)
-            if (response.isSuccessful) { // 로그인 성공
+            if (response.isSuccessful) { // 요청 성공
                 val loginResult = response.body()
                 loginResult?.let {
                     // LoginResult에서 accessToken과 refreshToken 가져오기
@@ -63,17 +64,17 @@ class AuthViewModel : ViewModel() {
     fun requestTempPassword(tempPasswordData: TempPasswordData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestTempPassword(tempPasswordData)
-            if (response.isSuccessful) { // 요청 성공
+            if (response.isSuccessful) {
                 onSuccess.invoke()
-            } else { // 요청 실패
+            } else {
                 onFailure.invoke()
             }
-        } catch(e: Exception) { // 네트워크 오류
+        } catch(e: Exception) {
             onErrorAction.invoke()
         }
     }
     // 이메일 중복 확인 요청 함수 (SignUpFragment1)
-    fun checkDuplicateEmail(email : String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun checkDuplicateEmail(email: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.checkDuplicateEmail(email)
             if (response.isSuccessful) { // 요청 성공
@@ -86,7 +87,7 @@ class AuthViewModel : ViewModel() {
         }
     }
     // 회원 가입 요청 함수 (SignUpFragment2)
-    fun requestRegister(signUpData : SignUpData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun requestRegister(signUpData: SignUpData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestRegister(signUpData)
             if (response.isSuccessful) { // 요청 성공
@@ -98,7 +99,6 @@ class AuthViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-
     // 구글 로그인 요청 함수 (LoginFragment)
     fun requestGoogleLogin(googleLoginData: GoogleLoginData, onSuccess: () -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
@@ -125,8 +125,7 @@ class AuthViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-
-    // 구글 회원가입 요청 함수
+    // 구글 회원가입 요청 함수 (GoogleSignUpFragment2)
     fun requestGoogleRegister(googleRegisterData: GoogleRegisterData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestGoogleRegister(googleRegisterData)
@@ -145,6 +144,19 @@ class AuthViewModel : ViewModel() {
                     // MainActivity로 이동 + Toast 메세지
                     onSuccess.invoke()
                 }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 닉네임 중복 확인 요청 함수 (SignUpFragment1, GoogleSignUpFragment1)
+    fun checkDuplicateNickname(nickname: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.checkDuplicateNickname(nickname)
+            if (response.isSuccessful) {
+                onSuccess.invoke()
             } else {
                 onFailure.invoke()
             }

@@ -11,7 +11,5 @@ data class MyProfileResultData (
     @SerializedName("profileImagePath")
     val profileImg : String,
     @SerializedName("nickname")
-    val nickname : String,
-    @SerializedName("userCode")
-    val userCode : String
+    val nickname : String
 )

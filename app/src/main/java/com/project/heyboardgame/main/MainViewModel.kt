@@ -112,11 +112,9 @@ class MainViewModel : ViewModel() {
                 profileResult?.let {
                     val profileImg = it.result.profileImg
                     val nickname = it.result.nickname
-                    val userCode = it.result.userCode
 
                     myDataStore.setProfileImage(profileImg)
                     myDataStore.setNickname(nickname)
-                    myDataStore.setUserCode(userCode)
 
                     Timber.d("프로필 조회 성공")
                 }
@@ -124,6 +122,19 @@ class MainViewModel : ViewModel() {
                 Timber.d("프로필 조회 실패")
             }
         } catch (e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 닉네임 중복 확인 요청 함수 (ChangeProfileFragment)
+    fun checkDuplicateNickname(nickname: String, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.checkDuplicateNickname(nickname)
+            if (response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
             onErrorAction.invoke()
         }
     }

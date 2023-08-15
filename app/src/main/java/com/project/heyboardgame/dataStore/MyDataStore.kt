@@ -25,7 +25,6 @@ class MyDataStore {
     // 프로필 정보
     private val PROFILE_IMAGE_URI = stringPreferencesKey("PROFILE_IMAGE_URI")
     private val NICKNAME = stringPreferencesKey("NICKNAME")
-    private val USER_CODE = stringPreferencesKey("USER_CODE")
     private val GOOGLE_LOGINED = booleanPreferencesKey("GOOGLE_LOGINED")
 
 
@@ -52,12 +51,6 @@ class MyDataStore {
     suspend fun setNickname(nickname : String) {
         mDataStore.edit { preferences ->
             preferences[NICKNAME] = nickname
-        }
-    }
-
-    suspend fun setUserCode(userCode : String) {
-        mDataStore.edit { preferences ->
-            preferences[USER_CODE] = userCode
         }
     }
 
@@ -107,18 +100,6 @@ class MyDataStore {
         mDataStore.edit { preferences ->
             currentValue = if (preferences[NICKNAME] != null) {
                 preferences[NICKNAME].toString()
-            } else {
-                ""
-            }
-        }
-        return currentValue
-    }
-
-    suspend fun getUserCode() : String {
-        var currentValue = ""
-        mDataStore.edit { preferences ->
-            currentValue = if (preferences[USER_CODE] != null) {
-                preferences[USER_CODE].toString()
             } else {
                 ""
             }

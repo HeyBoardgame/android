@@ -44,10 +44,13 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
     private val myDataStore : MyDataStore = MyDataStore()
     // 에러 변수
     private var isNicknameInvalid = false
-    // 변경 체크 변수
+    private var isNicknameDuplicated = false
+    // 이미지 변경 체크 변수
     private var isImageChanged = false
     // 프로필 이미지 변수
     private var finalImageUri: Uri? = null
+    // 원래 닉네임 저장 변수
+    private var originalNickname: String = ""
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,17 +66,18 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
                 myDataStore.getNickname()
             }
             binding.nickname.setText(nickname)
+            originalNickname = nickname
             if (profileImg != null) {
                 Glide.with(requireContext())
                     .load(profileImg)
-                    .into(binding.profileImg)
+                    .into(binding.myProfileImg)
             } else {
-                binding.profileImg.setImageResource(R.drawable.default_profile_img)
+                binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
             }
+            validateNickname(originalNickname)
         }
 
         binding.nickname.addTextChangedListener(nicknameTextWatcher) // 닉네임 입력창에 TextWatcher 추가
-
 
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
@@ -87,9 +91,31 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         }
 
         binding.defaultImgBtn.setOnClickListener {
-            binding.profileImg.setImageResource(R.drawable.default_profile_img)
+            binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
             finalImageUri = null
             isImageChanged = true
+            updateChangeButtonState()
+        }
+
+        binding.nicknameCheckBtn.setOnClickListener {
+            val nickname = binding.nickname.text.toString()
+            mainViewModel.checkDuplicateNickname(nickname,
+                onSuccess = {
+                    binding.nicknameCheckSuccess.visibility = View.VISIBLE
+                    binding.nicknameCheckFail.visibility = View.GONE
+                    isNicknameDuplicated = false
+                    updateChangeButtonState()
+                },
+                onFailure = {
+                    binding.nicknameCheckSuccess.visibility = View.GONE
+                    binding.nicknameCheckFail.visibility = View.VISIBLE
+                    isNicknameDuplicated = true
+                    updateChangeButtonState()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
 
         binding.changeProfileBtn.setOnClickListener {
@@ -151,15 +177,19 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result ->
             if (result.resultCode == RESULT_OK){
                 val imageUri = result.data?.data
-                binding.profileImg.setImageURI(imageUri)
+                binding.myProfileImg.setImageURI(imageUri)
                 finalImageUri = imageUri
                 isImageChanged = true
+                updateChangeButtonState()
             }
         }
 
     // 닉네임 TextWatcher
     private val nicknameTextWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
+            binding.nicknameCheckSuccess.visibility = View.GONE
+            binding.nicknameCheckFail.visibility = View.GONE
+            isNicknameDuplicated = true
             validateNickname(s.toString())
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -175,15 +205,27 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         val regex = Regex("^[A-Za-z0-9가-힣]+$") // 영문 대소문자, 숫자, 한글만 허용
         val containsSpecialCharacters = !regex.matches(nickname)
 
-        if (containsSpecialCharacters) {
-            binding.nicknameInvalid.visibility = View.VISIBLE
-            binding.changeProfileBtn.isEnabled = false
-            isNicknameInvalid = true
-        } else {
-            binding.nicknameInvalid.visibility = View.GONE
-            binding.changeProfileBtn.isEnabled = true
+        if (nickname == originalNickname) {
+            binding.nicknameCheckBtn.isEnabled = false
+            isNicknameDuplicated = false
             isNicknameInvalid = false
+            binding.nicknameInvalid.visibility = View.GONE
+        } else {
+            if (containsSpecialCharacters) {
+                binding.nicknameInvalid.visibility = View.VISIBLE
+                binding.nicknameCheckBtn.isEnabled = false
+                isNicknameInvalid = true
+            } else {
+                binding.nicknameInvalid.visibility = View.GONE
+                binding.nicknameCheckBtn.isEnabled = true
+                isNicknameInvalid = false
+            }
         }
+        updateChangeButtonState()
+    }
+
+    private fun updateChangeButtonState() {
+        binding.changeProfileBtn.isEnabled = !isNicknameInvalid && !isNicknameDuplicated && isImageChanged
     }
 
     override fun onDestroyView() {

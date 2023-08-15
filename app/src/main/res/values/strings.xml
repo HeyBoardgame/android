@@ -40,6 +40,8 @@
     <string name="duplicate_check">중복\n확인</string>
     <string name="email_check_success">사용 가능한 이메일입니다.</string>
     <string name="email_check_fail">이미 사용 중인 이메일입니다.</string>
+    <string name="nickname_check_success">사용 가능한 닉네임입니다.</string>
+    <string name="nickname_check_fail">이미 사용 중인 닉네임입니다.</string>
     <string name="nickname_invalid">닉네임을 다시 입력해주세요. (특수문자, 띄어쓰기, 자음, 모음 불가)</string>
     <string name="password_check_fail">비밀번호가 일치하지 않습니다.</string>
     <string name="email_invalid">이메일 형식이 맞지 않습니다.</string>

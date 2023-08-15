@@ -38,7 +38,7 @@ interface Api {
     suspend fun requestLogin(@Body loginData: LoginData): Response<LoginResult>
 
     @POST("auths/refresh") // refreshToken 요청
-    suspend fun getNewToken(@Body refreshData : RefreshData) : Response<RefreshResult>
+    suspend fun getNewToken(@Body refreshData: RefreshData): Response<RefreshResult>
 
     @PATCH("auths/temp-password") // 임시 비밀번호 발급
     suspend fun requestTempPassword(@Body tempPasswordData: TempPasswordData): Response<Void>
@@ -46,30 +46,33 @@ interface Api {
     @GET("auths/email-duplicate") // 이메일 중복 확인
     suspend fun checkDuplicateEmail(@Query("email") email: String): Response<Void>
 
+    @GET("auths/nickname-duplicate") // 닉네임 중복 확인
+    suspend fun checkDuplicateNickname(@Query("nickname") nickname: String): Response<Void>
+
     @POST("auths/register") // 회원가입
-    suspend fun requestRegister(@Body signUpData: SignUpData) : Response<Void>
+    suspend fun requestRegister(@Body signUpData: SignUpData): Response<Void>
 
     @PATCH("auths/logout") // 로그아웃
-    suspend fun requestLogout() : Response<Void>
+    suspend fun requestLogout(): Response<Void>
 
     @DELETE("auths/unregister") // 회원 탈퇴
-    suspend fun requestUnregister() : Response<Void>
+    suspend fun requestUnregister(): Response<Void>
 
     @PATCH("auths/new-password") // 비밀번호 재설정
-    suspend fun changePassword(@Body changePasswordData: ChangePasswordData) : Response<Void>
+    suspend fun changePassword(@Body changePasswordData: ChangePasswordData): Response<Void>
 
     @GET("my") // 프로필 조회
-    suspend fun getMyProfile() : Response<MyProfileResult>
+    suspend fun getMyProfile(): Response<MyProfileResult>
 
     @Multipart
     @PATCH("my") // 프로필 수정
-    suspend fun changeMyProfile(@Part file: MultipartBody.Part?, @Part("data") changeProfileData: RequestBody) : Response<Void>
+    suspend fun changeMyProfile(@Part file: MultipartBody.Part?, @Part("data") changeProfileData: RequestBody): Response<Void>
 
     @POST("oauths/login") // 구글 로그인
-    suspend fun requestGoogleLogin(@Body googleLoginData: GoogleLoginData) : Response<GoogleLoginResult>
+    suspend fun requestGoogleLogin(@Body googleLoginData: GoogleLoginData): Response<GoogleLoginResult>
 
     @POST("oauths/register") // 구글 회원가입
-    suspend fun requestGoogleRegister(@Body googleRegisterData: GoogleRegisterData) : Response<GoogleLoginResult>
+    suspend fun requestGoogleRegister(@Body googleRegisterData: GoogleRegisterData): Response<GoogleLoginResult>
 
     @GET("boardgames/search") // 보드게임 검색
     suspend fun getSearchResult(
@@ -81,22 +84,22 @@ interface Api {
     ): Response<SearchResult>
 
     @GET("boardgames/{id}") // 보드게임 단건 조회
-    suspend fun getDetail(@Path("id") id : Int) : Response<DetailResult>
+    suspend fun getDetail(@Path("id") id: Int): Response<DetailResult>
 
     @POST("boardgames/{id}/bookmarks") // 보드게임 찜하기
-    suspend fun addBookmark(@Path("id") id : Int) : Response<Void>
+    suspend fun addBookmark(@Path("id") id: Int): Response<Void>
 
     @DELETE("boardgames/{id}/bookmarks") // 보드게임 찜하기 취소
-    suspend fun deleteBookmark(@Path("id") id : Int) : Response<Void>
+    suspend fun deleteBookmark(@Path("id") id: Int): Response<Void>
 
     @PUT("boardgames/{id}/rate") // 보드게임 평가하기
-    suspend fun requestRating(@Path("id") id : Int, @Body ratingData : RatingData) : Response<Void>
+    suspend fun requestRating(@Path("id") id: Int, @Body ratingData: RatingData): Response<Void>
 
     @GET("my/bookmarks") // 찜한 보드게임 목록 조회
-    suspend fun getBookmarkList(@Query("sort") sort: String, @Query("page") pageNum: Int?, @Query("size") size: Int) : Response<HistoryResult>
+    suspend fun getBookmarkList(@Query("sort") sort: String, @Query("page") pageNum: Int?, @Query("size") size: Int): Response<HistoryResult>
 
     @GET("my/ratings") // 평가한 보드게임 목록 조회
-    suspend fun getRatedList() : Response<RatedResult>
+    suspend fun getRatedList(): Response<RatedResult>
 
     @GET("my/ratings/score") // 특정 평점 보드게임 목록 조회
     suspend fun getSpecificRatedList(
@@ -104,23 +107,23 @@ interface Api {
         @Query("sort") sort: String,
         @Query("page") pageNum: Int?,
         @Query("size") size: Int
-    ) : Response<HistoryResult>
+    ): Response<HistoryResult>
 
     @POST("friends/requests") // 친구 요청 보내기
-    suspend fun sendFriendRequest(@Body friendRequestData: FriendRequestData) : Response<Void>
+    suspend fun sendFriendRequest(@Body friendRequestData: FriendRequestData): Response<Void>
 
     @GET("friends") // 친구 목록 조회
-    suspend fun getFriendList(@Query("page") pageNum: Int?, @Query("size") size: Int) : Response<FriendResult>
+    suspend fun getFriendList(@Query("page") pageNum: Int?, @Query("size") size: Int): Response<FriendResult>
 
     @GET("friends/requests") // 친구 요청 목록 조회
-    suspend fun getFriendRequestList(@Query("page") pageNum: Int?, @Query("size") size: Int) : Response<FriendResult>
+    suspend fun getFriendRequestList(@Query("page") pageNum: Int?, @Query("size") size: Int): Response<FriendResult>
 
     @GET("friends/requests") // 상위 n개 친구 요청 목록 조회
-    suspend fun getFriendRequestList() : Response<FriendResult>
+    suspend fun getFriendRequestList(): Response<FriendResult>
 
     @POST("friends/requests/{id}") // 친구 요청 수락
-    suspend fun acceptFriendRequest(@Path("id") id: Int) : Response<Void>
+    suspend fun acceptFriendRequest(@Path("id") id: Int): Response<Void>
 
     @DELETE("friends/requests/{id}") // 친구 요청 거절
-    suspend fun declineFriendRequest(@Path("id") id: Int) : Response<Void>
+    suspend fun declineFriendRequest(@Path("id") id: Int): Response<Void>
 }
