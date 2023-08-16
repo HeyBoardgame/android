@@ -1,7 +1,9 @@
 package com.project.heyboardgame.retrofit
 
 import com.project.heyboardgame.dataModel.ChangePasswordData
+import com.project.heyboardgame.dataModel.CheckRequestResult
 import com.project.heyboardgame.dataModel.DetailResult
+import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.dataModel.FriendRequestData
 import com.project.heyboardgame.dataModel.FriendResult
 import com.project.heyboardgame.dataModel.GoogleLoginData
@@ -109,9 +111,6 @@ interface Api {
         @Query("size") size: Int
     ): Response<HistoryResult>
 
-    @POST("friends/requests") // 친구 요청 보내기
-    suspend fun sendFriendRequest(@Body friendRequestData: FriendRequestData): Response<Void>
-
     @GET("friends") // 친구 목록 조회
     suspend fun getFriendList(@Query("page") pageNum: Int?, @Query("size") size: Int): Response<FriendResult>
 
@@ -126,4 +125,10 @@ interface Api {
 
     @DELETE("friends/requests/{id}") // 친구 요청 거절
     suspend fun declineFriendRequest(@Path("id") id: Int): Response<Void>
+
+    @GET("friends/requests/search") // 친구 요청 시 사용자 유효성 확인
+    suspend fun checkFriendRequest(@Query("nickname") nickname: String): Response<CheckRequestResult>
+
+    @POST("friends/requests") // 친구 요청 보내기
+    suspend fun sendFriendRequest(@Body friendRequestData: FriendRequestData): Response<Void>
 }

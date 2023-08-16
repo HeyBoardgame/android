@@ -269,19 +269,6 @@ class MainViewModel : ViewModel() {
     fun getCurrentSearchQuery(): Triple<String, List<Int>, Int> {
         return Triple(currentSearchKeyword, currentGenreIdList, currentNumOfPlayer)
     }
-    // 친구 요청 보내기 (AddFriendFragment)
-    fun sendFriendRequest(friendRequestData: FriendRequestData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
-        try {
-            val response = api.sendFriendRequest(friendRequestData)
-            if (response.isSuccessful) {
-                onSuccess.invoke()
-            } else {
-                onFailure.invoke()
-            }
-        } catch(e: Exception) {
-            onErrorAction.invoke()
-        }
-    }
     // 친구 목록 페이징 (SocialFragment)
     fun loadFriendListPagingData() {
         val size = 15
@@ -335,6 +322,35 @@ class MainViewModel : ViewModel() {
     fun declineFriendRequest(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.declineFriendRequest(id)
+            if (response.isSuccessful) {
+                onSuccess.invoke()
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 친구 요청 시 사용자 유효성 확인
+    fun checkFriendRequest(nickname: String, onSuccess: (id: Int) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.checkFriendRequest(nickname)
+            if (response.isSuccessful) {
+                val checkResult = response.body()
+                if (checkResult != null) {
+                    onSuccess.invoke(checkResult.result.id)
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 친구 요청 보내기 (AddFriendFragment)
+    fun sendFriendRequest(friendRequestData: FriendRequestData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.sendFriendRequest(friendRequestData)
             if (response.isSuccessful) {
                 onSuccess.invoke()
             } else {

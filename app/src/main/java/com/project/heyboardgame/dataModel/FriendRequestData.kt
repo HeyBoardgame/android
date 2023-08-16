@@ -3,6 +3,6 @@ package com.project.heyboardgame.dataModel
 import com.google.gson.annotations.SerializedName
 
 data class FriendRequestData (
-    @SerializedName("userCode")
-    val userCode : String
+    @SerializedName("id")
+    val id : Int
 )

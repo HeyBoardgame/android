@@ -15,6 +15,7 @@ import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.databinding.FragmentFriendRequestBinding
 import com.project.heyboardgame.main.MainViewModel
 import com.project.heyboardgame.utils.InterfaceUtils
+import com.project.heyboardgame.utils.ViewUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -40,6 +41,11 @@ class FriendRequestFragment : Fragment(R.layout.fragment_friend_request), Interf
 
         loadFriendRequestPagingData()
 
+        friendRequestRVAdapter.addLoadStateListener { loadStates ->
+            val noContentView = binding.noContent
+            ViewUtils.setNoContentListener(loadStates, noContentView, friendRequestRVAdapter.itemCount)
+        }
+
     }
 
     private fun loadFriendRequestPagingData() {
@@ -56,11 +62,33 @@ class FriendRequestFragment : Fragment(R.layout.fragment_friend_request), Interf
     }
 
     override fun onAcceptButtonClicked(friend: Friend) {
-        Toast.makeText(requireContext(), "${friend.id} 수락", Toast.LENGTH_SHORT).show()
+        mainViewModel.acceptFriendRequest(friend.id,
+            onSuccess = {
+                Toast.makeText(requireContext(), "${friend.nickname}님의 친구 요청을 수락했습니다.", Toast.LENGTH_SHORT).show()
+                loadFriendRequestPagingData()
+            },
+            onFailure = {
+                Toast.makeText(requireContext(), "친구 요청 수락에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            },
+            onErrorAction = {
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     override fun onDeclineButtonClicked(friend: Friend) {
-        Toast.makeText(requireContext(), "${friend.id} 거절", Toast.LENGTH_SHORT).show()
+        mainViewModel.declineFriendRequest(friend.id,
+            onSuccess = {
+                Toast.makeText(requireContext(), "${friend.nickname}님의 친구 요청을 거절했습니다.", Toast.LENGTH_SHORT).show()
+                loadFriendRequestPagingData()
+            },
+            onFailure = {
+                Toast.makeText(requireContext(), "친구 요청 거절에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            },
+            onErrorAction = {
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     override fun onDestroyView() {

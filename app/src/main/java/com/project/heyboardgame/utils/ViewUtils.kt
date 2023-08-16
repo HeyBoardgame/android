@@ -16,7 +16,7 @@ class ViewUtils {
                 && itemCount < 1
             ) noContentView.visibility = View.VISIBLE
             else
-                noContentView.visibility = View.INVISIBLE
+                noContentView.visibility = View.GONE
         }
     }
 }

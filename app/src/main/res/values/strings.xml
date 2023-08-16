@@ -34,7 +34,7 @@
     <string name="chat">채팅하기</string>
     <string name="accept">친구 요청 받기</string>
     <string name="decline">친구 요청 거절</string>
-    <string name="add_friend_description">다른 사람의 유저 코드를 입력해\n친구 요청을 보내 보세요!</string>
+    <string name="add_friend_description">다른 사람의 닉네임을 입력해\n친구 요청을 보내 보세요!</string>
     <string name="forgot_pwd_success">이메일이 성공적으로 전송되었습니다.</string>
     <string name="forgot_pwd_fail">가입되지 않은 이메일입니다.</string>
     <string name="duplicate_check">중복\n확인</string>
@@ -99,6 +99,8 @@
     <string name="rated_0_5">★0.5 평가함</string>
     <string name="rated_nothing">해당 점수로 평가한 보드게임이 없습니다.</string>
     <string name="no_friend">아직 친구가 없어요.</string>
+    <string name="no_friend_request_text1">현재 받은 친구 요청이 없어요.</string>
+    <string name="no_friend_request_text2">함께 보드게임을 즐길 친구를 찾아보세요!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
