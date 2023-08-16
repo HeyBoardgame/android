@@ -8,6 +8,10 @@ data class HistoryResult (
 )
 
 data class HistoryResultData (
-    @SerializedName("boardGames")
-    val boardGames: List<BoardGame>
+    @SerializedName("content")
+    val boardGames: List<BoardGame>,
+    @SerializedName("prevPage")
+    val prevPage: Int?,
+    @SerializedName("nextPage")
+    val nextPage: Int?
 )

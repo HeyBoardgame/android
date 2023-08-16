@@ -5,17 +5,19 @@ import androidx.paging.PagingState
 import com.project.heyboardgame.dataModel.BoardGame
 import com.project.heyboardgame.retrofit.Api
 
-class RatedPagingSource(private val api: Api, private val score: Float, private val sort: String) : PagingSource<Int, BoardGame>() {
+class RatedPagingSource(private val api: Api, private val score: Float, private val sort: String,
+                        private val size: Int) : PagingSource<Int, BoardGame>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BoardGame> {
         val pageNum = params.key ?: 0
         return try {
-            val response = api.requestSpecificRatedList(score, sort, pageNum)
+            val response = api.getSpecificRatedList(score, sort, pageNum, size)
             if (response.isSuccessful) {
                 val historyResult = response.body()
                 val ratedList = historyResult?.result?.boardGames ?: emptyList()
-                val nextPage = if (ratedList.size < 20) null else pageNum + 1
+                val prevPage = historyResult?.result?.prevPage
+                val nextPage = historyResult?.result?.nextPage
 
-                LoadResult.Page(data = ratedList, prevKey = null, nextKey = nextPage)
+                LoadResult.Page(data = ratedList, prevKey = prevPage, nextKey = nextPage)
 
             } else {
                 LoadResult.Error(Exception("페이징 실패"))

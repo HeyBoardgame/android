@@ -1,7 +1,6 @@
 package com.project.heyboardgame.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,7 @@ import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.BoardGame
 
-class HomeRVAdapter(val context : Context, var boardgameList : List<BoardGame>)
-    : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
+class HomeRVAdapter(var boardgameList : List<BoardGame>) : RecyclerView.Adapter<HomeRVAdapter.ViewHolder>() {
 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         val image = view.findViewById<ImageView>(R.id.image)
@@ -44,7 +42,7 @@ class HomeRVAdapter(val context : Context, var boardgameList : List<BoardGame>)
     override fun onBindViewHolder(holder: HomeRVAdapter.ViewHolder, position: Int) {
         val item = boardgameList[position]
 
-        Glide.with(context).load(item.image).into(holder.image)
+        Glide.with(holder.itemView.context).load(item.image).into(holder.image)
         holder.title.text = item.title
         holder.itemView.setOnClickListener {
             itemClickListener?.onItemClick(item)

@@ -39,7 +39,6 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
 
         // RecyclerView Adapter 초기화
         historyRVAdapter = HistoryRVAdapter()
-
         binding.bookmarkRV.adapter = historyRVAdapter
         binding.bookmarkRV.layoutManager = GridLayoutManager(requireContext(), 3)
 
@@ -79,7 +78,6 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
             }
         }
 
-        // Adapter 아이템 개수 리스너 설정
         historyRVAdapter.addLoadStateListener { loadStates ->
             val noContentView = binding.noContent
             ViewUtils.setNoContentListener(loadStates, noContentView, historyRVAdapter.itemCount)

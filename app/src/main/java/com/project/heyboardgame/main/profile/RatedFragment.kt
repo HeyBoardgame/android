@@ -50,18 +50,18 @@ class RatedFragment : Fragment(R.layout.fragment_rated) {
         _binding = FragmentRatedBinding.bind(view)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        rated50Adapter = HomeRVAdapter(requireContext(), rated50List)
-        rated45Adapter = HomeRVAdapter(requireContext(), rated45List)
-        rated40Adapter = HomeRVAdapter(requireContext(), rated40List)
-        rated35Adapter = HomeRVAdapter(requireContext(), rated35List)
-        rated30Adapter = HomeRVAdapter(requireContext(), rated30List)
-        rated25Adapter = HomeRVAdapter(requireContext(), rated25List)
-        rated20Adapter = HomeRVAdapter(requireContext(), rated20List)
-        rated15Adapter = HomeRVAdapter(requireContext(), rated15List)
-        rated10Adapter = HomeRVAdapter(requireContext(), rated10List)
-        rated05Adapter = HomeRVAdapter(requireContext(), rated05List)
+        rated50Adapter = HomeRVAdapter(rated50List)
+        rated45Adapter = HomeRVAdapter(rated45List)
+        rated40Adapter = HomeRVAdapter(rated40List)
+        rated35Adapter = HomeRVAdapter(rated35List)
+        rated30Adapter = HomeRVAdapter(rated30List)
+        rated25Adapter = HomeRVAdapter(rated25List)
+        rated20Adapter = HomeRVAdapter(rated20List)
+        rated15Adapter = HomeRVAdapter(rated15List)
+        rated10Adapter = HomeRVAdapter(rated10List)
+        rated05Adapter = HomeRVAdapter(rated05List)
 
-        mainViewModel.requestRatedList(
+        mainViewModel.getRatedList(
             onSuccess = {
                 val boardGamesMap = it.boardGames
 

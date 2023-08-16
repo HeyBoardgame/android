@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.HomeRVAdapter
 import com.project.heyboardgame.dataModel.BoardGame
-import com.project.heyboardgame.dataModel.BoardgameList
 import com.project.heyboardgame.databinding.FragmentHomeBinding
 
 
@@ -63,7 +62,7 @@ class HomeFragment : Fragment() {
         boardgameList.add(BoardGame(6, "@drawable/tmp_img", "티켓투라이드"))
         boardgameList.add(BoardGame(7, "@drawable/tmp_img", "티켓투라이드"))
 
-        homeRVAdapter = HomeRVAdapter(requireContext(), boardgameList)
+        homeRVAdapter = HomeRVAdapter(boardgameList)
         binding.homeRV1.adapter = homeRVAdapter
         binding.homeRV1.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
