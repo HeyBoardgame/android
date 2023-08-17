@@ -3,6 +3,6 @@ package com.project.heyboardgame.dataModel
 import com.google.gson.annotations.SerializedName
 
 data class RatingData (
-    @SerializedName("rate")
+    @SerializedName("score")
     val rating : Float
 )

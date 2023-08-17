@@ -40,7 +40,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         id = args.id
 
         // 화면 초기화
-        mainViewModel.requestDetail(id,
+        mainViewModel.getDetail(id,
             onSuccess = {
                 Glide.with(requireContext()).load(it.image).into(binding.detailImg) // 이미지
                 binding.starRating.text = it.starRating.toString() // 보드게임 평점
@@ -76,6 +76,25 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             }
         )
 
+//        filterTitle.setOnClickListener {
+//            if (binding.filterItems.visibility == View.GONE) {
+//                binding.filterItems.visibility = View.VISIBLE
+//                binding.filterArrow.animate().setDuration(200).rotation(180f)
+//            } else {
+//                binding.filterItems.visibility = View.GONE
+//                binding.filterArrow.animate().setDuration(200).rotation(0f)
+//            }
+//        }
+        binding.descriptionTitle.setOnClickListener {
+            if (binding.detailDescription.visibility == View.GONE) {
+                binding.detailDescription.visibility = View.VISIBLE
+                binding.descriptionArrow.animate().setDuration(200).rotation(180f)
+            } else {
+                binding.detailDescription.visibility = View.GONE
+                binding.descriptionArrow.animate().setDuration(200).rotation(0f)
+            }
+        }
+
         // 뒤로가기 버튼
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
@@ -98,7 +117,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     }
                 )
             } else { // 찜하기가 안 되어 있었던 경우
-                mainViewModel.requestBookmark(id,
+                mainViewModel.addBookmark(id,
                     onSuccess = {
                         isBookmarked = true
                         binding.bookmarkBtn.setImageResource(R.drawable.icon_bookmark_full)
