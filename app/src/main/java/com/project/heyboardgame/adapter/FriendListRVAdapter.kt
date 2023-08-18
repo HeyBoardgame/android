@@ -42,7 +42,11 @@ class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHo
         val item = getItem(position)
 
         item?.let {
-            Glide.with(holder.itemView.context).load(it.image).into(holder.image)
+            if (item.image != null) {
+                Glide.with(holder.itemView.context).load(it.image).into(holder.image)
+            } else {
+                holder.image.setImageResource(R.drawable.default_profile_img)
+            }
             holder.nickname.text = it.nickname
 
             holder.chatBtn.setOnClickListener {

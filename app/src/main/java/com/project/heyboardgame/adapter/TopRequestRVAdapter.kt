@@ -37,7 +37,11 @@ class TopRequestRVAdapter(var friendRequestList : List<Friend>, private val inte
     override fun onBindViewHolder(holder: TopRequestRVAdapter.ViewHolder, position: Int) {
         val item = friendRequestList[position]
 
-        Glide.with(holder.itemView.context).load(item.image).into(holder.image)
+        if (item.image != null) {
+            Glide.with(holder.itemView.context).load(item.image).into(holder.image)
+        } else {
+            holder.image.setImageResource(R.drawable.default_profile_img)
+        }
         holder.nickname.text = item.nickname
         holder.acceptBtn.setOnClickListener {
             interfaceUtils.onAcceptButtonClicked(item)

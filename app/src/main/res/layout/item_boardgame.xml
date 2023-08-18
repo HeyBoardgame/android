@@ -8,7 +8,6 @@
 
     <ImageView
         android:id="@+id/image"
-        android:src="@drawable/tmp_img"
         android:scaleType="fitCenter"
         android:layout_width="100dp"
         android:layout_height="100dp"

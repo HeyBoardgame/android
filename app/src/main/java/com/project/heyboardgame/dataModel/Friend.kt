@@ -6,7 +6,7 @@ data class Friend (
     @SerializedName("id")
     val id: Int,
     @SerializedName("imagePath")
-    val image: String,
+    val image: String?,
     @SerializedName("nickname")
     val nickname: String
 )
