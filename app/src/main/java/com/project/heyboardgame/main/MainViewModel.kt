@@ -18,7 +18,6 @@ import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.dataModel.FriendRequestData
 import com.project.heyboardgame.dataModel.RatedResultData
 import com.project.heyboardgame.dataModel.RatingData
-import com.project.heyboardgame.dataModel.SearchResultData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.paging.BookmarkPagingSource
 import com.project.heyboardgame.paging.FriendListPagingSource
@@ -54,7 +53,7 @@ class MainViewModel : ViewModel() {
     // 친구 요청 목록 LiveData
     private val _friendRequestPagingData = MutableLiveData<Flow<PagingData<Friend>>>()
     val friendRequestPagingData: LiveData<Flow<PagingData<Friend>>> = _friendRequestPagingData
-    // 검색 결과 유지
+    // 검색 결과 변수
     private var currentSearchKeyword = ""
     private var currentGenreIdList = emptyList<Int>()
     private var currentNumOfPlayer = 0
@@ -187,7 +186,6 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-
     // 보드게임 찜하기 (DetailFragment)
     fun addBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
@@ -261,11 +259,13 @@ class MainViewModel : ViewModel() {
 
         _searchPagingData.value = pagingDataFlow
     }
+    // 검색 결과 저장하는 함수
     private fun setCurrentSearchQuery(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
         currentSearchKeyword = keyword
         currentGenreIdList = genreIdList
         currentNumOfPlayer = numOfPlayer
     }
+    // 검색 결과 return하는 함수
     fun getCurrentSearchQuery(): Triple<String, List<Int>, Int> {
         return Triple(currentSearchKeyword, currentGenreIdList, currentNumOfPlayer)
     }

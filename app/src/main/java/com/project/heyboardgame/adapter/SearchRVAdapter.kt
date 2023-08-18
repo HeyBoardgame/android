@@ -75,5 +75,4 @@ class SearchRVAdapter() : PagingDataAdapter<BoardGame2, SearchRVAdapter.ViewHold
             "${min}~${max}인"
         }
     }
-
 }

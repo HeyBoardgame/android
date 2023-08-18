@@ -1,18 +1,15 @@
 package com.project.heyboardgame.main.home
 
-import android.content.Context
+
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.SearchRVAdapter
@@ -25,7 +22,6 @@ import kotlinx.coroutines.launch
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
-
     // View Binding
     private var _binding : FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -51,13 +47,20 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         _binding = FragmentSearchBinding.bind(view)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-
         binding.search.setOnQueryTextListener(searchViewTextListener)
         binding.search.isSubmitButtonEnabled = true
 
         searchRVAdapter = SearchRVAdapter() // RecyclerView Adapter 초기화
         binding.searchRV.adapter = searchRVAdapter
         binding.searchRV.layoutManager = LinearLayoutManager(requireContext())
+
+        val (keyword, genreIdList, numOfPlayer) = mainViewModel.getCurrentSearchQuery()
+        if (keyword.isNotEmpty()) {
+            loadSearchPagingData(keyword, genreIdList, numOfPlayer)
+        }
+
+        binding.numberText.text = numOfPlayer.toString()
+        updateGenreUI(genreIdList)
 
         searchRVAdapter.setOnItemClickListener(object : SearchRVAdapter.OnItemClickListener {
             override fun onItemClick(item: BoardGame2) {
@@ -66,7 +69,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         })
 
-        // Adapter 아이템 개수 리스너 설정
         searchRVAdapter.addLoadStateListener { loadStates ->
             val noContentView = binding.noContent
             ViewUtils.setNoContentListener(loadStates, noContentView, searchRVAdapter.itemCount)
@@ -215,15 +217,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    // 키보드를 숨기는 메서드
-    private fun hideKeyboard() {
-        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val currentFocusView = requireActivity().currentFocus
-        if (currentFocusView != null) {
-            inputMethodManager.hideSoftInputFromWindow(currentFocusView.windowToken, 0)
-        }
-    }
-
     private val searchViewTextListener: SearchView.OnQueryTextListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             val numOfPlayer = binding.seekBar.progress
@@ -232,7 +225,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 binding.filterItems.visibility = View.GONE
                 binding.filterArrow.animate().setDuration(200).rotation(0f)
             }
-            hideKeyboard()
+            binding.search.clearFocus()
             if (isWorldClicked) {
                 genreIdList.add(1)
             }
@@ -275,10 +268,55 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         mainViewModel.searchPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
             viewLifecycleOwner.lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
-                    searchRVAdapter.submitData(PagingData.empty())
                     searchRVAdapter.submitData(pagingData)
                 }
             }
+        }
+    }
+
+    private fun updateGenreUI(genreIdList: List<Int>) {
+        if (genreIdList.contains(1)) {
+            isWorldClicked = true
+            binding.world.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.worldIcon.setImageResource(R.drawable.icon_world_color)
+            binding.worldText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(2)) {
+            isStrategyClicked = true
+            binding.strategy.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.strategyIcon.setImageResource(R.drawable.icon_strategy_color)
+            binding.strategyText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(3)) {
+            isWarClicked = true
+            binding.war.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.warIcon.setImageResource(R.drawable.icon_war_color)
+            binding.warText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(4)) {
+            binding.family.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.familyIcon.setImageResource(R.drawable.icon_family_color)
+            binding.familyText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(5)) {
+            binding.license.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.licenseIcon.setImageResource(R.drawable.icon_license_color)
+            binding.licenseText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(6)) {
+            binding.simple.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.simpleIcon.setImageResource(R.drawable.icon_simple_color)
+            binding.simpleText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(7)) {
+            binding.party.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.partyIcon.setImageResource(R.drawable.icon_party_color)
+            binding.partyText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(8)) {
+            binding.kids.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.kidsIcon.setImageResource(R.drawable.icon_kids_color)
+            binding.kidsText.setTextColor(Color.parseColor("#A93CFF"))
         }
     }
 

@@ -5,18 +5,19 @@ import androidx.paging.PagingState
 import com.project.heyboardgame.dataModel.BoardGame2
 import com.project.heyboardgame.retrofit.Api
 
-class SearchPagingSource(private val api: Api, private val keyword: String, private val genreIdList: List<Int>, private val numOfPlayer: Int)
-    : PagingSource<Int, BoardGame2>() {
+class SearchPagingSource(private val api: Api, private val keyword: String, private val genreIdList: List<Int>,
+                         private val numOfPlayer: Int, private val size: Int) : PagingSource<Int, BoardGame2>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BoardGame2> {
         val pageNum = params.key ?: 0
         return try {
-            val response = api.requestSearchResult(keyword, genreIdList, numOfPlayer, pageNum)
+            val response = api.getSearchResult(keyword, genreIdList, numOfPlayer, pageNum, size)
             if (response.isSuccessful) {
                 val searchResult = response.body()
                 val searchResultList = searchResult?.result?.boardGames ?: emptyList()
-                val nextPage = if (searchResultList.size < 20) null else pageNum + 1
+                val prevPage = searchResult?.result?.prevPage
+                val nextPage = searchResult?.result?.nextPage
 
-                LoadResult.Page(data = searchResultList, prevKey = null, nextKey = nextPage)
+                LoadResult.Page(data = searchResultList, prevKey = prevPage, nextKey = nextPage)
 
             } else {
                 LoadResult.Error(Exception("페이징 실패"))
@@ -29,5 +30,4 @@ class SearchPagingSource(private val api: Api, private val keyword: String, priv
     override fun getRefreshKey(state: PagingState<Int, BoardGame2>): Int? {
         return state.pages.lastOrNull()?.nextKey
     }
-
 }

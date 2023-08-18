@@ -8,6 +8,10 @@ data class SearchResult(
 )
 
 data class SearchResultData(
-    @SerializedName("boardGames")
-    val boardGames: List<BoardGame2>
+    @SerializedName("content")
+    val boardGames: List<BoardGame2>,
+    @SerializedName("prevPage")
+    val prevPage: Int?,
+    @SerializedName("nextPage")
+    val nextPage: Int?
 )
