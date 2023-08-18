@@ -1,6 +1,7 @@
 package com.project.heyboardgame.retrofit
 
 import com.project.heyboardgame.dataModel.ChangePasswordData
+import com.project.heyboardgame.dataModel.ChatListResult
 import com.project.heyboardgame.dataModel.CheckRequestResult
 import com.project.heyboardgame.dataModel.DetailResult
 import com.project.heyboardgame.dataModel.Friend
@@ -131,4 +132,7 @@ interface Api {
 
     @POST("friends/requests") // 친구 요청 보내기
     suspend fun sendFriendRequest(@Body friendRequestData: FriendRequestData): Response<Void>
+
+    @GET("chats") // 채팅방 목록 조회
+    suspend fun getChatList(@Query("page") pageNum: Int?, @Query("size") size: Int): Response<ChatListResult>
 }
