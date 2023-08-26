@@ -2,9 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="lightMainColor">#DEB4FF</color>
     <color name="mainColor">#C47AFF</color>
-    <color name="mainColorPressed">#BA62FF</color>
+    <color name="mainColorPressed">#AE47FF</color>
     <color name="purple">#A93CFF</color>
     <color name="detailDescription">#535353</color>
     <color name="detailColor">#787878</color>

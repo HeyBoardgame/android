@@ -76,15 +76,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             }
         )
 
-//        filterTitle.setOnClickListener {
-//            if (binding.filterItems.visibility == View.GONE) {
-//                binding.filterItems.visibility = View.VISIBLE
-//                binding.filterArrow.animate().setDuration(200).rotation(180f)
-//            } else {
-//                binding.filterItems.visibility = View.GONE
-//                binding.filterArrow.animate().setDuration(200).rotation(0f)
-//            }
-//        }
         binding.descriptionTitle.setOnClickListener {
             if (binding.detailDescription.visibility == View.GONE) {
                 binding.detailDescription.visibility = View.VISIBLE
@@ -133,7 +124,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             }
         }
 
-        // 별점 남기기
+        // 평점 남기기
         binding.myRating.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             if (isRatingCanceled) {
                 isRatingCanceled = false
@@ -157,25 +148,25 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
     }
 
-    // 별점 남기기 Dialog + 서버 통신
+    // 평점 남기기 Dialog + 서버 통신
     private fun showRatingDialog(changedRating : Float) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setTitle("별점 남기기")
-            .setMessage("별점을 남기시겠습니까?")
+        dialogBuilder.setTitle("평점 남기기")
+            .setMessage("평점을 남기시겠습니까?")
             .setPositiveButton("확인") { _, _ ->
                 val ratingData = RatingData(changedRating)
                 mainViewModel.requestRating(id, ratingData,
                     onSuccess = {
                         if (changedRating == 0f) {
-                            Toast.makeText(requireContext(), "등록된 별점이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "등록된 평점이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
                         } else {
-                            Toast.makeText(requireContext(), "별점이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), "평점이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show()
                         }
                         currentRating = changedRating
                         isRatingCanceled = false
                     },
                     onFailure = {
-                        Toast.makeText(requireContext(), "별점 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "평점 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                         isRatingCanceled = true
                         binding.myRating.rating = currentRating
                     },

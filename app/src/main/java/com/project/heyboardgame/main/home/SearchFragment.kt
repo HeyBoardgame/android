@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.SeekBar
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
@@ -40,7 +42,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var isWorldClicked = false
     // 장르 ID 리스트
     private var genreIdList : MutableList<Int> = mutableListOf()
+    // 키보드 설정 변수
+    private var originalMode : Int? = null
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        originalMode = activity?.window?.getSoftInputMode()!!
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -261,6 +271,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
+    private fun Window.getSoftInputMode() : Int {
+        return attributes.softInputMode
+    }
+
     private fun loadSearchPagingData(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
         mainViewModel.loadSearchPagingData(keyword, genreIdList, numOfPlayer)
 
@@ -322,6 +336,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        originalMode?.let { activity?.window?.setSoftInputMode(it) }
         _binding = null
     }
 }

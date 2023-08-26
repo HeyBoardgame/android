@@ -35,7 +35,7 @@
         <activity
             android:name=".main.MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

@@ -14,6 +14,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
@@ -51,7 +53,15 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
     private var finalImageUri: Uri? = null
     // 원래 닉네임 저장 변수
     private var originalNickname: String = ""
+    // 키보드 설정 변수
+    private var originalMode : Int? = null
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        originalMode = activity?.window?.getSoftInputMode()!!
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -149,7 +159,11 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         }
     }
 
-    fun absolutelyPath(path: Uri?, context : Context): String {
+    private fun Window.getSoftInputMode() : Int {
+        return attributes.softInputMode
+    }
+
+    private fun absolutelyPath(path: Uri?, context : Context): String {
         val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
         val c: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
         val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -232,5 +246,6 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         super.onDestroyView()
         _binding = null
         imageLauncher.unregister()
+        originalMode?.let { activity?.window?.setSoftInputMode(it) }
     }
 }

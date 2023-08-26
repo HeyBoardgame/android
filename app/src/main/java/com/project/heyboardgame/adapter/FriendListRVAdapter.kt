@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.navigation.findNavController
+import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Friend
-import timber.log.Timber
+import com.project.heyboardgame.main.social.SocialFragmentDirections
 
 class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHolder>(FriendListComparator) {
 
@@ -50,8 +50,10 @@ class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHo
             holder.nickname.text = it.nickname
 
             holder.chatBtn.setOnClickListener {
-                // 클릭 이벤트 처리
-                Timber.d("채팅화면으로 이동")
+                val navController = Navigation.findNavController(holder.itemView)
+
+                val action = SocialFragmentDirections.actionSocialFragmentToChatFragment(item.id, item.nickname)
+                navController.navigate(action)
             }
         }
     }

@@ -1,11 +1,12 @@
 package com.project.heyboardgame.main.social
 
+
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +23,15 @@ class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
     private val binding get() = _binding!!
     // View Model
     private lateinit var mainViewModel: MainViewModel
+    // 키보드 설정 변수
+    private var originalMode : Int? = null
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        originalMode = activity?.window?.getSoftInputMode()!!
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,6 +70,10 @@ class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
         }
     }
 
+    private fun Window.getSoftInputMode() : Int {
+        return attributes.softInputMode
+    }
+
     private fun showFriendConfirmationDialog(id: Int, nickname: String) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setTitle("친구 추가 확인")
@@ -89,6 +103,7 @@ class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        originalMode?.let { activity?.window?.setSoftInputMode(it) }
         _binding = null
     }
 }

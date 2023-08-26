@@ -2,6 +2,7 @@ package com.project.heyboardgame.retrofit
 
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChatListResult
+import com.project.heyboardgame.dataModel.ChatResult
 import com.project.heyboardgame.dataModel.CheckRequestResult
 import com.project.heyboardgame.dataModel.DetailResult
 import com.project.heyboardgame.dataModel.Friend
@@ -135,4 +136,10 @@ interface Api {
 
     @GET("chats") // 채팅방 목록 조회
     suspend fun getChatList(@Query("page") pageNum: Int?, @Query("size") size: Int): Response<ChatListResult>
+
+    @GET("chats/{id}") // 채팅방 대화 조회
+    suspend fun getChatting(@Path("id") id: Int, @Query("page") pageNum: Int?, @Query("size") size: Int): Response<ChatResult>
+
+    @POST("chats/{id}/message")
+    suspend fun sendMessage(@Path("id") id: Int, )
 }

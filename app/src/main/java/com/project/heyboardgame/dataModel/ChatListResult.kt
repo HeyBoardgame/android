@@ -17,18 +17,12 @@ data class ChatListResultData (
 )
 
 data class ChatRoom (
-    @SerializedName("roomId")
+    @SerializedName("id")
     val roomId: Int,
-    @SerializedName("friendId")
-    val friendId: Int,
-    @SerializedName("imagePath")
-    val image: String?,
-    @SerializedName("nickname")
-    val nickname: String,
     @SerializedName("lastMessage")
     val lastMessage: String,
-    @SerializedName("unreadMessage")
-    val unreadMessage: Int?,
     @SerializedName("timestamp")
-    val timestamp: String
+    val timestamp: String,
+    @SerializedName("userInfo")
+    val userInfo: Friend
 )

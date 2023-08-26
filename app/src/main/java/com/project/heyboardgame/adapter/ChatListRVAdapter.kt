@@ -59,20 +59,20 @@ class ChatListRVAdapter : PagingDataAdapter<ChatRoom, ChatListRVAdapter.ViewHold
         val item = getItem(position)
 
         item?.let {
-            if (item.image != null) {
-                Glide.with(holder.itemView.context).load(it.image).into(holder.image)
+            if (item.userInfo.image != null) {
+                Glide.with(holder.itemView.context).load(it.userInfo.image).into(holder.image)
             } else {
                 holder.image.setImageResource(R.drawable.default_profile_img)
             }
-            holder.nickname.text = it.nickname
+            holder.nickname.text = it.userInfo.nickname
             holder.lastMessage.text = it.lastMessage
             holder.timestamp.text = it.timestamp
-            if (item.unreadMessage != null) {
-                holder.unread.visibility = View.VISIBLE
-                holder.unreadNum.text = it.unreadMessage.toString()
-            } else {
-                holder.unread.visibility = View.INVISIBLE
-            }
+//            if (item.unreadMessage != null) {
+//                holder.unread.visibility = View.VISIBLE
+//                holder.unreadNum.text = it.unreadMessage.toString()
+//            } else {
+//                holder.unread.visibility = View.INVISIBLE
+//            }
             holder.itemView.setOnClickListener {
                 itemClickListener?.onItemClick(item)
             }

@@ -18,11 +18,11 @@
 
         <!-- 로고 이미지 -->
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
-            android:src="@drawable/logo_medium" />
+            android:src="@drawable/logo" />
 
         <!-- 로그인 타이틀 -->
         <TextView

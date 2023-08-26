@@ -54,7 +54,6 @@ class FriendRequestFragment : Fragment(R.layout.fragment_friend_request), Interf
         mainViewModel.friendRequestPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
             viewLifecycleOwner.lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
-                    friendRequestRVAdapter.submitData(PagingData.empty())
                     friendRequestRVAdapter.submitData(pagingData)
                 }
             }

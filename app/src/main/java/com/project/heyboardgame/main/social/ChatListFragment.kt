@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 
 
 class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
-
     // View Binding
     private var _binding : FragmentChatListBinding? = null
     private val binding get() = _binding!!
@@ -39,7 +38,8 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
         chatListRVAdapter.setOnItemClickListener(object : ChatListRVAdapter.OnItemClickListener {
             override fun onItemClick(item: ChatRoom) {
-
+                val action = ChatListFragmentDirections.actionChatListFragmentToChatFragment(item.userInfo.id, item.userInfo.nickname)
+                findNavController().navigate(action)
             }
         })
 
@@ -65,7 +65,6 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
         mainViewModel.chatListPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
             viewLifecycleOwner.lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
-                    chatListRVAdapter.submitData(PagingData.empty())
                     chatListRVAdapter.submitData(pagingData)
                 }
             }

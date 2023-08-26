@@ -15,7 +15,6 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.FriendListRVAdapter
-import com.project.heyboardgame.adapter.FriendRequestRVAdapter
 import com.project.heyboardgame.adapter.TopRequestRVAdapter
 import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.databinding.FragmentSocialBinding
@@ -99,7 +98,6 @@ class SocialFragment : Fragment(), InterfaceUtils {
         mainViewModel.friendListPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
             viewLifecycleOwner.lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
-                    friendListRVAdapter.submitData(PagingData.empty())
                     friendListRVAdapter.submitData(pagingData)
                 }
             }

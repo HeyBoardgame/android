@@ -13,6 +13,7 @@ import com.project.heyboardgame.dataModel.BoardGame
 import com.project.heyboardgame.dataModel.BoardGame2
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
+import com.project.heyboardgame.dataModel.Chat
 import com.project.heyboardgame.dataModel.ChatRoom
 import com.project.heyboardgame.dataModel.DetailResultData
 import com.project.heyboardgame.dataModel.Friend
@@ -22,6 +23,7 @@ import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.paging.BookmarkPagingSource
 import com.project.heyboardgame.paging.ChatListPagingSource
+import com.project.heyboardgame.paging.ChatPagingSource
 import com.project.heyboardgame.paging.FriendListPagingSource
 import com.project.heyboardgame.paging.FriendRequestPagingSource
 import com.project.heyboardgame.paging.RatedPagingSource
@@ -62,6 +64,9 @@ class MainViewModel : ViewModel() {
     // 채팅방 목록 LiveData
     private val _chatListPagingData = MutableLiveData<Flow<PagingData<ChatRoom>>>()
     val chatListPagingData: LiveData<Flow<PagingData<ChatRoom>>> = _chatListPagingData
+    // 채팅방 대화 LiveData
+    private val _chatPagingData = MutableLiveData<Flow<PagingData<Chat>>>()
+    val chatPagingData: LiveData<Flow<PagingData<Chat>>> = _chatPagingData
 
 
     // 로그아웃 함수 (ProfileFragment)
@@ -374,5 +379,15 @@ class MainViewModel : ViewModel() {
         ).flow
 
         _chatListPagingData.value = pagingDataFlow
+    }
+    // 채팅 대화 페이징 (ChatFragment)
+    fun loadChatPagingData(id: Int) {
+        val size = 15
+        val pagingDataFlow = Pager(
+            config = PagingConfig(pageSize = size),
+            pagingSourceFactory = { ChatPagingSource(id, api, size) }
+        ).flow
+
+        _chatPagingData.value = pagingDataFlow
     }
 }

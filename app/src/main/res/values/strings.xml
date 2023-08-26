@@ -103,6 +103,7 @@
     <string name="no_friend_request_text2">함께 보드게임을 즐길 친구를 찾아보세요!</string>
     <string name="no_chat_list_text1">채팅 목록이 비어있습니다.</string>
     <string name="no_chat_list_text2">친구에게 먼저 메시지를 보내 대화를 시작해보세요!</string>
+    <string name="send_message">메시지를 입력하세요.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/friendProfileImg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/default_profile_img" />
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/friendNickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="뚜띠따띠"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/friendMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/friend_message_bubble"
+        android:elevation="3dp"
+        android:maxWidth="250dp"
+        android:padding="15dp"
+        android:text="하이하이"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/friendNickname"
+        android:layout_marginStart="10dp"/>
+
+    <TextView
+        android:id="@+id/friendMessageTime"
+        android:text="12:00 PM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@+id/friendMessage"
+        app:layout_constraintBottom_toBottomOf="@+id/friendMessage"
+        android:layout_marginStart="10dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
