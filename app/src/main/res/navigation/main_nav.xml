@@ -72,11 +72,8 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
-                android:name="id"
-                app:argType="integer" />
-            <argument
-                android:name="nickname"
-                app:argType="string" />
+                android:name="friend"
+                app:argType="com.project.heyboardgame.dataModel.Friend" />
         </action>
     </fragment>
     <fragment
@@ -189,11 +186,8 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
-                android:name="id"
-                app:argType="integer" />
-            <argument
-                android:name="nickname"
-                app:argType="string" />
+                android:name="friend"
+                app:argType="com.project.heyboardgame.dataModel.Friend" />
         </action>
     </fragment>
     <fragment
@@ -287,10 +281,7 @@
         android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" >
         <argument
-            android:name="id"
-            app:argType="integer" />
-        <argument
-            android:name="nickname"
-            app:argType="string" />
+            android:name="friend"
+            app:argType="com.project.heyboardgame.dataModel.Friend" />
     </fragment>
 </navigation>

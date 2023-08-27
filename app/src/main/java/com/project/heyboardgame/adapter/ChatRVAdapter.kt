@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Chat
+import com.project.heyboardgame.dataModel.Friend
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-class ChatRVAdapter : PagingDataAdapter<Chat, RecyclerView.ViewHolder>(ChatComparator) {
+class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, RecyclerView.ViewHolder>(ChatComparator) {
 
     object ChatComparator : DiffUtil.ItemCallback<Chat>() {
         override fun areItemsTheSame(oldItem: Chat, newItem: Chat): Boolean {
@@ -68,21 +71,27 @@ class ChatRVAdapter : PagingDataAdapter<Chat, RecyclerView.ViewHolder>(ChatCompa
             is MyMessageViewHolder -> {
                 item?.let {
                     holder.myMessage.text = item.message
-                    holder.myMessageTime.text = item.timestamp
+                    holder.myMessageTime.text = formatChatTimestamp(item.timestamp)
                 }
             }
             is FriendMessageViewHolder -> {
                 item?.let {
-                    if (item.image != null) {
-                        Glide.with(holder.itemView.context).load(it.image).into(holder.friendProfileImg)
+                    if (friend.image != null) {
+                        Glide.with(holder.itemView.context).load(friend.image).into(holder.friendProfileImg)
                     } else {
                         holder.friendProfileImg.setImageResource(R.drawable.default_profile_img)
                     }
-                    holder.friendNickname.text = item.nickname
+                    holder.friendNickname.text = friend.nickname
                     holder.friendMessage.text = item.message
-                    holder.friendMessageTime.text = item.timestamp
+                    holder.friendMessageTime.text = formatChatTimestamp(item.timestamp)
                 }
             }
         }
+    }
+
+    private fun formatChatTimestamp(timestamp: String): String {
+        val chatTimeFormat = SimpleDateFormat("a hh:mm", Locale.getDefault())
+        val parsedTime = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(timestamp)
+        return chatTimeFormat.format(parsedTime)
     }
 }

@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.FriendListRVAdapter
@@ -19,13 +18,13 @@ import com.project.heyboardgame.adapter.TopRequestRVAdapter
 import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.databinding.FragmentSocialBinding
 import com.project.heyboardgame.main.MainViewModel
-import com.project.heyboardgame.utils.InterfaceUtils
+import com.project.heyboardgame.utils.FriendRequestCallback
 import com.project.heyboardgame.utils.ViewUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class SocialFragment : Fragment(), InterfaceUtils {
+class SocialFragment : Fragment(), FriendRequestCallback {
     // 뒤로 가기 이벤트를 위한 변수
     private lateinit var callback : OnBackPressedCallback
     private var backPressedTime : Long = 0

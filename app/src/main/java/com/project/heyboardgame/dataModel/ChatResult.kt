@@ -19,13 +19,9 @@ data class ChatResultData (
 data class Chat (
     @SerializedName("id") // 메세지 고유 값
     val id: Int,
-    @SerializedName("imagePath")
-    val image: String?,
-    @SerializedName("nickname")
-    val nickname: String,
     @SerializedName("message")
     val message: String,
-    @SerializedName("timestamp")
+    @SerializedName("createdAt")
     val timestamp: String,
     @SerializedName("isMyMessage")
     val isMyMessage: Boolean

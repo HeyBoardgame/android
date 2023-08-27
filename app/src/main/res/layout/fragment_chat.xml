@@ -58,12 +58,13 @@
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRV"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/chatInputLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider1" />
+        app:layout_constraintTop_toBottomOf="@id/divider1"
+        android:paddingVertical="5dp"/>
 
     <View
         android:id="@+id/divider2"
@@ -98,7 +99,7 @@
             android:paddingHorizontal="15dp"
             android:paddingVertical="10dp"
             android:textSize="15sp"
-            android:background="@drawable/button_white"
+            android:background="@drawable/custom_white"
             android:layout_weight="1"
             android:layout_marginEnd="5dp"/>
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginVertical="5dp"
+    android:layout_marginHorizontal="10dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -38,8 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/friend_message_bubble"
-        android:elevation="3dp"
-        android:maxWidth="250dp"
+        android:maxWidth="200dp"
         android:padding="15dp"
         android:text="하이하이"
         android:textColor="@color/black"
@@ -54,6 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="12sp"
+        android:textColor="@color/detailColor"
         app:layout_constraintLeft_toRightOf="@+id/friendMessage"
         app:layout_constraintBottom_toBottomOf="@+id/friendMessage"
         android:layout_marginStart="10dp"/>

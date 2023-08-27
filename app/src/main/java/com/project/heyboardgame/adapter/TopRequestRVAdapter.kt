@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Friend
-import com.project.heyboardgame.utils.InterfaceUtils
+import com.project.heyboardgame.utils.FriendRequestCallback
 
-class TopRequestRVAdapter(var friendRequestList : List<Friend>, private val interfaceUtils: InterfaceUtils)
+class TopRequestRVAdapter(var friendRequestList : List<Friend>, private val friendRequestCallback: FriendRequestCallback)
     : RecyclerView.Adapter<TopRequestRVAdapter.ViewHolder>() {
 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
@@ -44,10 +44,10 @@ class TopRequestRVAdapter(var friendRequestList : List<Friend>, private val inte
         }
         holder.nickname.text = item.nickname
         holder.acceptBtn.setOnClickListener {
-            interfaceUtils.onAcceptButtonClicked(item)
+            friendRequestCallback.onAcceptButtonClicked(item)
         }
         holder.declineBtn.setOnClickListener {
-            interfaceUtils.onDeclineButtonClicked(item)
+            friendRequestCallback.onDeclineButtonClicked(item)
         }
     }
 

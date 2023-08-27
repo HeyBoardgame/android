@@ -52,7 +52,7 @@ class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHo
             holder.chatBtn.setOnClickListener {
                 val navController = Navigation.findNavController(holder.itemView)
 
-                val action = SocialFragmentDirections.actionSocialFragmentToChatFragment(item.id, item.nickname)
+                val action = SocialFragmentDirections.actionSocialFragmentToChatFragment(item)
                 navController.navigate(action)
             }
         }

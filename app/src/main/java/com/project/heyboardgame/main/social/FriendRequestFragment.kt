@@ -7,20 +7,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.FriendRequestRVAdapter
 import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.databinding.FragmentFriendRequestBinding
 import com.project.heyboardgame.main.MainViewModel
-import com.project.heyboardgame.utils.InterfaceUtils
+import com.project.heyboardgame.utils.FriendRequestCallback
 import com.project.heyboardgame.utils.ViewUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 
-class FriendRequestFragment : Fragment(R.layout.fragment_friend_request), InterfaceUtils {
+class FriendRequestFragment : Fragment(R.layout.fragment_friend_request), FriendRequestCallback {
     // View Binding
     private var _binding : FragmentFriendRequestBinding? = null
     private val binding get() = _binding!!
