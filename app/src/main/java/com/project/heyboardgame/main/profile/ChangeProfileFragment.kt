@@ -44,9 +44,10 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
     private lateinit var mainViewModel: MainViewModel
     // DataStore
     private val myDataStore : MyDataStore = MyDataStore()
-    // 에러 변수
+    // 닉네임 에러 변수
     private var isNicknameInvalid = false
     private var isNicknameDuplicated = false
+    private var isNicknameChanged = false
     // 이미지 변경 체크 변수
     private var isImageChanged = false
     // 프로필 이미지 변수
@@ -204,6 +205,7 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
             binding.nicknameCheckSuccess.visibility = View.GONE
             binding.nicknameCheckFail.visibility = View.GONE
             isNicknameDuplicated = true
+            isNicknameChanged = true
             validateNickname(s.toString())
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -223,6 +225,7 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
             binding.nicknameCheckBtn.isEnabled = false
             isNicknameDuplicated = false
             isNicknameInvalid = false
+            isNicknameChanged = false
             binding.nicknameInvalid.visibility = View.GONE
         } else {
             if (containsSpecialCharacters) {
@@ -239,7 +242,7 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
     }
 
     private fun updateChangeButtonState() {
-        binding.changeProfileBtn.isEnabled = !isNicknameInvalid && !isNicknameDuplicated && isImageChanged
+        binding.changeProfileBtn.isEnabled = (isImageChanged || isNicknameChanged) && !isNicknameInvalid && !isNicknameDuplicated
     }
 
     override fun onDestroyView() {
