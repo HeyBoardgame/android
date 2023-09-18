@@ -21,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.ChangeProfileData
@@ -42,8 +43,6 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
     private val binding get() = _binding!!
     // ViewModel
     private lateinit var mainViewModel: MainViewModel
-    // DataStore
-    private val myDataStore : MyDataStore = MyDataStore()
     // 닉네임 에러 변수
     private var isNicknameInvalid = false
     private var isNicknameDuplicated = false
@@ -69,24 +68,19 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         _binding = FragmentChangeProfileBinding.bind(view)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
-        lifecycleScope.launch {
-            val profileImg = withContext(Dispatchers.IO) {
-                myDataStore.getProfileImage()
-            }
-            val nickname = withContext(Dispatchers.IO) {
-                myDataStore.getNickname()
-            }
-            binding.nickname.setText(nickname)
-            originalNickname = nickname
-            if (profileImg != null) {
-                Glide.with(requireContext())
-                    .load(profileImg)
-                    .into(binding.myProfileImg)
-            } else {
-                binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
-            }
-            validateNickname(originalNickname)
+        val args : ChangeProfileFragmentArgs by navArgs()
+        val myProfileData = args.myProfileData
+
+        binding.nickname.setText(myProfileData.nickname)
+        originalNickname = myProfileData.nickname
+        if (myProfileData.profileImg != null) {
+            Glide.with(requireContext())
+                .load(myProfileData.profileImg)
+                .into(binding.myProfileImg)
+        } else {
+            binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
         }
+        validateNickname(originalNickname)
 
         binding.nickname.addTextChangedListener(nicknameTextWatcher) // 닉네임 입력창에 TextWatcher 추가
 

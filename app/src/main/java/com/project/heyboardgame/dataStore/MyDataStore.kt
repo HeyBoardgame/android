@@ -1,7 +1,6 @@
 package com.project.heyboardgame.dataStore
 
 import android.content.Context
-import android.net.Uri
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -22,9 +21,7 @@ class MyDataStore {
     // 토큰
     private val ACCESS_TOKEN = stringPreferencesKey("ACCESS_TOKEN")
     private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
-    // 프로필 정보
-    private val PROFILE_IMAGE_URI = stringPreferencesKey("PROFILE_IMAGE_URI")
-    private val NICKNAME = stringPreferencesKey("NICKNAME")
+    // 구글 로그인 여부
     private val GOOGLE_LOGINED = booleanPreferencesKey("GOOGLE_LOGINED")
 
 
@@ -39,18 +36,6 @@ class MyDataStore {
     suspend fun setRefreshToken(refreshToken: String) {
         mDataStore.edit { preferences ->
             preferences[REFRESH_TOKEN] = refreshToken
-        }
-    }
-
-    suspend fun setProfileImage(profileImg: String) {
-        mDataStore.edit { preferences ->
-            preferences[PROFILE_IMAGE_URI] = profileImg
-        }
-    }
-
-    suspend fun setNickname(nickname : String) {
-        mDataStore.edit { preferences ->
-            preferences[NICKNAME] = nickname
         }
     }
 
@@ -79,27 +64,6 @@ class MyDataStore {
         mDataStore.edit { preferences ->
             currentValue = if (preferences[REFRESH_TOKEN] != null) {
                 preferences[REFRESH_TOKEN].toString()
-            } else {
-                ""
-            }
-        }
-        return currentValue
-    }
-
-    // 프로필 이미지 URI 불러오기
-    suspend fun getProfileImage(): Uri? {
-        var currentValue: String? = ""
-        mDataStore.edit { preferences ->
-            currentValue = preferences[PROFILE_IMAGE_URI]
-        }
-        return if (currentValue.isNullOrEmpty()) null else Uri.parse(currentValue)
-    }
-
-    suspend fun getNickname() : String {
-        var currentValue = ""
-        mDataStore.edit { preferences ->
-            currentValue = if (preferences[NICKNAME] != null) {
-                preferences[NICKNAME].toString()
             } else {
                 ""
             }

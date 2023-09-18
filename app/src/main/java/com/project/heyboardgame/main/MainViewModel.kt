@@ -18,6 +18,8 @@ import com.project.heyboardgame.dataModel.ChatRoom
 import com.project.heyboardgame.dataModel.DetailResultData
 import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.dataModel.FriendRequestData
+import com.project.heyboardgame.dataModel.MyProfileResultData
+import com.project.heyboardgame.dataModel.PersonalRecResultData
 import com.project.heyboardgame.dataModel.RatedResultData
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataStore.MyDataStore
@@ -113,22 +115,16 @@ class MainViewModel : ViewModel() {
         }
     }
     // 프로필 정보 요청 함수 (MainActivity)
-    fun getMyProfile(onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun getMyProfile(onSuccess: (myProfileResultData: MyProfileResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.getMyProfile()
             if (response.isSuccessful) {
-                val profileResult = response.body() // 서버에서 받아온 데이터
+                val profileResult = response.body()
                 profileResult?.let {
-                    val profileImg = it.result.profileImg
-                    val nickname = it.result.nickname
-
-                    myDataStore.setProfileImage(profileImg)
-                    myDataStore.setNickname(nickname)
-
-                    Timber.d("프로필 조회 성공")
+                    onSuccess.invoke(it.result)
                 }
             } else {
-                Timber.d("프로필 조회 실패")
+                onFailure.invoke()
             }
         } catch (e: Exception) {
             onErrorAction.invoke()
@@ -155,10 +151,6 @@ class MainViewModel : ViewModel() {
         val response = api.changeMyProfile(file, requestBody)
         try {
             if (response.isSuccessful) {
-                if (changeProfileData.isChanged) {
-                    myDataStore.setProfileImage(profileImg)
-                }
-                myDataStore.setNickname(changeProfileData.nickname)
                 onSuccess.invoke()
             } else {
                 onFailure.invoke()
@@ -174,7 +166,7 @@ class MainViewModel : ViewModel() {
             if (response.isSuccessful) {
                 val detailResult = response.body()
                 detailResult?.let {
-                    onSuccess(it.result)
+                    onSuccess.invoke(it.result)
                 }
             } else {
                 onFailure.invoke()
@@ -249,7 +241,7 @@ class MainViewModel : ViewModel() {
             if (response.isSuccessful) {
                 val ratedResult = response.body()
                 ratedResult?.let {
-                    onSuccess(it.result)
+                    onSuccess.invoke(it.result)
                 }
             } else {
                 onFailure.invoke()
@@ -389,5 +381,21 @@ class MainViewModel : ViewModel() {
         ).flow
 
         _chatPagingData.value = pagingDataFlow
+    }
+    // 개인 추천 컨텐츠 가져오기
+    fun getPersonalRecommend(onSuccess: (personalRecResultData: PersonalRecResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.getPersonalRecommend()
+            if (response.isSuccessful) {
+                val personalRecResult = response.body()
+                personalRecResult?.let {
+                    onSuccess.invoke(it.result)
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
     }
 }

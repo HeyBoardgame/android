@@ -17,12 +17,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.heyboardgame.R
 import com.project.heyboardgame.auth.AuthActivity
+import com.project.heyboardgame.dataModel.MyProfileResultData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.FragmentProfileBinding
 import com.project.heyboardgame.main.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 
 class ProfileFragment : Fragment() {
@@ -39,6 +41,9 @@ class ProfileFragment : Fragment() {
     private val myDataStore : MyDataStore = MyDataStore()
     // 구글 로그인 유저인 지 확인하는 변수
     private var isGoogleLogined : Boolean = false
+    // 나의 프로필 변수
+    private var myProfileImg = ""
+    private var myNickname = ""
 
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
     override fun onAttach(context: Context) {
@@ -65,24 +70,32 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
+        mainViewModel.getMyProfile(
+            onSuccess = {
+                myNickname = it.nickname
+                if (it.profileImg != null) {
+                    myProfileImg = it.profileImg
+                    Glide.with(requireContext())
+                        .load(it.profileImg)
+                        .into(binding.myProfileImg)
+                } else {
+                    myProfileImg = ""
+                    binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
+                }
+                binding.myNickname.text = it.nickname
+            },
+            onFailure = {
+                Toast.makeText(requireContext(), "프로필 조회에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            },
+            onErrorAction = {
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        )
+
         lifecycleScope.launch {
-            val profileImg = withContext(Dispatchers.IO) {
-                myDataStore.getProfileImage()
-            }
-            val nickname = withContext(Dispatchers.IO) {
-                myDataStore.getNickname()
-            }
             val googleLogined = withContext(Dispatchers.IO) {
                 myDataStore.getGoogleLogined()
             }
-            if (profileImg != null) {
-                Glide.with(requireContext())
-                    .load(profileImg)
-                    .into(binding.myProfileImg)
-            } else {
-                binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
-            }
-            binding.myNickname.text = nickname
             isGoogleLogined = googleLogined
         }
 
@@ -113,7 +126,14 @@ class ProfileFragment : Fragment() {
         }
 
         binding.changeProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_changeProfileFragment)
+            val myProfileData : MyProfileResultData
+            if (myProfileImg == "") {
+                myProfileData = MyProfileResultData(null, myNickname)
+            } else {
+                myProfileData = MyProfileResultData(myProfileImg, myNickname)
+            }
+            val action = ProfileFragmentDirections.actionProfileFragmentToChangeProfileFragment(myProfileData)
+            findNavController().navigate(action)
         }
 
         binding.changePassword.setOnClickListener {
