@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -104,7 +105,7 @@ class ProfileFragment : Fragment() {
                 val permissionState = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)
 
                 if (permissionState == PackageManager.PERMISSION_DENIED) {
-                    redirectToNotificationSettings()
+                    showNotificationAllowedDialog()
                 } else {
                     mainViewModel.setNotificationAllowed(true)
                     Toast.makeText(requireContext(), "푸시알림이 활성화되었습니다.", Toast.LENGTH_SHORT).show()
@@ -165,23 +166,31 @@ class ProfileFragment : Fragment() {
         binding.unregister.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_unregisterFragment)
         }
-
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun redirectToNotificationSettings() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("알림 권한 요청")
-            .setMessage("푸시 알림을 받으시려면 알림 권한을 활성화해야 합니다. 권한 설정으로 이동하시려면 '권한 허용'을 선택해주세요.")
-            .setPositiveButton("권한 허용") { _, _ ->
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()){
+            if (it){
+                Toast.makeText(requireContext(), "알림 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                mainViewModel.setNotificationAllowed(true)
+                binding.notificationSwitch.isChecked = true
+            } else {
+                Toast.makeText(requireContext(), "알림 권한이 거부되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_SHORT).show()
+                mainViewModel.setNotificationAllowed(false)
                 binding.notificationSwitch.isChecked = false
-                val intent = Intent().apply {
-                    action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
-                }
-                startActivity(intent)
             }
-            .setNegativeButton("취소") { _, _ ->
+        }
+
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun showNotificationAllowedDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("알림 권한을 활성화 시켜주세요.")
+            .setMessage("푸시 알림을 받으시려면 알림 권한을 활성화해야 합니다. '확인'버튼을 누르신 후 위치 권한을 허용해 주세요.")
+            .setPositiveButton("확인") { _, _ ->
+                notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            .setNegativeButton("거부") { _, _ ->
                 Toast.makeText(requireContext(), "푸시알림 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
                 binding.notificationSwitch.isChecked = false
             }
