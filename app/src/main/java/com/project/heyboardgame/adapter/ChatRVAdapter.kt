@@ -1,10 +1,13 @@
 package com.project.heyboardgame.adapter
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +16,11 @@ import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Chat
 import com.project.heyboardgame.dataModel.Friend
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
 import java.util.Locale
 
 class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, RecyclerView.ViewHolder>(ChatComparator) {
@@ -35,6 +43,8 @@ class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, Recycl
     inner class MyMessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val myMessage = view.findViewById<TextView>(R.id.myMessage)
         val myMessageTime = view.findViewById<TextView>(R.id.myMessageTime)
+        val dateSeparator = view.findViewById<ConstraintLayout>(R.id.dateSeparator)
+        val date = view.findViewById<TextView>(R.id.date)
     }
 
     inner class FriendMessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -42,6 +52,8 @@ class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, Recycl
         val friendNickname = view.findViewById<TextView>(R.id.friendNickname)
         val friendMessage = view.findViewById<TextView>(R.id.friendMessage)
         val friendMessageTime = view.findViewById<TextView>(R.id.friendMessageTime)
+        val dateSeparator = view.findViewById<ConstraintLayout>(R.id.dateSeparator)
+        val date = view.findViewById<TextView>(R.id.date)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -64,14 +76,23 @@ class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, Recycl
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
+        val nextItem = if (position + 1 < itemCount) getItem(position + 1) else null
 
         when (holder) {
             is MyMessageViewHolder -> {
                 item?.let {
                     holder.myMessage.text = item.message
                     holder.myMessageTime.text = formatChatTimestamp(item.timestamp)
+
+                    if (shouldShowDateSeparator(item, nextItem)) {
+                        holder.dateSeparator.visibility = View.VISIBLE
+                        holder.date.text = formatDateSeparator(item.timestamp)
+                    } else {
+                        holder.dateSeparator.visibility = View.GONE
+                    }
                 }
             }
             is FriendMessageViewHolder -> {
@@ -84,9 +105,47 @@ class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, Recycl
                     holder.friendNickname.text = friend.nickname
                     holder.friendMessage.text = item.message
                     holder.friendMessageTime.text = formatChatTimestamp(item.timestamp)
+                    if (shouldShowDateSeparator(item, nextItem)) {
+                        holder.dateSeparator.visibility = View.VISIBLE
+                        holder.date.text = formatDateSeparator(item.timestamp)
+                    } else {
+                        holder.dateSeparator.visibility = View.GONE
+                    }
                 }
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun shouldShowDateSeparator(currentItem: Chat?, nextItem: Chat?): Boolean {
+        if (nextItem == null) {
+            return true
+        }
+        val currentDate = parseDate(currentItem?.timestamp ?: "")
+        val nextDate = parseDate(nextItem.timestamp)
+        return currentDate != nextDate
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun parseDate(timestamp: String): LocalDateTime {
+        val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val parsedDate = dateTimeFormat.parse(timestamp)
+
+        val calendar = Calendar.getInstance()
+        calendar.time = parsedDate
+
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        return LocalDateTime.of(year, month, day, 0, 0)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun formatDateSeparator(timestamp: String): String {
+        val parsedDate = parseDate(timestamp)
+        val formattedDate = parsedDate.format(DateTimeFormatter.ofPattern("yyyy년 M월 d일"))
+        return formattedDate
     }
 
     private fun formatChatTimestamp(timestamp: String): String {

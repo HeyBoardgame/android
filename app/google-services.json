@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1094749624709",
+    "project_id": "yeoboge-6b9a9",
+    "storage_bucket": "yeoboge-6b9a9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094749624709:android:5802fc9439927c0af84cec",
+        "android_client_info": {
+          "package_name": "com.project.heyboardgame"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJQ_SVYOHcgi7k1JuG-vMiUIQTK3-L9lE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

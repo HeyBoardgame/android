@@ -5,16 +5,21 @@ import com.project.heyboardgame.dataModel.ChatListResult
 import com.project.heyboardgame.dataModel.ChatResult
 import com.project.heyboardgame.dataModel.CheckRequestResult
 import com.project.heyboardgame.dataModel.DetailResult
-import com.project.heyboardgame.dataModel.Friend
+import com.project.heyboardgame.dataModel.FcmToken
 import com.project.heyboardgame.dataModel.FriendRequestData
 import com.project.heyboardgame.dataModel.FriendResult
 import com.project.heyboardgame.dataModel.GoogleLoginData
 import com.project.heyboardgame.dataModel.GoogleLoginResult
 import com.project.heyboardgame.dataModel.GoogleRegisterData
+import com.project.heyboardgame.dataModel.GroupMatchData
+import com.project.heyboardgame.dataModel.GroupMatchResult
+import com.project.heyboardgame.dataModel.GroupRecommendData
+import com.project.heyboardgame.dataModel.GroupRecommendResult
 import com.project.heyboardgame.dataModel.HistoryResult
 import com.project.heyboardgame.dataModel.LoginData
 import com.project.heyboardgame.dataModel.LoginResult
 import com.project.heyboardgame.dataModel.MyProfileResult
+import com.project.heyboardgame.dataModel.PersonalRecResult
 import com.project.heyboardgame.dataModel.RatedResult
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataModel.RefreshData
@@ -37,7 +42,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Api {
-
     @POST("auths/login") // 로그인
     suspend fun requestLogin(@Body loginData: LoginData): Response<LoginResult>
 
@@ -140,6 +144,15 @@ interface Api {
     @GET("chats/{id}") // 채팅방 대화 조회
     suspend fun getChatting(@Path("id") id: Int, @Query("page") pageNum: Int?, @Query("size") size: Int): Response<ChatResult>
 
-    @POST("chats/{id}/message")
-    suspend fun sendMessage(@Path("id") id: Int, )
+    @GET("recommends") // 홈화면 컨텐츠(개인추천) 조회
+    suspend fun getPersonalRecommend(): Response<PersonalRecResult>
+
+    @PATCH("auths/fcm-token") // 기기 토큰 등록
+    suspend fun sendFcmToken(@Body fcmToken: FcmToken): Response<Void>
+
+    @POST("recommends/group-match") // 그룹 매칭 요청
+    suspend fun requestGroupMatch(@Body groupMatchData: GroupMatchData): Response<GroupMatchResult>
+
+    @POST("recommends/group") // 그룹 추천 결과 요청
+    suspend fun requestGroupRecommend(@Body groupRecommendData: GroupRecommendData): Response<GroupRecommendResult>
 }

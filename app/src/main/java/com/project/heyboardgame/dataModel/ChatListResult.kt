@@ -19,10 +19,12 @@ data class ChatListResultData (
 data class ChatRoom (
     @SerializedName("id")
     val roomId: Int,
+    @SerializedName("userInfo")
+    val userInfo: Friend,
     @SerializedName("lastMessage")
     val lastMessage: String,
-    @SerializedName("timestamp")
+    @SerializedName("createdAt")
     val timestamp: String,
-    @SerializedName("userInfo")
-    val userInfo: Friend
+    @SerializedName("unReadMessage")
+    val unreadMessage: Int?
 )

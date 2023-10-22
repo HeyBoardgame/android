@@ -1,8 +1,12 @@
 package com.project.heyboardgame.main.social
 
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,8 +23,8 @@ import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.FragmentChatBinding
 import com.project.heyboardgame.main.MainViewModel
-import com.project.heyboardgame.utils.MyWebSocketListener
-import com.project.heyboardgame.utils.WebSocketCallback
+import com.project.heyboardgame.websocket.MyWebSocketListener
+import com.project.heyboardgame.websocket.WebSocketCallback
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -46,7 +50,9 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
     private lateinit var webSocket: WebSocket
     // 친구 정보
     private lateinit var friendInfo: Friend
+    private var isInitialLoad: Boolean = true
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
@@ -65,8 +71,20 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
             reverseLayout = true
             stackFromEnd = true
         }
+
         binding.chatRV.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            binding.chatRV.scrollToPosition(0)
+            if (isInitialLoad) {
+                binding.chatRV.scrollToPosition(0)
+                isInitialLoad = false
+            } else if (bottom < oldBottom) {
+                binding.chatRV.scrollBy(0, oldBottom - bottom)
+            } else if (bottom > oldBottom) {
+                val layoutManager = binding.chatRV.layoutManager as LinearLayoutManager
+                val firstVisibleItemPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+                if (firstVisibleItemPosition != 0) {
+                    binding.chatRV.scrollBy(0, oldBottom - bottom)
+                }
+            }
         }
 
         val webSocketUrl = "ws://13.125.211.203:8080/api/v1/chats/send-message/${friendInfo.id}"
@@ -90,6 +108,29 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
                 sendMessage(message)
             }
         }
+
+        binding.chatRV.setOnTouchListener { _, event ->
+            if (event.action == MotionEvent.ACTION_DOWN) {
+                // 클릭 이벤트가 발생하면 키보드를 숨기는 함수 호출
+                hideKeyboard()
+                binding.chatEditText.clearFocus()
+            }
+            return@setOnTouchListener false
+        }
+    }
+
+    private fun hideKeyboard() {
+        val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val focusedView = requireActivity().currentFocus
+        if (focusedView != null) {
+            inputMethodManager.hideSoftInputFromWindow(focusedView.windowToken, 0)
+        }
+    }
+
+    private fun scrollToPositionOnMainThread() {
+        binding.chatRV.post {
+            binding.chatRV.smoothScrollToPosition(0)
+        }
     }
 
     private fun sendMessage(message: String) {
@@ -111,6 +152,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
             chatRVAdapter.submitData(lifecycle, PagingData.from(newData))
 
             binding.chatEditText.text.clear() // 메시지 입력창 비우기
+            scrollToPositionOnMainThread()
         } else {
             // 메시지 전송 실패 처리
             Timber.e("Failed to send message")
@@ -125,6 +167,8 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
             val currentData = chatRVAdapter.snapshot().items
             val newData = listOf(newChat) + currentData
             chatRVAdapter.submitData(lifecycle, PagingData.from(newData))
+            scrollToPositionOnMainThread()
+            chatRVAdapter.notifyItemRangeInserted(0, chatRVAdapter.itemCount + 1)
         }
     }
 

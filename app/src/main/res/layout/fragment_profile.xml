@@ -162,33 +162,6 @@
 
                 </LinearLayout>
 
-                <!-- 도전 과제 -->
-                <LinearLayout
-                    android:id="@+id/challenge"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="3dp"
-                    android:background="@drawable/button_transparent"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/icon_challenge" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="도전 과제"
-                        android:textColor="@color/black"
-                        android:textSize="15sp" />
-
-                </LinearLayout>
-
             </LinearLayout>
 
             <LinearLayout
@@ -289,13 +262,15 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.SwitchCompat
-                        android:id="@+id/switch2"
+                        android:id="@+id/notificationSwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:thumbTint="@color/mainColor"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.565"
+                        app:thumbTint="@color/mainColor"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -365,6 +340,5 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.1" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

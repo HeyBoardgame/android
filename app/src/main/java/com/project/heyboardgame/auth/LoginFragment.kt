@@ -24,7 +24,9 @@ import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.GoogleLoginData
 import com.project.heyboardgame.databinding.FragmentLoginBinding
 import com.project.heyboardgame.dataModel.LoginData
+import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.main.MainActivity
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 
@@ -39,6 +41,7 @@ class LoginFragment : Fragment() {
     private lateinit var authViewModel: AuthViewModel
     // Google Login
     private lateinit var googleSignInClient: GoogleSignInClient
+    private val myDataStore : MyDataStore = MyDataStore()
 
 
     // 화면에서 뒤로 가기를 두 번 눌렀을 때 종료시켜주는 함수
@@ -144,16 +147,19 @@ class LoginFragment : Fragment() {
                     onFailure = {
                         if (it == 401) {
                             Toast.makeText(requireContext(), "이미 가입된 회원입니다. 자체 로그인을 이용해주세요.", Toast.LENGTH_SHORT).show()
+                            logoutGoogle()
                         } else if (it == 404) {
                             Toast.makeText(requireContext(), "회원가입이 필요합니다.", Toast.LENGTH_SHORT).show()
                             val action = LoginFragmentDirections.actionLoginFragmentToGoogleSignUpFragment1(googleEmail)
                             findNavController().navigate(action)
                         } else {
                             Toast.makeText(requireContext(), "구글 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            logoutGoogle()
                         }
                     },
                     onErrorAction = {
                         Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                        logoutGoogle()
                     }
                 )
             } else {
@@ -162,6 +168,16 @@ class LoginFragment : Fragment() {
         } catch (e: ApiException){
             Toast.makeText(requireContext(), "구글 로그인에 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun logoutGoogle() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+
+        googleSignInClient.signOut()
     }
 
     override fun onDestroyView() {

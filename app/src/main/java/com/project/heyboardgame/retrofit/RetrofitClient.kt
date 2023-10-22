@@ -1,6 +1,8 @@
 package com.project.heyboardgame.retrofit
 
+import com.project.heyboardgame.App
 import com.project.heyboardgame.dataStore.MyDataStore
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,10 +10,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
     private const val BASE_URL = "http://13.125.211.203:8080/api/v1/"
-
+    // OkHttp 캐시 설정
+    private const val cacheSize = (10 * 1024 * 1024).toLong() // 10 MB
+    private val cache = Cache(App.getContext().cacheDir, cacheSize)
     // Singleton으로 관리할 TokenInterceptor 인스턴스
     private var tokenInterceptor: TokenInterceptor? = null
-
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
@@ -28,6 +31,7 @@ object RetrofitClient {
     private fun createHttpClient(dataStore: MyDataStore, includeTokenInterceptor: Boolean): OkHttpClient {
         val httpClientBuilder = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .cache(cache)
 
         if (includeTokenInterceptor) {
             val tokenInterceptor = getTokenInterceptor(dataStore)

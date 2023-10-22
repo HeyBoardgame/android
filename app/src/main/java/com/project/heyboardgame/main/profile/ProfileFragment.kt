@@ -1,16 +1,22 @@
 package com.project.heyboardgame.main.profile
 
+import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -18,17 +24,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.heyboardgame.R
 import com.project.heyboardgame.auth.AuthActivity
 import com.project.heyboardgame.dataModel.MyProfileResultData
-import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.FragmentProfileBinding
 import com.project.heyboardgame.main.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
 class ProfileFragment : Fragment() {
-
     // 뒤로 가기 이벤트를 위한 변수
     private lateinit var callback : OnBackPressedCallback
     private var backPressedTime : Long = 0
@@ -37,8 +38,6 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
     // View Model
     private lateinit var mainViewModel: MainViewModel
-    // DataStore
-    private val myDataStore : MyDataStore = MyDataStore()
     // 구글 로그인 유저인 지 확인하는 변수
     private var isGoogleLogined : Boolean = false
     // 나의 프로필 변수
@@ -66,9 +65,17 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+
+        binding.notificationSwitch.isChecked = mainViewModel.getNotificationAllowed()
+
+        mainViewModel.checkGoogleLogined()
+        mainViewModel.googleLogined.observe(viewLifecycleOwner) { googleLogined ->
+            isGoogleLogined = googleLogined
+        }
 
         mainViewModel.getMyProfile(
             onSuccess = {
@@ -92,11 +99,26 @@ class ProfileFragment : Fragment() {
             }
         )
 
-        lifecycleScope.launch {
-            val googleLogined = withContext(Dispatchers.IO) {
-                myDataStore.getGoogleLogined()
+        binding.notificationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                val permissionState = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)
+
+                if (permissionState == PackageManager.PERMISSION_DENIED) {
+                    redirectToNotificationSettings()
+                } else {
+                    mainViewModel.setNotificationAllowed(true)
+                    Toast.makeText(requireContext(), "푸시알림이 활성화되었습니다.", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                val permissionState = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS)
+
+                if (permissionState == PackageManager.PERMISSION_GRANTED) {
+                    mainViewModel.setNotificationAllowed(false)
+                    Toast.makeText(requireContext(), "푸시알림이 해제되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    mainViewModel.setNotificationAllowed(false)
+                }
             }
-            isGoogleLogined = googleLogined
         }
 
         binding.bookmark.setOnClickListener {
@@ -146,6 +168,26 @@ class ProfileFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun redirectToNotificationSettings() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("알림 권한 요청")
+            .setMessage("푸시 알림을 받으시려면 알림 권한을 활성화해야 합니다. 권한 설정으로 이동하시려면 '권한 허용'을 선택해주세요.")
+            .setPositiveButton("권한 허용") { _, _ ->
+                binding.notificationSwitch.isChecked = false
+                val intent = Intent().apply {
+                    action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                    putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().packageName)
+                }
+                startActivity(intent)
+            }
+            .setNegativeButton("취소") { _, _ ->
+                Toast.makeText(requireContext(), "푸시알림 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+                binding.notificationSwitch.isChecked = false
+            }
+            .show()
+    }
+
     private fun logoutGoogle() {
         if (isGoogleLogined) {
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -155,13 +197,10 @@ class ProfileFragment : Fragment() {
             val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
 
             googleSignInClient.signOut().addOnCompleteListener {
-                lifecycleScope.launch {
-                    myDataStore.setGoogleLogined(false)
-                }
+                mainViewModel.setGoogleLogined(false)
             }
         }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

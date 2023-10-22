@@ -125,12 +125,9 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
 
         binding.changeProfileBtn.setOnClickListener {
             val filePart : MultipartBody.Part?
-            val profileImg : String
             if (finalImageUri == null) {
-                profileImg = ""
                 filePart = null
             } else {
-                profileImg = finalImageUri.toString()
                 val file = File(absolutelyPath(finalImageUri, requireContext()))
                 val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
                 filePart = MultipartBody.Part.createFormData("file", file.name, requestFile)
@@ -138,8 +135,7 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
             val nickname = binding.nickname.text.toString()
             val changeProfileData = ChangeProfileData(nickname, isImageChanged)
 
-
-            mainViewModel.changeMyProfile(profileImg, filePart, changeProfileData,
+            mainViewModel.changeMyProfile(filePart, changeProfileData,
                 onSuccess = {
                     findNavController().popBackStack()
                     Toast.makeText(requireContext(), "프로필이 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()

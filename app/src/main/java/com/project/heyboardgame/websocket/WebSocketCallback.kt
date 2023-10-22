@@ -1,4 +1,4 @@
-package com.project.heyboardgame.utils
+package com.project.heyboardgame.websocket
 
 interface WebSocketCallback {
     fun onMessageReceived(senderId: Int, message: String, timestamp: String)

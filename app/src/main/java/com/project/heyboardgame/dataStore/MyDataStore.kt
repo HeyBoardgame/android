@@ -8,6 +8,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.project.heyboardgame.App
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 class MyDataStore {
 
@@ -23,30 +25,62 @@ class MyDataStore {
     private val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
     // 구글 로그인 여부
     private val GOOGLE_LOGINED = booleanPreferencesKey("GOOGLE_LOGINED")
+    // 앱 첫 실행 여부
+    private val IS_FIRST_RUN = booleanPreferencesKey("IS_FIRST_RUN")
+    // 알림 권한 허용 여부
+    private val NOTIFICATION_ALLOWED = booleanPreferencesKey("NOTIFICATION_ALLOWED")
+    // FCM 토큰
+    private val FCM_TOKEN = stringPreferencesKey("FCM_TOKEN")
 
-
-    // 로그인 성공 시 액세스 토큰 저장
     suspend fun setAccessToken(accessToken: String) {
         mDataStore.edit { preferences ->
             preferences[ACCESS_TOKEN] = accessToken
         }
     }
 
-    // 로그인 성공 시 리프레시 토큰 저장
     suspend fun setRefreshToken(refreshToken: String) {
         mDataStore.edit { preferences ->
             preferences[REFRESH_TOKEN] = refreshToken
         }
     }
 
-    suspend fun setGoogleLogined(googleLogined : Boolean) {
+    suspend fun setGoogleLogined(googleLogined: Boolean) {
         mDataStore.edit { preferences ->
             preferences[GOOGLE_LOGINED] = googleLogined
         }
     }
 
-    // 액세스 토큰이 있으면 액세스 토큰 반환, 없으면 빈 문자열 반환
-    suspend fun getAccessToken() : String {
+    suspend fun setFirstRun(isFirstRun: Boolean) {
+        mDataStore.edit { preferences ->
+            preferences[IS_FIRST_RUN] = isFirstRun
+        }
+    }
+
+    suspend fun setNotificationAllowed(isNotificationAllowed: Boolean) {
+        mDataStore.edit { preferences ->
+            preferences[NOTIFICATION_ALLOWED] = isNotificationAllowed
+        }
+    }
+
+    suspend fun setFcmToken(fcmToken: String) {
+        mDataStore.edit { preferences ->
+            preferences[FCM_TOKEN] = fcmToken
+        }
+    }
+
+    suspend fun getFcmToken(): String {
+        var currentValue = ""
+        mDataStore.edit { preferences ->
+            currentValue = if (preferences[FCM_TOKEN] != null) {
+                preferences[FCM_TOKEN].toString()
+            } else {
+                ""
+            }
+        }
+        return currentValue
+    }
+
+    suspend fun getAccessToken(): String {
         var currentValue = ""
         mDataStore.edit { preferences ->
             currentValue = if (preferences[ACCESS_TOKEN] != null) {
@@ -58,8 +92,7 @@ class MyDataStore {
         return currentValue
     }
 
-    // 리프레시 토큰 반환
-    suspend fun getRefreshToken() : String {
+    suspend fun getRefreshToken(): String {
         var currentValue = ""
         mDataStore.edit { preferences ->
             currentValue = if (preferences[REFRESH_TOKEN] != null) {
@@ -75,6 +108,20 @@ class MyDataStore {
         var currentValue = false
         mDataStore.edit { preferences ->
             currentValue = preferences[GOOGLE_LOGINED] ?: false
+        }
+        return currentValue
+    }
+
+    suspend fun getFirstRun(): Boolean {
+        return mDataStore.data.map { preferences ->
+            preferences[IS_FIRST_RUN] ?: true
+        }.first()
+    }
+
+    suspend fun getNotificationAllowed(): Boolean {
+        var currentValue = false
+        mDataStore.edit { preferences ->
+            currentValue = preferences[NOTIFICATION_ALLOWED] ?: false
         }
         return currentValue
     }

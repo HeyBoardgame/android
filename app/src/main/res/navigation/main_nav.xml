@@ -4,12 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
     app:startDestination="@id/homeFragment">
-
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.project.heyboardgame.main.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment"
@@ -17,6 +16,17 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="integer"/>
+        </action>
     </fragment>
     <fragment
         android:id="@+id/recommendFragment"
@@ -24,19 +34,23 @@
         android:label="fragment_recommend"
         tools:layout="@layout/fragment_recommend" >
         <action
-            android:id="@+id/action_recommendFragment_to_matchFragment"
-            app:destination="@id/matchFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
             android:id="@+id/action_recommendFragment_to_addFriendFragment"
             app:destination="@id/addFriendFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_recommendFragment_to_matchFragment"
+            app:destination="@id/matchFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="groupMatchResult"
+                app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/socialFragment"
@@ -101,7 +115,11 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="myProfileData"
+                app:argType="com.project.heyboardgame.dataModel.MyProfileResultData" />
+        </action>
         <action
             android:id="@+id/action_profileFragment_to_bookmarkFragment"
             app:destination="@id/bookmarkFragment"
@@ -128,13 +146,35 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="groupMatchResult"
+                app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
+        </action>
+        <argument
+            android:name="groupMatchResult"
+            app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
     </fragment>
     <fragment
         android:id="@+id/matchResFragment"
         android:name="com.project.heyboardgame.main.recommend.MatchResFragment"
         android:label="fragment_match_res"
-        tools:layout="@layout/fragment_match_res" />
+        tools:layout="@layout/fragment_match_res" >
+        <argument
+            android:name="groupMatchResult"
+            app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
+        <action
+            android:id="@+id/action_matchResFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="integer" />
+        </action>
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.project.heyboardgame.main.home.SearchFragment"
@@ -204,7 +244,11 @@
         android:id="@+id/changeProfileFragment"
         android:name="com.project.heyboardgame.main.profile.ChangeProfileFragment"
         android:label="fragment_change_profile"
-        tools:layout="@layout/fragment_change_profile" />
+        tools:layout="@layout/fragment_change_profile" >
+        <argument
+            android:name="myProfileData"
+            app:argType="com.project.heyboardgame.dataModel.MyProfileResultData" />
+    </fragment>
     <fragment
         android:id="@+id/bookmarkFragment"
         android:name="com.project.heyboardgame.main.profile.BookmarkFragment"
