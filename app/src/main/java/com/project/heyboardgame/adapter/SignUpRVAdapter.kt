@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.SignUpItem
 
-class SignUpRVAdapter(val genreList : MutableList<SignUpItem>)
+class SignUpRVAdapter(private val genreList : MutableList<SignUpItem>)
     : RecyclerView.Adapter<SignUpRVAdapter.ViewHolder>(){
 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {

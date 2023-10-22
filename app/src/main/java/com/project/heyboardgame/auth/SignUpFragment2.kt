@@ -38,7 +38,7 @@ class SignUpFragment2 : Fragment() {
 
         // safe args 사용해서 SignUpFragment1에서 email, password, nickname 받아오기
         val args: SignUpFragment2Args by navArgs()
-        val signUpTmpData: SignUpData = args.signUpData
+        val signUpTmpData = args.signUpData
 
         val email = signUpTmpData.email
         val password = signUpTmpData.password

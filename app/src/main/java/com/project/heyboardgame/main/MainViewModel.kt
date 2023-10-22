@@ -18,6 +18,10 @@ import com.project.heyboardgame.dataModel.ChatRoom
 import com.project.heyboardgame.dataModel.DetailResultData
 import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.dataModel.FriendRequestData
+import com.project.heyboardgame.dataModel.GroupMatchData
+import com.project.heyboardgame.dataModel.GroupMatchResultData
+import com.project.heyboardgame.dataModel.GroupRecommendData
+import com.project.heyboardgame.dataModel.GroupRecommendResultData
 import com.project.heyboardgame.dataModel.MyProfileResultData
 import com.project.heyboardgame.dataModel.PersonalRecResultData
 import com.project.heyboardgame.dataModel.RatedResultData
@@ -34,6 +38,7 @@ import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -69,6 +74,10 @@ class MainViewModel : ViewModel() {
     // 채팅방 대화 LiveData
     private val _chatPagingData = MutableLiveData<Flow<PagingData<Chat>>>()
     val chatPagingData: LiveData<Flow<PagingData<Chat>>> = _chatPagingData
+    // googleLogined LiveData
+    private val _googleLogined = MutableLiveData<Boolean>()
+    val googleLogined : LiveData<Boolean>
+        get() = _googleLogined
 
 
     // 로그아웃 함수 (ProfileFragment)
@@ -144,7 +153,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 프로필 수정 함수 (ChangeProfileFragment)
-    fun changeMyProfile(profileImg: String, file: MultipartBody.Part?, changeProfileData: ChangeProfileData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun changeMyProfile(file: MultipartBody.Part?, changeProfileData: ChangeProfileData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         val json = Gson().toJson(changeProfileData) // ChangeProfileData를 JSON으로 직렬화
         // ChangeProfileData를 RequestBody로 변환
         val requestBody = json.toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
@@ -389,6 +398,56 @@ class MainViewModel : ViewModel() {
             if (response.isSuccessful) {
                 val personalRecResult = response.body()
                 personalRecResult?.let {
+                    onSuccess.invoke(it.result)
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 구글 로그인 여부 확인하는 함수
+    fun checkGoogleLogined() = viewModelScope.launch {
+        val getGoogleLogined = myDataStore.getGoogleLogined()
+        _googleLogined.value = getGoogleLogined
+    }
+    // 구글 로그인 여부 변경하는 함수
+    fun setGoogleLogined(isGoogleLogined: Boolean) = viewModelScope.launch {
+        myDataStore.setGoogleLogined(isGoogleLogined)
+        _googleLogined.value = isGoogleLogined
+    }
+    // 알림 허용 권한 변경하는 함수
+    fun setNotificationAllowed(isChecked: Boolean) = viewModelScope.launch {
+        myDataStore.setNotificationAllowed(isChecked)
+    }
+    // 알림 허용 권한 여부 가져오는 함수
+    fun getNotificationAllowed(): Boolean {
+        return runBlocking { myDataStore.getNotificationAllowed() }
+    }
+    // 그룹 매칭 요청하는 함수
+    fun requestGroupMatch(groupMatchData: GroupMatchData, onSuccess: (groupMatchResultData: GroupMatchResultData) -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestGroupMatch(groupMatchData)
+            if (response.isSuccessful) {
+                val groupMatchResult = response.body()
+                groupMatchResult?.let {
+                    onSuccess.invoke(it.result)
+                }
+            } else {
+                onFailure.invoke(response.code())
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 그룹 추천 결과 요청하는 함수
+    fun requestGroupRecommend(groupRecommendData: GroupRecommendData, onSuccess: (groupRecommendResultData: GroupRecommendResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestGroupRecommend(groupRecommendData)
+            if (response.isSuccessful) {
+                val groupRecommendResult = response.body()
+                groupRecommendResult?.let {
                     onSuccess.invoke(it.result)
                 }
             } else {

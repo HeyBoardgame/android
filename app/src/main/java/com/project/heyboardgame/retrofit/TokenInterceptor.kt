@@ -2,6 +2,8 @@ package com.project.heyboardgame.retrofit
 
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -65,20 +67,25 @@ class TokenInterceptor(private val dataStore: MyDataStore) : Interceptor {
                     redirectToLoginScreen(appContext)
                 }
             }
+        } else if (response.code == 403) {
+            redirectToLoginScreen(appContext)
         }
         return response
     }
 
     private fun redirectToLoginScreen(context: Context) {
-        logoutGoogle(context)
-        runBlocking {
-            dataStore.setAccessToken("")
-            dataStore.setRefreshToken("")
+        val mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post {
+            logoutGoogle(context)
+            runBlocking {
+                dataStore.setAccessToken("")
+                dataStore.setRefreshToken("")
+            }
+            Toast.makeText(context, "리프레시에 실패했습니다. 로그인 화면으로 이동합니다.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, AuthActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(intent)
         }
-        Toast.makeText(context, "리프레시에 실패했습니다. 로그인 화면으로 이동합니다.", Toast.LENGTH_SHORT).show()
-        val intent = Intent(context, AuthActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        context.startActivity(intent)
     }
 
     private fun logoutGoogle(context: Context) {

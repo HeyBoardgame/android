@@ -17,8 +17,8 @@
     <string name="recommend">추천</string>
     <string name="social">소셜</string>
     <string name="profile">MY</string>
-    <string name="shake_title">흔들어 보세요!</string>
-    <string name="shake_text">주변 친구와 자동으로 그룹 매칭이 됩니다!</string>
+    <string name="shake_title">다같이 흔들어 보세요!</string>
+    <string name="shake_text">주변에 친구를 맺은 사용자가 있다면\n자동으로 그룹 매칭이 됩니다!</string>
     <string name="add_friend">친구 추가</string>
     <string name="go_back">뒤로 가기</string>
     <string name="group_match">그룹 매칭이\n 완료되었습니다!</string>
