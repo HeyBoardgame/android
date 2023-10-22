@@ -43,7 +43,6 @@
             android:id="@+id/searchBtn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:contentDescription="검색"
             android:src="@drawable/icon_search"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"

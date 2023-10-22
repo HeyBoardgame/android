@@ -155,4 +155,7 @@ interface Api {
 
     @POST("recommends/group") // 그룹 추천 결과 요청
     suspend fun requestGroupRecommend(@Body groupRecommendData: GroupRecommendData): Response<GroupRecommendResult>
+
+    @GET("recommends/group/history") // 그룹 추천 기록 조회
+    suspend fun requestRecommendedList(): Response<GroupRecommendResult>
 }

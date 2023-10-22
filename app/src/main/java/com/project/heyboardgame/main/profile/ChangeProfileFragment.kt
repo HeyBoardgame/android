@@ -89,10 +89,11 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         }
 
         binding.changeProfileImg.setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 galleryPermissionLauncher.launch(Manifest.permission.READ_MEDIA_IMAGES)
-            else
+            } else {
                 galleryPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
         }
 
         binding.defaultImgBtn.setOnClickListener {

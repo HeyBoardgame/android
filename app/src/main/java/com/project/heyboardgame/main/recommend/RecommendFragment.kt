@@ -1,6 +1,9 @@
 package com.project.heyboardgame.main.recommend
 
+import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -10,12 +13,14 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -24,7 +29,6 @@ import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.GroupMatchData
 import com.project.heyboardgame.databinding.FragmentRecommendBinding
 import com.project.heyboardgame.main.MainViewModel
-import timber.log.Timber
 import kotlin.math.round
 import kotlin.math.sqrt
 
@@ -95,12 +99,33 @@ class RecommendFragment : Fragment(), SensorEventListener {
             findNavController().navigate(R.id.action_recommendFragment_to_addFriendFragment)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(),
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 0)
+        binding.recordListBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_recommendFragment_to_recListFragment)
+        }
+
+        getMyLocation()
+    }
+
+    private val gpsLocationListener = LocationListener { location ->
+        longitude = location.longitude
+        latitude = location.latitude
+    }
+
+    private val locationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()){
+            if (it){
+                Toast.makeText(requireContext(), "위치 접근 권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
+                getMyLocation()
+            } else
+                Toast.makeText(requireContext(), "위치 접근 권한이 거부되었습니다. 설정에서 권한을 허용해주세요.", Toast.LENGTH_SHORT).show()
+        }
+
+    private fun getMyLocation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+        ) {
+            showLocationAllowedDialog()
         } else {
-            // 가장 최근 위치 정보 가져오는 코드
             val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             if (location != null) {
                 longitude = location.longitude
@@ -113,9 +138,18 @@ class RecommendFragment : Fragment(), SensorEventListener {
         }
     }
 
-    private val gpsLocationListener = LocationListener { location ->
-        longitude = location.longitude
-        latitude = location.latitude
+    private fun showLocationAllowedDialog() {
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        dialogBuilder.setTitle("위치 권한을 허용해 주세요.")
+            .setMessage("주변 친구와 매칭하려면 위치 권한이 필요합니다. '확인'버튼을 누르신 후 위치 권한을 허용해 주세요. '거부'를 누르시면 해당 기능 사용에 제한이 있을 수 있습니다.")
+            .setPositiveButton("확인") { _, _ ->
+                locationPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+            }
+            .setNegativeButton("거부") { _, _ ->
+                Toast.makeText(requireContext(), "위치 접근 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+            .create()
+            .show()
     }
 
     private fun roundToTwoDecimals(value: Double): Double {
@@ -185,8 +219,14 @@ class RecommendFragment : Fragment(), SensorEventListener {
         acceleration = acceleration * 0.9f + delta
 
         if (acceleration > 10 && System.currentTimeMillis() - lastVibrationTime > vibrationThreshold) {
-            requestGroupMatch(roundToTwoDecimals(latitude), roundToTwoDecimals(longitude))
-            lastVibrationTime = System.currentTimeMillis()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
+                    requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            ) {
+                showLocationAllowedDialog()
+            } else {
+                requestGroupMatch(roundToTwoDecimals(latitude), roundToTwoDecimals(longitude))
+                lastVibrationTime = System.currentTimeMillis()
+            }
         }
     }
 

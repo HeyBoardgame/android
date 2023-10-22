@@ -51,6 +51,13 @@
                 android:name="groupMatchResult"
                 app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
         </action>
+        <action
+            android:id="@+id/action_recommendFragment_to_recListFragment"
+            app:destination="@id/recListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/socialFragment"
@@ -327,5 +334,18 @@
         <argument
             android:name="friend"
             app:argType="com.project.heyboardgame.dataModel.Friend" />
+    </fragment>
+    <fragment
+        android:id="@+id/recListFragment"
+        android:name="com.project.heyboardgame.main.recommend.RecListFragment"
+        android:label="fragment_rec_list"
+        tools:layout="@layout/fragment_rec_list" >
+        <action
+            android:id="@+id/action_recListFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 </navigation>

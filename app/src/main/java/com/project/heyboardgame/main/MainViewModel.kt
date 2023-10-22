@@ -457,4 +457,20 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
+    // 추천 받았던 보드게임 요청하는 함수
+    fun requestRecommendedList(onSuccess: (groupRecommendResultData: GroupRecommendResultData) -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestRecommendedList()
+            if (response.isSuccessful) {
+                val groupRecommendResult = response.body()
+                groupRecommendResult?.let {
+                    onSuccess.invoke(it.result)
+                }
+            } else {
+                onFailure.invoke(response.code())
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
 }
