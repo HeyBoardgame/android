@@ -8,31 +8,26 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Chat
 import com.project.heyboardgame.dataModel.Friend
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 
-class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, RecyclerView.ViewHolder>(ChatComparator) {
+class ChatRVAdapter(var chatList: MutableList<Chat>, private val friend: Friend) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    fun addAll(newList: MutableList<Chat>) {
+        chatList.addAll(newList)
+        notifyItemRangeChanged(0, chatList.size)
+    }
 
-    object ChatComparator : DiffUtil.ItemCallback<Chat>() {
-        override fun areItemsTheSame(oldItem: Chat, newItem: Chat): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Chat, newItem: Chat): Boolean {
-            return oldItem == newItem
-        }
+    fun add(newChat: Chat) {
+        chatList.add(0, newChat)
+        notifyItemRangeChanged(0, chatList.size)
     }
 
     companion object {
@@ -57,7 +52,7 @@ class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, Recycl
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item = getItem(position)
+        val item = chatList[position]
         return if (item?.isMyMessage!!) {
             VIEW_TYPE_MY_MESSAGE
         } else {
@@ -78,12 +73,12 @@ class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, Recycl
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-        val nextItem = if (position + 1 < itemCount) getItem(position + 1) else null
+        val item = chatList[position]
+        val nextItem = if (position + 1 < itemCount) chatList[position + 1] else null
 
         when (holder) {
-            is MyMessageViewHolder -> {
-                item?.let {
+            is ChatRVAdapter.MyMessageViewHolder -> {
+                item.let {
                     holder.myMessage.text = item.message
                     holder.myMessageTime.text = formatChatTimestamp(item.timestamp)
 
@@ -95,8 +90,8 @@ class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, Recycl
                     }
                 }
             }
-            is FriendMessageViewHolder -> {
-                item?.let {
+            is ChatRVAdapter.FriendMessageViewHolder -> {
+                item.let {
                     if (friend.image != null) {
                         Glide.with(holder.itemView.context).load(friend.image).into(holder.friendProfileImg)
                     } else {
@@ -114,6 +109,10 @@ class ChatRVAdapter(private val friend: Friend) : PagingDataAdapter<Chat, Recycl
                 }
             }
         }
+    }
+
+    override fun getItemCount(): Int {
+        return chatList.size
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

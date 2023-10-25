@@ -9,7 +9,7 @@ data class ChatResult (
 
 data class ChatResultData (
     @SerializedName("content")
-    val rooms: List<Chat>,
+    val content: List<Chat>,
     @SerializedName("prevPage")
     val prevPage: Int?,
     @SerializedName("nextPage")

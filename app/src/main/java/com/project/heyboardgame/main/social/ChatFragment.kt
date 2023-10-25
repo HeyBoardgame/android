@@ -7,13 +7,13 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.ChatRVAdapter
@@ -25,8 +25,6 @@ import com.project.heyboardgame.databinding.FragmentChatBinding
 import com.project.heyboardgame.main.MainViewModel
 import com.project.heyboardgame.websocket.MyWebSocketListener
 import com.project.heyboardgame.websocket.WebSocketCallback
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -50,7 +48,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
     private lateinit var webSocket: WebSocket
     // 친구 정보
     private lateinit var friendInfo: Friend
-    private var isInitialLoad: Boolean = true
+    // 채팅
+    private var currentChatList: MutableList<Chat> = mutableListOf()
+    private var nextPage: Int? = 0
+    private var isRequested: Boolean = false
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,18 +66,30 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
 
         binding.friendNickname.text = friendInfo.nickname
 
-        chatRVAdapter = ChatRVAdapter(friendInfo)
+        chatRVAdapter = ChatRVAdapter(mutableListOf(), friendInfo)
         binding.chatRV.adapter = chatRVAdapter
         binding.chatRV.layoutManager = LinearLayoutManager(requireContext()).apply {
             reverseLayout = true
             stackFromEnd = true
         }
 
-        binding.chatRV.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-            if (isInitialLoad) {
+        mainViewModel.getChatting(friendInfo.id, 0, 15,
+            onSuccess = {
+                currentChatList.addAll(it.content)
+                chatRVAdapter.addAll(it.content as MutableList<Chat>)
                 binding.chatRV.scrollToPosition(0)
-                isInitialLoad = false
-            } else if (bottom < oldBottom) {
+                nextPage = it.nextPage
+            },
+            onFailure = {
+                Toast.makeText(requireContext(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            },
+            onErrorAction = {
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        )
+
+        binding.chatRV.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if (bottom < oldBottom) {
                 binding.chatRV.scrollBy(0, oldBottom - bottom)
             } else if (bottom > oldBottom) {
                 val layoutManager = binding.chatRV.layoutManager as LinearLayoutManager
@@ -87,16 +100,29 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
             }
         }
 
+        binding.chatRV.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = binding.chatRV.layoutManager as LinearLayoutManager
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                val totalCount = recyclerView.adapter?.itemCount?.minus(1)
+
+                if (lastVisibleItem == totalCount && !isRequested) {
+                    isRequested = true
+                    loadNextPage(nextPage)
+                }
+            }
+        })
+
         val webSocketUrl = "ws://13.125.211.203:8080/api/v1/chats/send-message/${friendInfo.id}"
         val webSocketListener = MyWebSocketListener(this)
         val request = Request.Builder()
             .url(webSocketUrl)
-            .header("Authorization", "Bearer $accessToken") // 여기에 액세스 토큰을 직접 추가
+            .header("Authorization", "Bearer $accessToken")
             .build()
         val okHttpClient = OkHttpClient()
         webSocket = okHttpClient.newWebSocket(request, webSocketListener)
-
-        loadChatPagingData(friendInfo.id)
 
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
@@ -116,6 +142,27 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
                 binding.chatEditText.clearFocus()
             }
             return@setOnTouchListener false
+        }
+    }
+
+    private fun loadNextPage(pageNum: Int?) {
+        if (pageNum != null) {
+            mainViewModel.getChatting(friendInfo.id, pageNum, 15,
+                onSuccess = {
+                    currentChatList.addAll(it.content)
+                    chatRVAdapter.addAll(it.content as MutableList<Chat>)
+                    nextPage = it.nextPage
+                    isRequested = false
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            )
+        } else {
+            return
         }
     }
 
@@ -141,18 +188,12 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
         val chatMessage = ChatData(message = message, timestamp = formattedTime)
         val jsonMessage = Gson().toJson(chatMessage)
         if (webSocket.send(jsonMessage)) {
-
             val newChat = Chat(id = 0, message = message, timestamp = formattedTime, isMyMessage = true)
-
-            // 현재 데이터를 가져옴
-            val currentData = chatRVAdapter.snapshot().items
-            // 새 아이템을 추가한 데이터 리스트를 만듦
-            val newData = listOf(newChat) + currentData
-            // 새 데이터를 어댑터에 제출
-            chatRVAdapter.submitData(lifecycle, PagingData.from(newData))
-
-            binding.chatEditText.text.clear() // 메시지 입력창 비우기
-            scrollToPositionOnMainThread()
+            activity?.runOnUiThread {
+                chatRVAdapter.add(newChat)
+                scrollToPositionOnMainThread()
+            }
+            binding.chatEditText.text.clear()
         } else {
             // 메시지 전송 실패 처리
             Timber.e("Failed to send message")
@@ -161,25 +202,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
 
     override fun onMessageReceived(senderId: Int, message: String, timestamp: String) {
         if (senderId == friendInfo.id) {
-
             val newChat = Chat(id = 0, message = message, timestamp = timestamp, isMyMessage = false)
-
-            val currentData = chatRVAdapter.snapshot().items
-            val newData = listOf(newChat) + currentData
-            chatRVAdapter.submitData(lifecycle, PagingData.from(newData))
-            scrollToPositionOnMainThread()
-            chatRVAdapter.notifyItemRangeInserted(0, chatRVAdapter.itemCount + 1)
-        }
-    }
-
-    private fun loadChatPagingData(id: Int) {
-        mainViewModel.loadChatPagingData(id)
-
-        mainViewModel.chatPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
-            viewLifecycleOwner.lifecycleScope.launch {
-                pagingDataFlow.collectLatest { pagingData ->
-                    chatRVAdapter.submitData(pagingData)
-                }
+            activity?.runOnUiThread {
+                chatRVAdapter.add(newChat)
+                scrollToPositionOnMainThread()
             }
         }
     }

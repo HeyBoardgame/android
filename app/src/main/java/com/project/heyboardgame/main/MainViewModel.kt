@@ -14,6 +14,7 @@ import com.project.heyboardgame.dataModel.BoardGame2
 import com.project.heyboardgame.dataModel.ChangePasswordData
 import com.project.heyboardgame.dataModel.ChangeProfileData
 import com.project.heyboardgame.dataModel.Chat
+import com.project.heyboardgame.dataModel.ChatResultData
 import com.project.heyboardgame.dataModel.ChatRoom
 import com.project.heyboardgame.dataModel.DetailResultData
 import com.project.heyboardgame.dataModel.Friend
@@ -28,8 +29,6 @@ import com.project.heyboardgame.dataModel.RatedResultData
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.paging.BookmarkPagingSource
-import com.project.heyboardgame.paging.ChatListPagingSource
-import com.project.heyboardgame.paging.ChatPagingSource
 import com.project.heyboardgame.paging.FriendListPagingSource
 import com.project.heyboardgame.paging.FriendRequestPagingSource
 import com.project.heyboardgame.paging.RatedPagingSource
@@ -42,7 +41,6 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import timber.log.Timber
 
 class MainViewModel : ViewModel() {
     // DataStore
@@ -68,9 +66,6 @@ class MainViewModel : ViewModel() {
     private var currentSearchKeyword = ""
     private var currentGenreIdList = emptyList<Int>()
     private var currentNumOfPlayer = 0
-    // 채팅방 목록 LiveData
-    private val _chatListPagingData = MutableLiveData<Flow<PagingData<ChatRoom>>>()
-    val chatListPagingData: LiveData<Flow<PagingData<ChatRoom>>> = _chatListPagingData
     // 채팅방 대화 LiveData
     private val _chatPagingData = MutableLiveData<Flow<PagingData<Chat>>>()
     val chatPagingData: LiveData<Flow<PagingData<Chat>>> = _chatPagingData
@@ -371,27 +366,23 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 채팅방 목록 페이징 (ChatListFragment)
-    fun loadChatListPagingData() {
-        val size = 15
-        val pagingDataFlow = Pager(
-            config = PagingConfig(pageSize = size),
-            pagingSourceFactory = { ChatListPagingSource(api, size) }
-        ).flow
-
-        _chatListPagingData.value = pagingDataFlow
+    // 채팅방 목록 가져오기 (ChatListFragment)
+    fun getChatList(onSuccess: (chatList: List<ChatRoom>) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.getChatList()
+            if (response.isSuccessful) {
+                val chatListResult = response.body()
+                if (chatListResult != null) {
+                    onSuccess.invoke(chatListResult.result)
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
     }
-    // 채팅 대화 페이징 (ChatFragment)
-    fun loadChatPagingData(id: Int) {
-        val size = 15
-        val pagingDataFlow = Pager(
-            config = PagingConfig(pageSize = size),
-            pagingSourceFactory = { ChatPagingSource(id, api, size) }
-        ).flow
-
-        _chatPagingData.value = pagingDataFlow
-    }
-    // 개인 추천 컨텐츠 가져오기
+    // 개인 추천 컨텐츠 가져오기 (HomeFragment)
     fun getPersonalRecommend(onSuccess: (personalRecResultData: PersonalRecResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.getPersonalRecommend()
@@ -425,7 +416,7 @@ class MainViewModel : ViewModel() {
     fun getNotificationAllowed(): Boolean {
         return runBlocking { myDataStore.getNotificationAllowed() }
     }
-    // 그룹 매칭 요청하는 함수
+    // 그룹 매칭 요청하는 함수 (RecommendFragment)
     fun requestGroupMatch(groupMatchData: GroupMatchData, onSuccess: (groupMatchResultData: GroupMatchResultData) -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestGroupMatch(groupMatchData)
@@ -441,7 +432,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 그룹 추천 결과 요청하는 함수
+    // 그룹 추천 결과 요청하는 함수 (MatchFragment)
     fun requestGroupRecommend(groupRecommendData: GroupRecommendData, onSuccess: (groupRecommendResultData: GroupRecommendResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestGroupRecommend(groupRecommendData)
@@ -457,7 +448,7 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 추천 받았던 보드게임 요청하는 함수
+    // 추천 받았던 보드게임 요청하는 함수 (RecListFragment)
     fun requestRecommendedList(onSuccess: (groupRecommendResultData: GroupRecommendResultData) -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestRecommendedList()
@@ -468,6 +459,20 @@ class MainViewModel : ViewModel() {
                 }
             } else {
                 onFailure.invoke(response.code())
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 채팅 대화 페이징 (ChatFragment)
+    fun getChatting(id: Int, pageNum: Int?, size: Int, onSuccess: (chatResultData: ChatResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.getChatting(id, pageNum, size)
+            if (response.isSuccessful) {
+                val chatResult = response.body()
+                chatResult?.let {
+                    onSuccess.invoke(it.result)
+                }
             }
         } catch(e: Exception) {
             onErrorAction.invoke()

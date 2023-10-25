@@ -139,7 +139,7 @@ interface Api {
     suspend fun sendFriendRequest(@Body friendRequestData: FriendRequestData): Response<Void>
 
     @GET("chats") // 채팅방 목록 조회
-    suspend fun getChatList(@Query("page") pageNum: Int?, @Query("size") size: Int): Response<ChatListResult>
+    suspend fun getChatList(): Response<ChatListResult>
 
     @GET("chats/{id}") // 채팅방 대화 조회
     suspend fun getChatting(@Path("id") id: Int, @Query("page") pageNum: Int?, @Query("size") size: Int): Response<ChatResult>
