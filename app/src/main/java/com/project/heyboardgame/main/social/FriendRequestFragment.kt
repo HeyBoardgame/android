@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.FriendRequestRVAdapter
@@ -37,6 +38,10 @@ class FriendRequestFragment : Fragment(R.layout.fragment_friend_request), Friend
         friendRequestRVAdapter = FriendRequestRVAdapter(this)
         binding.friendRequestRV.adapter = friendRequestRVAdapter
         binding.friendRequestRV.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.backBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         loadFriendRequestPagingData()
 
