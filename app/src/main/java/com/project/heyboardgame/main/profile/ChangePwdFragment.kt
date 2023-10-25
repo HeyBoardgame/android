@@ -5,6 +5,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,7 +25,14 @@ class ChangePwdFragment : Fragment(R.layout.fragment_change_pwd) {
     // 에러 상태 저장 변수
     private var isPasswordValid = false
     private var isPasswordCheckFail = false
+    // 키보드 설정 변수
+    private var originalMode : Int? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        originalMode = activity?.window?.getSoftInputMode()!!
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,6 +65,10 @@ class ChangePwdFragment : Fragment(R.layout.fragment_change_pwd) {
                 }
             )
         }
+    }
+
+    private fun Window.getSoftInputMode() : Int {
+        return attributes.softInputMode
     }
 
     private val currentPasswordCheckTextWatcher = object : TextWatcher {
@@ -135,6 +148,7 @@ class ChangePwdFragment : Fragment(R.layout.fragment_change_pwd) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        originalMode?.let { activity?.window?.setSoftInputMode(it) }
         _binding = null
     }
 }

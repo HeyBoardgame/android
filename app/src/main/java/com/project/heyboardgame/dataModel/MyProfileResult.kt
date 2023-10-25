@@ -1,17 +1,18 @@
 package com.project.heyboardgame.dataModel
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 data class MyProfileResult(
     @SerializedName("result")
     val result: MyProfileResultData
 )
 
+@Parcelize
 data class MyProfileResultData (
     @SerializedName("profileImagePath")
-    val profileImg : String,
+    val profileImg : String?,
     @SerializedName("nickname")
-    val nickname : String,
-    @SerializedName("userCode")
-    val userCode : String
-)
+    val nickname : String
+) : Parcelable

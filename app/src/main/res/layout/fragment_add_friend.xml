@@ -48,7 +48,7 @@
 
         <!-- 친구 검색창 -->
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/nicknameSearchView"
+            android:id="@+id/userCodeSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_white"
@@ -57,7 +57,7 @@
             app:queryBackground="@color/transparent"
             android:focusable="true"
             app:goIcon="@drawable/icon_send"
-            app:queryHint="유저 코드를 입력하세요" />
+            app:queryHint="닉네임을 입력하세요" />
 
     </LinearLayout>
 
@@ -88,6 +88,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9"/>
+        app:layout_constraintGuide_percent="0.85"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

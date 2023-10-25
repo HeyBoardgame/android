@@ -1,30 +1,56 @@
 package com.project.heyboardgame.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.navigation.Navigation
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.project.heyboardgame.R
+import com.project.heyboardgame.dataModel.Friend
+import com.project.heyboardgame.main.social.SocialFragmentDirections
+import com.project.heyboardgame.utils.GlideUtils
 
-class FriendListRVAdapter(val context : Context, val nicknameList: MutableList<String>)
-    : RecyclerView.Adapter<FriendListRVAdapter.ViewHolder>(){
+class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHolder>(FriendListComparator) {
 
-    inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
-
+    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val image = view.findViewById<ImageView>(R.id.profileImg)
+        val nickname = view.findViewById<TextView>(R.id.nickname)
+        val chatBtn = view.findViewById<ImageButton>(R.id.chatBtn)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendListRVAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_friend_list, parent, false)
+    object FriendListComparator : DiffUtil.ItemCallback<Friend>() {
+        override fun areItemsTheSame(oldItem: Friend, newItem: Friend): Boolean {
+            return oldItem.id == newItem.id
+        }
 
+        override fun areContentsTheSame(oldItem: Friend, newItem: Friend): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_friend_list, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: FriendListRVAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position)
 
-    }
+        item?.let {
+            GlideUtils.loadThumbnailImage(holder.itemView.context, it.image, holder.image)
+            holder.nickname.text = it.nickname
 
-    override fun getItemCount(): Int {
-        return nicknameList.size
+            holder.chatBtn.setOnClickListener {
+                val navController = Navigation.findNavController(holder.itemView)
+
+                val action = SocialFragmentDirections.actionSocialFragmentToChatFragment(item)
+                navController.navigate(action)
+            }
+        }
     }
 }

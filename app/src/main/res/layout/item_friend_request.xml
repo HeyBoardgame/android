@@ -18,18 +18,20 @@
 
         <!-- 프로필 이미지 -->
         <ImageView
+            android:id="@+id/profileImg"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/tmp_profile_img" />
+            android:src="@drawable/default_profile_img" />
 
     </androidx.cardview.widget.CardView>
 
     <!-- 닉네임 -->
     <TextView
+        android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="시나모롤"
+        android:text="닉네임"
         android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"

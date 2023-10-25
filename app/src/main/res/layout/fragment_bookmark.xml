@@ -6,45 +6,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".main.profile.BookmarkFragment">
 
-    <!-- 뒤로가기 버튼 -->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- NO CONTENT -->
+    <LinearLayout
+        android:id="@+id/noContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="100dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/noContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:constraint_referenced_ids="noContentText,noContentImage" />
-
-        <TextView
-            android:id="@+id/noContentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bookmark"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center">
 
         <ImageView
-            android:id="@+id/noContentImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_marginBottom="15dp"
-            android:src="@drawable/default_profile_img"
-            app:layout_constraintBottom_toTopOf="@id/noContentText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/no_content_bookmark"
+            android:layout_marginBottom="10dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_content_bookmark_text1"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_content_bookmark_text2"
+            android:textColor="@color/detailColor"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <!-- 뒤로가기 버튼 -->
     <ImageButton
         android:id="@+id/backBtn"
         android:layout_width="30dp"
@@ -69,7 +67,6 @@
 
         <!-- 페이지 타이틀 -->
         <TextView
-            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -80,6 +77,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- 정렬 드롭다운 -->
         <Spinner
             android:id="@+id/sortDropdown"
             android:layout_width="wrap_content"

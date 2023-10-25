@@ -3,8 +3,6 @@ package com.project.heyboardgame.main
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -12,13 +10,9 @@ import com.project.heyboardgame.R
 import com.project.heyboardgame.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
-    private val viewModel : MainViewModel by viewModels() // viewModel
     private lateinit var binding : ActivityMainBinding // viewBinding
-
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,10 +26,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNavView.setupWithNavController(navController)
 
         showHideBottomNav()
-
-        viewModel.requestMyProfile(onErrorAction = {
-            Toast.makeText(this, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-        })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -47,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             // 바텀 네비게이션이 표시되는 Fragment
             if(destination.id == R.id.homeFragment || destination.id == R.id.recommendFragment || destination.id == R.id.profileFragment
-                || destination.id == R.id.socialFragment || destination.id == R.id.matchFragment){
+                || destination.id == R.id.socialFragment || destination.id == R.id.matchFragment || destination.id == R.id.chatListFragment){
                 binding.bottomNavView.visibility = View.VISIBLE
             }
             // 바텀 네비게이션이 표시되지 않는 Fragment
@@ -56,5 +46,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

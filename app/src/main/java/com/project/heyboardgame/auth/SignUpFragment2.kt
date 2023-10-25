@@ -38,23 +38,23 @@ class SignUpFragment2 : Fragment() {
 
         // safe args 사용해서 SignUpFragment1에서 email, password, nickname 받아오기
         val args: SignUpFragment2Args by navArgs()
-        val signUpTmpData: SignUpData = args.signUpData
+        val signUpTmpData = args.signUpData
 
         val email = signUpTmpData.email
         val password = signUpTmpData.password
         val nickname = signUpTmpData.nickname
 
         val genreList = mutableListOf<SignUpItem>()
-        genreList.add(SignUpItem(R.drawable.icon_strategy, "전략", 1, false))
-        genreList.add(SignUpItem(R.drawable.icon_party, "파티", 2, false))
-        genreList.add(SignUpItem(R.drawable.icon_simple, "단순", 3, false))
-        genreList.add(SignUpItem(R.drawable.icon_card, "카드", 4, false))
-        genreList.add(SignUpItem(R.drawable.icon_family, "가족", 5, false))
-        genreList.add(SignUpItem(R.drawable.icon_kids, "키즈", 6, false))
-        genreList.add(SignUpItem(R.drawable.icon_war, "전쟁", 7, false))
-        genreList.add(SignUpItem(R.drawable.icon_world, "세계관", 8, false))
+        genreList.add(SignUpItem(R.drawable.icon_world, "세계관", 1, false))
+        genreList.add(SignUpItem(R.drawable.icon_strategy, "전략", 2, false))
+        genreList.add(SignUpItem(R.drawable.icon_war, "전쟁", 3, false))
+        genreList.add(SignUpItem(R.drawable.icon_family, "가족", 4, false))
+        genreList.add(SignUpItem(R.drawable.icon_license, "라이선스", 5, false))
+        genreList.add(SignUpItem(R.drawable.icon_simple, "단순", 6, false))
+        genreList.add(SignUpItem(R.drawable.icon_party, "파티", 7, false))
+        genreList.add(SignUpItem(R.drawable.icon_kids, "키즈", 8, false))
 
-        signUpRVAdapter = SignUpRVAdapter(requireContext(), genreList)
+        signUpRVAdapter = SignUpRVAdapter(genreList)
         binding.genreListRV.adapter = signUpRVAdapter
         binding.genreListRV.layoutManager = GridLayoutManager(requireContext(), 2)
 

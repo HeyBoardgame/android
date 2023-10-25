@@ -16,7 +16,6 @@ import com.project.heyboardgame.databinding.FragmentSignUp1Binding
 
 
 class SignUpFragment1 : Fragment() {
-
     // View Binding
     private var _binding : FragmentSignUp1Binding? = null
     private val binding get() = _binding!!
@@ -25,6 +24,7 @@ class SignUpFragment1 : Fragment() {
     // 각 에러 상태를 저장하는 변수들
     private var isPasswordCheckFail = false
     private var isNicknameInvalid = false
+    private var isNicknameDuplicated = false
     private var isEmailInvalid = false
     private var isEmailDuplicated = false
     private var isPasswordValid = false
@@ -47,8 +47,7 @@ class SignUpFragment1 : Fragment() {
         // 이메일 중복 확인 버튼 클릭 시 이벤트
         binding.emailCheck.setOnClickListener {
             val email = binding.email.text.toString()
-            authViewModel.checkDuplicateEmail(
-                email,
+            authViewModel.checkDuplicateEmail(email,
                 onSuccess = {
                     // 이메일 중복이 아닌 경우
                     binding.emailCheckSuccess.visibility = View.VISIBLE
@@ -61,6 +60,27 @@ class SignUpFragment1 : Fragment() {
                     binding.emailCheckSuccess.visibility = View.GONE
                     binding.emailCheckFail.visibility = View.VISIBLE
                     isEmailDuplicated = true
+                    updateNextButtonState()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+
+        binding.nicknameCheck.setOnClickListener {
+            val nickname = binding.nickname.text.toString()
+            authViewModel.checkDuplicateNickname(nickname,
+                onSuccess = {
+                    binding.nicknameCheckSuccess.visibility = View.VISIBLE
+                    binding.nicknameCheckFail.visibility = View.GONE
+                    isNicknameDuplicated = false
+                    updateNextButtonState()
+                },
+                onFailure = {
+                    binding.nicknameCheckSuccess.visibility = View.GONE
+                    binding.nicknameCheckFail.visibility = View.VISIBLE
+                    isNicknameDuplicated = true
                     updateNextButtonState()
                 },
                 onErrorAction = {
@@ -93,10 +113,10 @@ class SignUpFragment1 : Fragment() {
     // 이메일 TextWatcher
     private val emailTextWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            validateEmail(s.toString())
             binding.emailCheckSuccess.visibility = View.GONE
             binding.emailCheckFail.visibility = View.GONE
             isEmailDuplicated = true
+            validateEmail(s.toString())
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             // 생략
@@ -108,7 +128,6 @@ class SignUpFragment1 : Fragment() {
     // 비밀번호 TextWatcher
     private val passwordTextWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            validatePasswordCheck()
             if (binding.password.text.toString().length < 8) {
                 binding.passwordMinLength.visibility = View.VISIBLE
                 isPasswordValid = false
@@ -116,6 +135,7 @@ class SignUpFragment1 : Fragment() {
                 binding.passwordMinLength.visibility = View.GONE
                 isPasswordValid = true
             }
+            validatePasswordCheck()
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             // 생략
@@ -139,6 +159,9 @@ class SignUpFragment1 : Fragment() {
     // 닉네임 TextWatcher
     private val nicknameTextWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
+            binding.nicknameCheckSuccess.visibility = View.GONE
+            binding.nicknameCheckFail.visibility = View.GONE
+            isNicknameDuplicated = true
             validateNickname(s.toString())
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -188,9 +211,11 @@ class SignUpFragment1 : Fragment() {
 
         if (containsSpecialCharacters) {
             binding.nicknameInvalid.visibility = View.VISIBLE
+            binding.nicknameCheck.isEnabled = false
             isNicknameInvalid = true
         } else {
             binding.nicknameInvalid.visibility = View.GONE
+            binding.nicknameCheck.isEnabled = true
             isNicknameInvalid = false
         }
         updateNextButtonState()
@@ -207,7 +232,8 @@ class SignUpFragment1 : Fragment() {
 
     // 다음 버튼 상태 업데이트
     private fun updateNextButtonState() {
-        binding.nextBtn.isEnabled = isInputValid() && !isPasswordCheckFail && !isNicknameInvalid && !isEmailInvalid && isPasswordValid && !isEmailDuplicated
+        binding.nextBtn.isEnabled = isInputValid() && !isPasswordCheckFail && !isNicknameInvalid &&
+                !isEmailInvalid && isPasswordValid && !isEmailDuplicated && !isNicknameDuplicated
     }
 
     override fun onDestroyView() {

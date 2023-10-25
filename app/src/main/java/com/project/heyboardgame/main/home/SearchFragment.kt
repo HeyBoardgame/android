@@ -1,26 +1,29 @@
 package com.project.heyboardgame.main.home
 
-import android.content.Context
+
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.view.Window
+import android.view.WindowManager
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.SearchRVAdapter
-import com.project.heyboardgame.dataModel.SearchResultData
+import com.project.heyboardgame.dataModel.BoardGame2
 import com.project.heyboardgame.databinding.FragmentSearchBinding
 import com.project.heyboardgame.main.MainViewModel
+import com.project.heyboardgame.utils.ViewUtils
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
-
     // View Binding
     private var _binding : FragmentSearchBinding? = null
     private val binding get() = _binding!!
@@ -32,16 +35,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var isStrategyClicked = false
     private var isPartyClicked = false
     private var isSimpleClicked = false
-    private var isCardClicked = false
+    private var isLicenseClicked = false
     private var isFamilyClicked = false
     private var isKidsClicked = false
     private var isWarClicked = false
     private var isWorldClicked = false
     // 장르 ID 리스트
     private var genreIdList : MutableList<Int> = mutableListOf()
-    // 검색 결과 리스트
-    private var searchResultList = mutableListOf<SearchResultData>()
+    // 키보드 설정 변수
+    private var originalMode : Int? = null
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        originalMode = activity?.window?.getSoftInputMode()!!
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,16 +60,28 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.search.setOnQueryTextListener(searchViewTextListener)
         binding.search.isSubmitButtonEnabled = true
 
-        searchRVAdapter = SearchRVAdapter(requireContext(), searchResultList)
+        searchRVAdapter = SearchRVAdapter() // RecyclerView Adapter 초기화
         binding.searchRV.adapter = searchRVAdapter
         binding.searchRV.layoutManager = LinearLayoutManager(requireContext())
 
-        searchRVAdapter.itemClick = object : SearchRVAdapter.ItemClick {
-            override fun onClick(view: View, position: Int) {
-                val id = searchResultList[position].id
-                val action = SearchFragmentDirections.actionSearchFragmentToDetailFragment(id)
+        val (keyword, genreIdList, numOfPlayer) = mainViewModel.getCurrentSearchQuery()
+        if (keyword.isNotEmpty()) {
+            loadSearchPagingData(keyword, genreIdList, numOfPlayer)
+        }
+
+        binding.numberText.text = numOfPlayer.toString()
+        updateGenreUI(genreIdList)
+
+        searchRVAdapter.setOnItemClickListener(object : SearchRVAdapter.OnItemClickListener {
+            override fun onItemClick(item: BoardGame2) {
+                val action = SearchFragmentDirections.actionSearchFragmentToDetailFragment(item.id)
                 findNavController().navigate(action)
             }
+        })
+
+        searchRVAdapter.addLoadStateListener { loadStates ->
+            val noContentView = binding.noContent
+            ViewUtils.setNoContentListener(loadStates, noContentView, searchRVAdapter.itemCount)
         }
 
         binding.apply {
@@ -87,7 +108,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                     val numOfPlayer = seekBar?.progress
-                    Toast.makeText(requireContext(), "인원 수: $numOfPlayer", Toast.LENGTH_SHORT).show()
+                    binding.numberText.text = numOfPlayer.toString()
                 }
 
             })
@@ -134,16 +155,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 }
             }
 
-            card.setOnClickListener {
-                isCardClicked = if (isCardClicked) {
-                    card.setBackgroundColor(Color.parseColor("#DADADA"))
-                    cardIcon.setImageResource(R.drawable.icon_card)
-                    cardText.setTextColor(Color.parseColor("#FF000000"))
+            license.setOnClickListener {
+                isLicenseClicked = if (isLicenseClicked) {
+                    license.setBackgroundColor(Color.parseColor("#DADADA"))
+                    licenseIcon.setImageResource(R.drawable.icon_license)
+                    licenseText.setTextColor(Color.parseColor("#FF000000"))
                     false
                 } else {
-                    card.setBackgroundColor(Color.parseColor("#DEB4FF"))
-                    cardIcon.setImageResource(R.drawable.icon_card_color)
-                    cardText.setTextColor(Color.parseColor("#A93CFF"))
+                    license.setBackgroundColor(Color.parseColor("#DEB4FF"))
+                    licenseIcon.setImageResource(R.drawable.icon_license_color)
+                    licenseText.setTextColor(Color.parseColor("#A93CFF"))
                     true
                 }
             }
@@ -206,15 +227,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    // 키보드를 숨기는 메서드
-    private fun hideKeyboard() {
-        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        val currentFocusView = requireActivity().currentFocus
-        if (currentFocusView != null) {
-            inputMethodManager.hideSoftInputFromWindow(currentFocusView.windowToken, 0)
-        }
-    }
-
     private val searchViewTextListener: SearchView.OnQueryTextListener = object : SearchView.OnQueryTextListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             val numOfPlayer = binding.seekBar.progress
@@ -223,48 +235,33 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 binding.filterItems.visibility = View.GONE
                 binding.filterArrow.animate().setDuration(200).rotation(0f)
             }
-            hideKeyboard()
-            if (isStrategyClicked) {
+            binding.search.clearFocus()
+            if (isWorldClicked) {
                 genreIdList.add(1)
             }
-            if (isPartyClicked) {
+            if (isStrategyClicked) {
                 genreIdList.add(2)
             }
-            if (isSimpleClicked) {
+            if (isWarClicked) {
                 genreIdList.add(3)
             }
-            if (isCardClicked) {
+            if (isFamilyClicked) {
                 genreIdList.add(4)
             }
-            if (isFamilyClicked) {
+            if (isLicenseClicked) {
                 genreIdList.add(5)
             }
-            if (isKidsClicked) {
+            if (isSimpleClicked) {
                 genreIdList.add(6)
             }
-            if (isWarClicked) {
+            if (isPartyClicked) {
                 genreIdList.add(7)
             }
-            if (isWorldClicked) {
+            if (isKidsClicked) {
                 genreIdList.add(8)
             }
 
-            mainViewModel.requestSearchResult(query!!, genreIdList, numOfPlayer,
-                onSuccess = {
-                    if(it != null) { // 검색어와 일치하는 결과가 있는 경우
-                        searchRVAdapter.setNewData(it)
-                        searchResultList = it.toMutableList()
-                    } else { // 검색어와 일치하는 결과가 없는 경우
-                        Toast.makeText(requireContext(), "검색어와 일치하는 결과가 없습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                },
-                onFailure = {
-                    Toast.makeText(requireContext(), "검색에 실패하였습니다.", Toast.LENGTH_SHORT).show()
-                },
-                onErrorAction = {
-                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            )
+            loadSearchPagingData(query!!, genreIdList, numOfPlayer)
 
             return true
         }
@@ -274,8 +271,72 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
+    private fun Window.getSoftInputMode() : Int {
+        return attributes.softInputMode
+    }
+
+    private fun loadSearchPagingData(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
+        mainViewModel.loadSearchPagingData(keyword, genreIdList, numOfPlayer)
+
+        // SearchagingData Flow 관찰
+        mainViewModel.searchPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
+            viewLifecycleOwner.lifecycleScope.launch {
+                pagingDataFlow.collectLatest { pagingData ->
+                    searchRVAdapter.submitData(pagingData)
+                }
+            }
+        }
+    }
+
+    private fun updateGenreUI(genreIdList: List<Int>) {
+        if (genreIdList.contains(1)) {
+            isWorldClicked = true
+            binding.world.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.worldIcon.setImageResource(R.drawable.icon_world_color)
+            binding.worldText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(2)) {
+            isStrategyClicked = true
+            binding.strategy.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.strategyIcon.setImageResource(R.drawable.icon_strategy_color)
+            binding.strategyText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(3)) {
+            isWarClicked = true
+            binding.war.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.warIcon.setImageResource(R.drawable.icon_war_color)
+            binding.warText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(4)) {
+            binding.family.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.familyIcon.setImageResource(R.drawable.icon_family_color)
+            binding.familyText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(5)) {
+            binding.license.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.licenseIcon.setImageResource(R.drawable.icon_license_color)
+            binding.licenseText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(6)) {
+            binding.simple.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.simpleIcon.setImageResource(R.drawable.icon_simple_color)
+            binding.simpleText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(7)) {
+            binding.party.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.partyIcon.setImageResource(R.drawable.icon_party_color)
+            binding.partyText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+        if (genreIdList.contains(8)) {
+            binding.kids.setBackgroundColor(Color.parseColor("#DEB4FF"))
+            binding.kidsIcon.setImageResource(R.drawable.icon_kids_color)
+            binding.kidsText.setTextColor(Color.parseColor("#A93CFF"))
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        originalMode?.let { activity?.window?.setSoftInputMode(it) }
         _binding = null
     }
 }

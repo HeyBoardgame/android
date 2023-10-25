@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -38,7 +39,6 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
 
         // RecyclerView Adapter 초기화
         historyRVAdapter = HistoryRVAdapter()
-
         binding.bookmarkRV.adapter = historyRVAdapter
         binding.bookmarkRV.layoutManager = GridLayoutManager(requireContext(), 3)
 
@@ -78,7 +78,6 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
             }
         }
 
-        // Adapter 아이템 개수 리스너 설정
         historyRVAdapter.addLoadStateListener { loadStates ->
             val noContentView = binding.noContent
             ViewUtils.setNoContentListener(loadStates, noContentView, historyRVAdapter.itemCount)
@@ -92,7 +91,6 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmark) {
         mainViewModel.bookmarkPagingData.observe(viewLifecycleOwner) { pagingDataFlow ->
             viewLifecycleOwner.lifecycleScope.launch {
                 pagingDataFlow.collectLatest { pagingData ->
-                    // 데이터를 지우고 다시 로드
                     historyRVAdapter.submitData(PagingData.empty())
                     historyRVAdapter.submitData(pagingData)
                 }

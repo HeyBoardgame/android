@@ -18,6 +18,7 @@
 
         <!-- 프로필 이미지 -->
         <ImageView
+            android:id="@+id/profileImg"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:scaleType="fitCenter"
@@ -27,6 +28,7 @@
 
     <!-- 닉네임 -->
     <TextView
+        android:id="@+id/nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="기본닉네임"
@@ -39,6 +41,7 @@
 
     <!-- 채팅하기 -->
     <ImageButton
+        android:id="@+id/chatBtn"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:scaleType="fitXY"

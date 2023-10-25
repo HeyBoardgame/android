@@ -63,7 +63,7 @@
 
                 <ImageView
                     android:src="@drawable/default_profile_img"
-                    android:id="@+id/profileImg"
+                    android:id="@+id/myProfileImg"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:scaleType="fitCenter"/>
@@ -113,18 +113,42 @@
             android:textSize="15sp"
             android:textStyle="bold" />
 
-        <!-- 닉네임 입력창 -->
-        <EditText
-            android:id="@+id/nickname"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/custom_white"
-            android:hint="@string/nickname"
-            android:inputType="text"
-            android:paddingStart="20dp"
-            android:textSize="12sp"
-            android:maxLength="10"/>
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:gravity="center">
+
+            <!-- 닉네임 입력창 -->
+            <EditText
+                android:id="@+id/nickname"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:background="@drawable/custom_white"
+                android:hint="@string/nickname"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp"
+                android:textSize="12sp"
+                android:inputType="text"
+                android:layout_weight="4"
+                android:layout_marginEnd="5dp"
+                android:maxLength="10"/>
+
+            <!-- 닉네임 중복 확인 버튼 -->
+            <Button
+                android:id="@+id/nicknameCheckBtn"
+                android:text="@string/duplicate_check"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_color"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:enabled="false"/>
+
+        </LinearLayout>
 
         <!-- 닉네임 형식 에러 -->
         <TextView
@@ -134,6 +158,30 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:text="@string/nickname_invalid"
+            android:textColor="@color/red"
+            android:textSize="11sp"
+            android:visibility="gone"/>
+
+        <!-- 닉네임 중복 확인 성공 메세지 -->
+        <TextView
+            android:id="@+id/nicknameCheckSuccess"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/nickname_check_success"
+            android:textColor="@color/blue"
+            android:textSize="11sp"
+            android:visibility="gone"/>
+
+        <!-- 닉네임 중복 확인 실패 메세지 -->
+        <TextView
+            android:id="@+id/nicknameCheckFail"
+            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/nickname_check_fail"
             android:textColor="@color/red"
             android:textSize="11sp"
             android:visibility="gone"/>

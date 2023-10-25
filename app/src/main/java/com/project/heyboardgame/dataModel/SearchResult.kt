@@ -4,20 +4,14 @@ import com.google.gson.annotations.SerializedName
 
 data class SearchResult(
     @SerializedName("result")
-    val result: List<SearchResultData>
+    val result: SearchResultData
 )
 
 data class SearchResultData(
-    @SerializedName("boardGameId")
-    val id: Int,
-    @SerializedName("boardGameImg")
-    val image: String,
-    @SerializedName("boardGameTitle")
-    val title: String,
-    @SerializedName("boardGameGenre")
-    val genre: List<String>,
-    @SerializedName("boardGameDifficulty")
-    val difficulty: String,
-    @SerializedName("boardGameNumOfPlayer")
-    val numOfPlayer: String
+    @SerializedName("content")
+    val boardGames: List<BoardGame2>,
+    @SerializedName("prevPage")
+    val prevPage: Int?,
+    @SerializedName("nextPage")
+    val nextPage: Int?
 )

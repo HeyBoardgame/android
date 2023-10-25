@@ -40,7 +40,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         id = args.id
 
         // 화면 초기화
-        mainViewModel.requestDetail(id,
+        mainViewModel.getDetail(id,
             onSuccess = {
                 Glide.with(requireContext()).load(it.image).into(binding.detailImg) // 이미지
                 binding.starRating.text = it.starRating.toString() // 보드게임 평점
@@ -53,7 +53,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 val min = it.playerMin
                 binding.numOfPlayer.text = createPlayerString(min, max) // 인원 수
                 binding.detailDescription.text = it.description // 상세 설명
-                binding.detailStrategy.text = it.strategy // 사용 전략
+                binding.detailStrategy.text = it.strategy.toCommaSeparatedString() // 사용 전략
                 isBookmarked = it.isBookmarked
                 if (it.isBookmarked) {
                     binding.bookmarkBtn.setImageResource(R.drawable.icon_bookmark_full)
@@ -75,6 +75,16 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
         )
+
+        binding.descriptionTitle.setOnClickListener {
+            if (binding.detailDescription.visibility == View.GONE) {
+                binding.detailDescription.visibility = View.VISIBLE
+                binding.descriptionArrow.animate().setDuration(200).rotation(180f)
+            } else {
+                binding.detailDescription.visibility = View.GONE
+                binding.descriptionArrow.animate().setDuration(200).rotation(0f)
+            }
+        }
 
         // 뒤로가기 버튼
         binding.backBtn.setOnClickListener {
@@ -98,7 +108,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     }
                 )
             } else { // 찜하기가 안 되어 있었던 경우
-                mainViewModel.requestBookmark(id,
+                mainViewModel.addBookmark(id,
                     onSuccess = {
                         isBookmarked = true
                         binding.bookmarkBtn.setImageResource(R.drawable.icon_bookmark_full)
@@ -114,7 +124,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             }
         }
 
-        // 별점 남기기
+        // 평점 남기기
         binding.myRating.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
             if (isRatingCanceled) {
                 isRatingCanceled = false
@@ -138,21 +148,25 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
     }
 
-    // 별점 남기기 Dialog + 서버 통신
+    // 평점 남기기 Dialog + 서버 통신
     private fun showRatingDialog(changedRating : Float) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setTitle("별점 남기기")
-            .setMessage("별점을 남기시겠습니까?")
+        dialogBuilder.setTitle("평점 남기기")
+            .setMessage("평점을 남기시겠습니까?")
             .setPositiveButton("확인") { _, _ ->
                 val ratingData = RatingData(changedRating)
                 mainViewModel.requestRating(id, ratingData,
                     onSuccess = {
-                        Toast.makeText(requireContext(), "별점이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                        if (changedRating == 0f) {
+                            Toast.makeText(requireContext(), "등록된 평점이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(requireContext(), "평점이 성공적으로 등록되었습니다.", Toast.LENGTH_SHORT).show()
+                        }
                         currentRating = changedRating
                         isRatingCanceled = false
                     },
                     onFailure = {
-                        Toast.makeText(requireContext(), "별점 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "평점 등록에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                         isRatingCanceled = true
                         binding.myRating.rating = currentRating
                     },
