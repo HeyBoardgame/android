@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
@@ -18,7 +16,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class ChatListRVAdapter : PagingDataAdapter<ChatRoom, ChatListRVAdapter.ViewHolder>(ChatListComparator) {
+class ChatListRVAdapter(var chatRoomList: List<ChatRoom>) : RecyclerView.Adapter<ChatListRVAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image = view.findViewById<ImageView>(R.id.profileImg)
         val nickname = view.findViewById<TextView>(R.id.nickname)
@@ -26,6 +24,12 @@ class ChatListRVAdapter : PagingDataAdapter<ChatRoom, ChatListRVAdapter.ViewHold
         val timestamp = view.findViewById<TextView>(R.id.timestamp)
         val unread = view.findViewById<CardView>(R.id.unread)
         val unreadNum = view.findViewById<TextView>(R.id.unreadNum)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newData: List<ChatRoom>) {
+        chatRoomList = newData
+        notifyDataSetChanged()
     }
 
     interface OnItemClickListener {
@@ -38,25 +42,15 @@ class ChatListRVAdapter : PagingDataAdapter<ChatRoom, ChatListRVAdapter.ViewHold
         itemClickListener = listener
     }
 
-    object ChatListComparator : DiffUtil.ItemCallback<ChatRoom>() {
-        override fun areItemsTheSame(oldItem: ChatRoom, newItem: ChatRoom): Boolean {
-            return oldItem.roomId == newItem.roomId
-        }
-
-        override fun areContentsTheSame(oldItem: ChatRoom, newItem: ChatRoom): Boolean {
-            return oldItem == newItem
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatListRVAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_list, parent, false)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
+    override fun onBindViewHolder(holder: ChatListRVAdapter.ViewHolder, position: Int) {
+        val item = chatRoomList[position]
 
-        item?.let {
+        item.let {
             if (item.userInfo.image != null) {
                 Glide.with(holder.itemView.context).load(it.userInfo.image).into(holder.image)
             } else {
@@ -77,11 +71,14 @@ class ChatListRVAdapter : PagingDataAdapter<ChatRoom, ChatListRVAdapter.ViewHold
         }
     }
 
+    override fun getItemCount(): Int {
+        return chatRoomList.size
+    }
+
     private fun formatTimestamp(timestamp: String): String {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = Calendar.getInstance().time
         val parsedDate = dateFormat.parse(timestamp)
-        val diff = currentDate.time - parsedDate.time
         val currentCalendar = Calendar.getInstance()
         currentCalendar.time = currentDate
         val parsedCalendar = Calendar.getInstance()

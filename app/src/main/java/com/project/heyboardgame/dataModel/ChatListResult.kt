@@ -4,16 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class ChatListResult (
     @SerializedName("result")
-    val result: ChatListResultData
-)
-
-data class ChatListResultData (
-    @SerializedName("content")
-    val rooms: List<ChatRoom>,
-    @SerializedName("prevPage")
-    val prevPage: Int?,
-    @SerializedName("nextPage")
-    val nextPage: Int?
+    val result: List<ChatRoom>
 )
 
 data class ChatRoom (
@@ -26,5 +17,5 @@ data class ChatRoom (
     @SerializedName("createdAt")
     val timestamp: String,
     @SerializedName("unReadMessage")
-    val unreadMessage: Int?
+    var unreadMessage: Int?
 )
