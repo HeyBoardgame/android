@@ -66,7 +66,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
 
-                    val notificationId = 1
+                    val notificationId = 3 + id.toInt()
                     notificationManager.notify(notificationId, builder.build())
                 }
                 "friendRequest" -> { // 친구 요청 수신 알림
@@ -86,7 +86,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
 
-                    val notificationId = 2
+                    val notificationId = 1
                     notificationManager.notify(notificationId, builder.build())
                 }
                 "friendAccept" -> { // 친구 요청 수락 알림
@@ -106,7 +106,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
 
-                    val notificationId = 3
+                    val notificationId = 2
                     notificationManager.notify(notificationId, builder.build())
                 }
                 "rating" -> { // 평가 요청 알림
@@ -126,7 +126,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(true)
 
-                    val notificationId = 4
+                    val notificationId = 3
                     notificationManager.notify(notificationId, builder.build())
                 }
                 else -> {
