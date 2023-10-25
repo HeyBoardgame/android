@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.project.heyboardgame.R
@@ -27,7 +25,7 @@ import com.project.heyboardgame.auth.AuthActivity
 import com.project.heyboardgame.dataModel.MyProfileResultData
 import com.project.heyboardgame.databinding.FragmentProfileBinding
 import com.project.heyboardgame.main.MainViewModel
-import timber.log.Timber
+import com.project.heyboardgame.utils.GlideUtils
 
 
 class ProfileFragment : Fragment() {
@@ -81,15 +79,8 @@ class ProfileFragment : Fragment() {
         mainViewModel.getMyProfile(
             onSuccess = {
                 myNickname = it.nickname
-                if (it.profileImg != null) {
-                    myProfileImg = it.profileImg
-                    Glide.with(requireContext())
-                        .load(it.profileImg)
-                        .into(binding.myProfileImg)
-                } else {
-                    myProfileImg = ""
-                    binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
-                }
+                myProfileImg = it.profileImg ?: ""
+                GlideUtils.loadThumbnailImage(requireContext(), it.profileImg, binding.myProfileImg)
                 binding.myNickname.text = it.nickname
             },
             onFailure = {

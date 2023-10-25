@@ -8,9 +8,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.ChatRoom
+import com.project.heyboardgame.utils.GlideUtils
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -51,11 +51,7 @@ class ChatListRVAdapter(var chatRoomList: List<ChatRoom>) : RecyclerView.Adapter
         val item = chatRoomList[position]
 
         item.let {
-            if (item.userInfo.image != null) {
-                Glide.with(holder.itemView.context).load(it.userInfo.image).into(holder.image)
-            } else {
-                holder.image.setImageResource(R.drawable.default_profile_img)
-            }
+            GlideUtils.loadThumbnailImage(holder.itemView.context, it.userInfo.image, holder.image)
             holder.nickname.text = it.userInfo.nickname
             holder.lastMessage.text = it.lastMessage
             holder.timestamp.text = formatTimestamp(it.timestamp)

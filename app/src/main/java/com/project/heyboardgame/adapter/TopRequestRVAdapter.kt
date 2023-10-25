@@ -8,10 +8,10 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.utils.FriendRequestCallback
+import com.project.heyboardgame.utils.GlideUtils
 
 class TopRequestRVAdapter(var friendRequestList : List<Friend>, private val friendRequestCallback: FriendRequestCallback)
     : RecyclerView.Adapter<TopRequestRVAdapter.ViewHolder>() {
@@ -37,11 +37,7 @@ class TopRequestRVAdapter(var friendRequestList : List<Friend>, private val frie
     override fun onBindViewHolder(holder: TopRequestRVAdapter.ViewHolder, position: Int) {
         val item = friendRequestList[position]
 
-        if (item.image != null) {
-            Glide.with(holder.itemView.context).load(item.image).into(holder.image)
-        } else {
-            holder.image.setImageResource(R.drawable.default_profile_img)
-        }
+        GlideUtils.loadThumbnailImage(holder.itemView.context, item.image, holder.image)
         holder.nickname.text = item.nickname
         holder.acceptBtn.setOnClickListener {
             friendRequestCallback.onAcceptButtonClicked(item)

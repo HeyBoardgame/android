@@ -9,10 +9,10 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Chat
 import com.project.heyboardgame.dataModel.Friend
+import com.project.heyboardgame.utils.GlideUtils
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -92,11 +92,7 @@ class ChatRVAdapter(var chatList: MutableList<Chat>, private val friend: Friend)
             }
             is ChatRVAdapter.FriendMessageViewHolder -> {
                 item.let {
-                    if (friend.image != null) {
-                        Glide.with(holder.itemView.context).load(friend.image).into(holder.friendProfileImg)
-                    } else {
-                        holder.friendProfileImg.setImageResource(R.drawable.default_profile_img)
-                    }
+                    GlideUtils.loadThumbnailImage(holder.itemView.context, friend.image, holder.friendProfileImg)
                     holder.friendNickname.text = friend.nickname
                     holder.friendMessage.text = item.message
                     holder.friendMessageTime.text = formatChatTimestamp(item.timestamp)

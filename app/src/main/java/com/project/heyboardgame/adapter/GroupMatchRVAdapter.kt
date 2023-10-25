@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Friend
+import com.project.heyboardgame.utils.GlideUtils
 
 class GroupMatchRVAdapter(private val group : List<Friend>) : RecyclerView.Adapter<GroupMatchRVAdapter.ViewHolder>(){
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
@@ -24,11 +24,7 @@ class GroupMatchRVAdapter(private val group : List<Friend>) : RecyclerView.Adapt
     override fun onBindViewHolder(holder: GroupMatchRVAdapter.ViewHolder, position: Int) {
         val item = group[position]
 
-        if (item.image != null) {
-            Glide.with(holder.itemView.context).load(item.image).into(holder.image)
-        } else {
-            holder.image.setImageResource(R.drawable.default_profile_img)
-        }
+        GlideUtils.loadThumbnailImage(holder.itemView.context, item.image, holder.image)
         holder.nickname.text = item.nickname
     }
 

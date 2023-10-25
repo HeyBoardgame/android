@@ -19,18 +19,13 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.ChangeProfileData
-import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.FragmentChangeProfileBinding
 import com.project.heyboardgame.main.MainViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.project.heyboardgame.utils.GlideUtils
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -73,13 +68,7 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
 
         binding.nickname.setText(myProfileData.nickname)
         originalNickname = myProfileData.nickname
-        if (myProfileData.profileImg != null) {
-            Glide.with(requireContext())
-                .load(myProfileData.profileImg)
-                .into(binding.myProfileImg)
-        } else {
-            binding.myProfileImg.setImageResource(R.drawable.default_profile_img)
-        }
+        GlideUtils.loadThumbnailImage(requireContext(), myProfileData.profileImg, binding.myProfileImg)
         validateNickname(originalNickname)
 
         binding.nickname.addTextChangedListener(nicknameTextWatcher) // 닉네임 입력창에 TextWatcher 추가

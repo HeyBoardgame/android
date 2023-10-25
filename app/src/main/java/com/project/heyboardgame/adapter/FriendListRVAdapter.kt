@@ -10,10 +10,10 @@ import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.main.social.SocialFragmentDirections
+import com.project.heyboardgame.utils.GlideUtils
 
 class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHolder>(FriendListComparator) {
 
@@ -42,11 +42,7 @@ class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHo
         val item = getItem(position)
 
         item?.let {
-            if (item.image != null) {
-                Glide.with(holder.itemView.context).load(it.image).into(holder.image)
-            } else {
-                holder.image.setImageResource(R.drawable.default_profile_img)
-            }
+            GlideUtils.loadThumbnailImage(holder.itemView.context, it.image, holder.image)
             holder.nickname.text = it.nickname
 
             holder.chatBtn.setOnClickListener {
