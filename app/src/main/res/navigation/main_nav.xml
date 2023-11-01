@@ -52,8 +52,8 @@
                 app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
         </action>
         <action
-            android:id="@+id/action_recommendFragment_to_recListFragment"
-            app:destination="@id/recListFragment"
+            android:id="@+id/action_recommendFragment_to_recTimelineFragment"
+            app:destination="@id/recTimelineFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -207,6 +207,17 @@
         <argument
             android:name="id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detailFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="friend"
+                app:argType="com.project.heyboardgame.dataModel.Friend" />
+        </action>
     </fragment>
     <fragment
         android:id="@+id/addFriendFragment"
@@ -346,6 +357,30 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="integer" />
+        </action>
+        <argument
+            android:name="timelineId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/recTimelineFragment"
+        android:name="com.project.heyboardgame.main.recommend.RecTimelineFragment"
+        android:label="fragment_rec_timeline"
+        tools:layout="@layout/fragment_rec_timeline" >
+        <action
+            android:id="@+id/action_recTimelineFragment_to_recListFragment"
+            app:destination="@id/recListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="timelineId"
+                app:argType="integer" />
+        </action>
     </fragment>
 </navigation>

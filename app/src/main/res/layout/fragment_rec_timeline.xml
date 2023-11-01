@@ -4,7 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".main.recommend.RecListFragment">
+    tools:context=".main.recommend.RecTimelineFragment">
+
+    <!-- NO CONTENT -->
+    <LinearLayout
+        android:id="@+id/noContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginBottom="10dp"
+            android:src="@drawable/no_content_rec_list" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_content_recommend_text1"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_content_recommend_text2"
+            android:textColor="@color/detailColor"
+            android:textSize="12sp" />
+
+    </LinearLayout>
 
     <!-- 뒤로가기 버튼 -->
     <ImageButton
@@ -23,7 +60,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/rec_list"
+        android:text="@string/rec_timeline"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -32,9 +69,9 @@
         app:layout_constraintStart_toEndOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <!-- 추천 결과 리스트 -->
+    <!-- 최근 매칭 타임라인 리스트 -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/matchResultListRV"
+        android:id="@+id/timelineRV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

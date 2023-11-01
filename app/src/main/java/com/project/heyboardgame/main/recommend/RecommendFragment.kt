@@ -99,8 +99,8 @@ class RecommendFragment : Fragment(), SensorEventListener {
             findNavController().navigate(R.id.action_recommendFragment_to_addFriendFragment)
         }
 
-        binding.recordListBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_recommendFragment_to_recListFragment)
+        binding.recommendHistoryBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_recommendFragment_to_recTimelineFragment)
         }
 
         getMyLocation()

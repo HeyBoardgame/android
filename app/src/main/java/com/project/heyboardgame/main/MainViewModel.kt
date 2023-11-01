@@ -27,12 +27,14 @@ import com.project.heyboardgame.dataModel.MyProfileResultData
 import com.project.heyboardgame.dataModel.PersonalRecResultData
 import com.project.heyboardgame.dataModel.RatedResultData
 import com.project.heyboardgame.dataModel.RatingData
+import com.project.heyboardgame.dataModel.Timeline
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.paging.BookmarkPagingSource
 import com.project.heyboardgame.paging.FriendListPagingSource
 import com.project.heyboardgame.paging.FriendRequestPagingSource
 import com.project.heyboardgame.paging.RatedPagingSource
 import com.project.heyboardgame.paging.SearchPagingSource
+import com.project.heyboardgame.paging.TimelinePagingSource
 import com.project.heyboardgame.retrofit.Api
 import com.project.heyboardgame.retrofit.RetrofitClient
 import kotlinx.coroutines.flow.Flow
@@ -66,9 +68,9 @@ class MainViewModel : ViewModel() {
     private var currentSearchKeyword = ""
     private var currentGenreIdList = emptyList<Int>()
     private var currentNumOfPlayer = 0
-    // 채팅방 대화 LiveData
-    private val _chatPagingData = MutableLiveData<Flow<PagingData<Chat>>>()
-    val chatPagingData: LiveData<Flow<PagingData<Chat>>> = _chatPagingData
+    // 그룹 추천 타임라인 목록 LiveData
+    private val _timelinePagingData = MutableLiveData<Flow<PagingData<Timeline>>>()
+    val timelinePagingData: LiveData<Flow<PagingData<Timeline>>> = _timelinePagingData
     // googleLogined LiveData
     private val _googleLogined = MutableLiveData<Boolean>()
     val googleLogined : LiveData<Boolean>
@@ -448,22 +450,6 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
-    // 추천 받았던 보드게임 요청하는 함수 (RecListFragment)
-    fun requestRecommendedList(onSuccess: (groupRecommendResultData: GroupRecommendResultData) -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
-        try {
-            val response = api.requestRecommendedList()
-            if (response.isSuccessful) {
-                val groupRecommendResult = response.body()
-                groupRecommendResult?.let {
-                    onSuccess.invoke(it.result)
-                }
-            } else {
-                onFailure.invoke(response.code())
-            }
-        } catch(e: Exception) {
-            onErrorAction.invoke()
-        }
-    }
     // 채팅 대화 페이징 (ChatFragment)
     fun getChatting(id: Int, pageNum: Int?, size: Int, onSuccess: (chatResultData: ChatResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
@@ -473,6 +459,32 @@ class MainViewModel : ViewModel() {
                 chatResult?.let {
                     onSuccess.invoke(it.result)
                 }
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
+    // 그룹 추천 타임라인 페이징 (RecTimelineFragment)
+    fun loadTimelinePagingData() {
+        val size = 20
+        val pagingDataFlow = Pager(
+            config = PagingConfig(pageSize = size, initialLoadSize = 10),
+            pagingSourceFactory = { TimelinePagingSource(api, size) }
+        ).flow
+
+        _timelinePagingData.value = pagingDataFlow
+    }
+    // 추천 받았던 보드게임 요청하는 함수 (RecListFragment)
+    fun requestRecommendedList(timelineId: Int, onSuccess: (groupRecommendResultData: GroupRecommendResultData) -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestRecommendedList(timelineId)
+            if (response.isSuccessful) {
+                val groupRecommendResult = response.body()
+                groupRecommendResult?.let {
+                    onSuccess.invoke(it.result)
+                }
+            } else {
+                onFailure.invoke(response.code())
             }
         } catch(e: Exception) {
             onErrorAction.invoke()

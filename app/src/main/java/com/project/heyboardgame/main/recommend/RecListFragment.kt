@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.MatchResRVAdapter
@@ -30,20 +31,19 @@ class RecListFragment : Fragment(R.layout.fragment_rec_list) {
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         _binding = FragmentRecListBinding.bind(view)
 
+        val args: RecListFragmentArgs by navArgs()
+        val timelineId = args.timelineId
+
         matchResRVAdapter = MatchResRVAdapter(recommends)
 
-        mainViewModel.requestRecommendedList(
+        mainViewModel.requestRecommendedList(timelineId,
             onSuccess = {
                 matchResRVAdapter.updateData(it.recommendations)
                 binding.matchResultListRV.adapter = matchResRVAdapter
                 binding.matchResultListRV.layoutManager = LinearLayoutManager(requireContext())
             },
             onFailure = {
-                if (it == 404) {
-                    binding.noContent.visibility = View.VISIBLE
-                } else {
-                    Toast.makeText(requireContext(), "추천 목록 불러오기에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
+                Toast.makeText(requireContext(), "추천 목록 불러오기에 실패했습니다.", Toast.LENGTH_SHORT).show()
             },
             onErrorAction = {
                 Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()

@@ -27,6 +27,7 @@ import com.project.heyboardgame.dataModel.RefreshResult
 import com.project.heyboardgame.dataModel.SearchResult
 import com.project.heyboardgame.dataModel.SignUpData
 import com.project.heyboardgame.dataModel.TempPasswordData
+import com.project.heyboardgame.dataModel.TimelineResult
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -156,6 +157,9 @@ interface Api {
     @POST("recommends/group") // 그룹 추천 결과 요청
     suspend fun requestGroupRecommend(@Body groupRecommendData: GroupRecommendData): Response<GroupRecommendResult>
 
-    @GET("recommends/group/history") // 그룹 추천 기록 조회
-    suspend fun requestRecommendedList(): Response<GroupRecommendResult>
+    @GET("recommends/group/history") // 그룹 추천 타임라인 요청
+    suspend fun requestRecommendTimeline(@Query("page") pageNum: Int?, @Query("size") size: Int): Response<TimelineResult>
+
+    @GET("recommends/group/history/details") // 그룹 추천 기록 조회
+    suspend fun requestRecommendedList(@Query("id") id: Int): Response<GroupRecommendResult>
 }
