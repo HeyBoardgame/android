@@ -335,7 +335,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginBottom="15dp">
 
                 <!-- 보드게임 상세설명 타이틀 -->
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -377,6 +378,211 @@
                     android:paddingBottom="20dp"
                     android:lineSpacingExtra="10dp"
                     android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <!-- 친구들의 평가 -->
+            <LinearLayout
+                android:id="@+id/friendsRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="10dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:text="@string/friends_rating"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_marginBottom="10dp">
+
+                    <!-- BEST 평가 친구 -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/bestRatingFriend"
+                        android:layout_weight="1">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardView1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:cardCornerRadius="50dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:id="@+id/bestProfileImg"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/default_profile_img" />
+
+                        </androidx.cardview.widget.CardView>
+
+                        <LinearLayout
+                            android:id="@+id/thumbsUp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="50dp"
+                            android:layout_marginTop="40dp"
+                            android:elevation="10dp"
+                            android:orientation="vertical"
+                            app:layout_constraintStart_toStartOf="@+id/cardView1"
+                            app:layout_constraintTop_toTopOf="@+id/cardView1"
+                            app:layout_constraintBottom_toTopOf="@+id/bestNickname">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_thumbs_up"
+                                android:layout_marginBottom="3dp"/>
+
+                            <TextView
+                                android:id="@+id/bestRate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <!-- 닉네임 -->
+                        <TextView
+                            android:id="@+id/bestNickname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:layout_marginBottom="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/thumbsUp"
+                            app:layout_constraintBottom_toTopOf="@+id/askBestReview"/>
+
+                        <Button
+                            android:id="@+id/askBestReview"
+                            android:layout_width="80dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/button_color"
+                            android:text="@string/ask_review"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/bestNickname" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <!-- WORST 평가 친구 -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/worstRatingFriend"
+                        android:layout_weight="1">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:cardCornerRadius="50dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <ImageView
+                                android:id="@+id/worstProfileImg"
+                                android:layout_width="70dp"
+                                android:layout_height="70dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/default_profile_img" />
+
+                        </androidx.cardview.widget.CardView>
+
+                        <LinearLayout
+                            android:id="@+id/thumbsDown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="50dp"
+                            android:layout_marginTop="40dp"
+                            android:elevation="10dp"
+                            android:orientation="vertical"
+                            app:layout_constraintStart_toStartOf="@+id/cardView2"
+                            app:layout_constraintTop_toTopOf="@+id/cardView2"
+                            app:layout_constraintBottom_toTopOf="@+id/worstNickname">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/icon_thumbs_down"
+                                android:layout_marginBottom="3dp"/>
+
+                            <TextView
+                                android:id="@+id/worstRate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="2.5"
+                                android:textColor="@color/black"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <!-- 닉네임 -->
+                        <TextView
+                            android:id="@+id/worstNickname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="김액옹"
+                            android:textColor="@color/black"
+                            android:textSize="15sp"
+                            android:layout_marginBottom="10dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/thumbsDown"
+                            app:layout_constraintBottom_toTopOf="@+id/askWorstReview"/>
+
+                        <Button
+                            android:id="@+id/askWorstReview"
+                            android:layout_width="80dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/button_color"
+                            android:text="@string/ask_review"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="12sp"
+                            android:layout_marginHorizontal="30dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/worstNickname" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 

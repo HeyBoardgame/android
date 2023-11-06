@@ -10,25 +10,31 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.project.heyboardgame.R
+import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.databinding.FragmentDetailBinding
 import com.project.heyboardgame.main.MainViewModel
+import com.project.heyboardgame.utils.GlideUtils
+import timber.log.Timber
 
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
-
     // View Binding
     private var _binding : FragmentDetailBinding? = null
     private val binding get() = _binding!!
     // View Model
     private lateinit var mainViewModel: MainViewModel
     // 보드게임 ID
-    private var id : Int = 0
+    private var id : Long = 0
     // 찜 여부
     private var isBookmarked : Boolean = false
     // 별점 관련 변수
+    private var isFirstTime = true
     private var currentRating = 0f
     private var isRatingCanceled = false
+    // 친구 아이디
+    private lateinit var bestRatingFriend : Friend
+    private lateinit var worstRatingFriend : Friend
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,30 +48,53 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         // 화면 초기화
         mainViewModel.getDetail(id,
             onSuccess = {
-                Glide.with(requireContext()).load(it.image).into(binding.detailImg) // 이미지
-                binding.starRating.text = it.starRating.toString() // 보드게임 평점
-                binding.title.text = it.title // 보드게임 이름
-                binding.genre.text = it.genre.toCommaSeparatedString() // 장르
-                binding.theme.text = it.theme.toCommaSeparatedString() // 테마
-                binding.difficulty.text = it.difficulty // 난이도
-                binding.timeRequired.text = it.timeRequired.toString() // 소요시간
-                val max = it.playerMax
-                val min = it.playerMin
+                // 보드게임 정보 세팅
+                Glide.with(requireContext()).load(it.boardGameDetail.image).into(binding.detailImg) // 이미지
+//                binding.starRating.text = it.boardGameDetail.starRating.toString() // 보드게임 평점
+                binding.title.text = it.boardGameDetail.title // 보드게임 이름
+                binding.genre.text = it.boardGameDetail.genre.toCommaSeparatedString() // 장르
+                binding.theme.text = it.boardGameDetail.theme.toCommaSeparatedString() // 테마
+                binding.difficulty.text = it.boardGameDetail.difficulty // 난이도
+                binding.timeRequired.text = it.boardGameDetail.playTime.toString() // 소요시간
+                val max = it.boardGameDetail.playerMax
+                val min = it.boardGameDetail.playerMin
                 binding.numOfPlayer.text = createPlayerString(min, max) // 인원 수
-                binding.detailDescription.text = it.description // 상세 설명
-                binding.detailStrategy.text = it.strategy.toCommaSeparatedString() // 사용 전략
-                isBookmarked = it.isBookmarked
-                if (it.isBookmarked) {
+                binding.detailDescription.text = it.boardGameDetail.description // 상세 설명
+                binding.detailStrategy.text = it.boardGameDetail.strategy.toCommaSeparatedString() // 사용 전략
+                isBookmarked = it.myDetail.isBookmarked
+                if (it.boardGameDetail.translated == "YES") {
+                    binding.translated.text = "O"
+                } else {
+                    binding.translated.text = "X"
+                }
+                // 내 정보 세팅
+                if (it.myDetail.isBookmarked) {
                     binding.bookmarkBtn.setImageResource(R.drawable.icon_bookmark_full)
                 } else {
                     binding.bookmarkBtn.setImageResource(R.drawable.icon_bookmark_empty)
                 }
-                currentRating = it.myRating.toFloat()
-                binding.myRating.rating = it.myRating.toFloat()
-                if (it.translated == "YES") {
-                    binding.translated.text = "O"
+                if (it.myDetail.myRating != null) {
+                    currentRating = it.myDetail.myRating.toFloat()
+                    binding.myRating.rating = it.myDetail.myRating.toFloat()
+                    isFirstTime = false
                 } else {
-                    binding.translated.text = "X"
+                    currentRating = 0F
+                    binding.myRating.rating = 0F
+                    isFirstTime = false
+                }
+                // 친구 정보 세팅
+                if (it.bestRatingFriend != null && it.worstRatingFriend != null) {
+                    binding.friendsRating.visibility = View.VISIBLE
+                    bestRatingFriend = Friend(it.bestRatingFriend.friendId, it.bestRatingFriend.image, it.bestRatingFriend.nickname)
+                    worstRatingFriend = Friend(it.worstRatingFriend.friendId, it.worstRatingFriend.image, it.worstRatingFriend.nickname)
+                    GlideUtils.loadThumbnailImage(requireContext(), it.bestRatingFriend.image, binding.bestProfileImg)
+                    GlideUtils.loadThumbnailImage(requireContext(), it.worstRatingFriend.image, binding.worstProfileImg)
+                    binding.bestNickname.text = it.bestRatingFriend.nickname
+                    binding.worstNickname.text = it.worstRatingFriend.nickname
+                    binding.bestRate.text = it.bestRatingFriend.rating.toString()
+                    binding.worstRate.text = it.worstRatingFriend.rating.toString()
+                } else {
+                    binding.friendsRating.visibility = View.GONE
                 }
             },
             onFailure = {
@@ -89,6 +118,16 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         // 뒤로가기 버튼
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
+        }
+
+        binding.askBestReview.setOnClickListener {
+            val action = DetailFragmentDirections.actionDetailFragmentToChatFragment(bestRatingFriend)
+            findNavController().navigate(action)
+        }
+
+        binding.askWorstReview.setOnClickListener {
+            val action = DetailFragmentDirections.actionDetailFragmentToChatFragment(worstRatingFriend)
+            findNavController().navigate(action)
         }
 
         // 찜하기 버튼
@@ -126,10 +165,12 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         // 평점 남기기
         binding.myRating.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            if (isRatingCanceled) {
-                isRatingCanceled = false
-            } else {
-                showRatingDialog(rating)
+            if (!isFirstTime) {
+                if (isRatingCanceled) {
+                    isRatingCanceled = false
+                } else {
+                    showRatingDialog(rating)
+                }
             }
         }
     }

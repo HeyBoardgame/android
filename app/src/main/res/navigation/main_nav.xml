@@ -25,7 +25,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="id"
-                app:argType="integer"/>
+                app:argType="long"/>
         </action>
     </fragment>
     <fragment
@@ -179,7 +179,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="id"
-                app:argType="integer" />
+                app:argType="long" />
         </action>
     </fragment>
     <fragment
@@ -196,7 +196,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="id"
-                app:argType="integer"/>
+                app:argType="long"/>
         </action>
     </fragment>
     <fragment
@@ -204,9 +204,6 @@
         android:name="com.project.heyboardgame.main.home.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail">
-        <argument
-            android:name="id"
-            app:argType="integer" />
         <action
             android:id="@+id/action_detailFragment_to_chatFragment"
             app:destination="@id/chatFragment"
@@ -218,6 +215,9 @@
                 android:name="friend"
                 app:argType="com.project.heyboardgame.dataModel.Friend" />
         </action>
+        <argument
+            android:name="id"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/addFriendFragment"
@@ -281,7 +281,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="id"
-                app:argType="integer" />
+                app:argType="long" />
         </action>
     </fragment>
     <fragment
@@ -298,7 +298,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="id"
-                app:argType="integer" />
+                app:argType="long" />
         </action>
         <action
             android:id="@+id/action_ratedFragment_to_specificRateFragment"
@@ -326,7 +326,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="id"
-                app:argType="integer" />
+                app:argType="long" />
         </action>
         <argument
             android:name="score"
@@ -360,11 +360,11 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="id"
-                app:argType="integer" />
+                app:argType="long" />
         </action>
         <argument
             android:name="timelineId"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/recTimelineFragment"
@@ -380,7 +380,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim">
             <argument
                 android:name="timelineId"
-                app:argType="integer" />
+                app:argType="long" />
         </action>
     </fragment>
 </navigation>
