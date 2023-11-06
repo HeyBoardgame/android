@@ -14,27 +14,26 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
 import com.project.heyboardgame.R
 import com.project.heyboardgame.adapter.ChatRVAdapter
 import com.project.heyboardgame.dataModel.Chat
-import com.project.heyboardgame.dataModel.ChatData
 import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.dataStore.MyDataStore
 import com.project.heyboardgame.databinding.FragmentChatBinding
 import com.project.heyboardgame.main.MainViewModel
-import com.project.heyboardgame.websocket.MyWebSocketListener
-import com.project.heyboardgame.websocket.WebSocketCallback
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.WebSocket
+import org.json.JSONObject
 import timber.log.Timber
+import ua.naiksoftware.stomp.Stomp
+import ua.naiksoftware.stomp.StompClient
+import ua.naiksoftware.stomp.dto.LifecycleEvent
+import ua.naiksoftware.stomp.dto.StompHeader
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 
-class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
+class ChatFragment : Fragment(R.layout.fragment_chat) {
     // View Binding
     private var _binding : FragmentChatBinding? = null
     private val binding get() = _binding!!
@@ -44,14 +43,21 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
     private val myDataStore : MyDataStore = MyDataStore()
     // Adapter
     private lateinit var chatRVAdapter: ChatRVAdapter
-    // 소켓
-    private lateinit var webSocket: WebSocket
     // 친구 정보
     private lateinit var friendInfo: Friend
     // 채팅
     private var currentChatList: MutableList<Chat> = mutableListOf()
     private var nextPage: Int? = 0
     private var isRequested: Boolean = false
+    // 액세스 토큰
+    private var accessToken: String = ""
+    // 페이징 크기
+    private val size = 30
+    // STOMP
+    private lateinit var stompClient : StompClient
+    private lateinit var stompConnection: Disposable
+    private lateinit var topic: Disposable
+    private var isPaused = false
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,7 +68,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
         val args : ChatFragmentArgs by navArgs()
         friendInfo = args.friend
 
-        val accessToken = runBlocking { myDataStore.getAccessToken() }
+        accessToken = runBlocking { myDataStore.getAccessToken() }
 
         binding.friendNickname.text = friendInfo.nickname
 
@@ -73,7 +79,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
             stackFromEnd = true
         }
 
-        mainViewModel.getChatting(friendInfo.id, 0, 15,
+        mainViewModel.getChatting(friendInfo.id, 0, size,
             onSuccess = {
                 currentChatList.addAll(it.content)
                 chatRVAdapter.addAll(it.content as MutableList<Chat>)
@@ -115,14 +121,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
             }
         })
 
-        val webSocketUrl = "ws://13.125.211.203:8080/api/v1/chats/send-message/${friendInfo.id}"
-        val webSocketListener = MyWebSocketListener(this)
-        val request = Request.Builder()
-            .url(webSocketUrl)
-            .header("Authorization", "Bearer $accessToken")
-            .build()
-        val okHttpClient = OkHttpClient()
-        webSocket = okHttpClient.newWebSocket(request, webSocketListener)
+        connectStomp()
 
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
@@ -147,7 +146,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
 
     private fun loadNextPage(pageNum: Int?) {
         if (pageNum != null) {
-            mainViewModel.getChatting(friendInfo.id, pageNum, 15,
+            mainViewModel.getChatting(friendInfo.id, pageNum, size,
                 onSuccess = {
                     currentChatList.addAll(it.content)
                     chatRVAdapter.addAll(it.content as MutableList<Chat>)
@@ -180,39 +179,95 @@ class ChatFragment : Fragment(R.layout.fragment_chat), WebSocketCallback {
         }
     }
 
+    private fun connectStomp() {
+        val url = "ws://13.125.211.203:8080/api/v1/chats/connect/${friendInfo.id}"
+        stompClient =  Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
+
+        val headerList = arrayListOf<StompHeader>()
+        headerList.add(StompHeader("Authorization", "Bearer $accessToken"))
+        stompClient.connect(headerList)
+
+        topic = stompClient.topic("/sub/send-message/${friendInfo.id}").subscribe { topicMessage ->
+            Timber.d("${topicMessage.payload}")
+            val jsonObject = JSONObject(topicMessage.payload)
+            val message = jsonObject.getString("msg")
+            Timber.d("${message}")
+
+            receiveMessage(topicMessage.payload)
+        }
+
+        stompConnection = stompClient.lifecycle().subscribe { lifecycleEvent ->
+            when (lifecycleEvent.type) {
+                LifecycleEvent.Type.OPENED -> {
+                    Timber.d("Open")
+                }
+                LifecycleEvent.Type.CLOSED -> {
+                    Timber.d("Closed")
+
+                }
+                LifecycleEvent.Type.ERROR -> {
+                    Timber.d("Error: ${lifecycleEvent.exception}")
+                }
+                else ->{
+                    Timber.d("Else: ${lifecycleEvent.message}")
+                }
+            }
+        }
+    }
+
     private fun sendMessage(message: String) {
         val currentTime = System.currentTimeMillis()
         val dataFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
         val formattedTime = dataFormat.format(currentTime)
 
-        val chatMessage = ChatData(message = message, timestamp = formattedTime)
-        val jsonMessage = Gson().toJson(chatMessage)
-        if (webSocket.send(jsonMessage)) {
-            val newChat = Chat(id = 0, message = message, timestamp = formattedTime, isMyMessage = true)
-            activity?.runOnUiThread {
-                chatRVAdapter.add(newChat)
-                scrollToPositionOnMainThread()
-            }
-            binding.chatEditText.text.clear()
-        } else {
-            // 메시지 전송 실패 처리
-            Timber.e("Failed to send message")
+        val data = JSONObject()
+        data.put("msg", message)
+        data.put("timeStamp", formattedTime)
+        data.put("accessToken", accessToken)
+
+        stompClient.send("/pub/send-message/${friendInfo.id}", data.toString()).subscribe()
+
+        val newChat = Chat(id = 0, message = message, timestamp = formattedTime, isMyMessage = true)
+        activity?.runOnUiThread {
+            chatRVAdapter.add(newChat)
+            scrollToPositionOnMainThread()
+        }
+        binding.chatEditText.text.clear()
+    }
+
+    private fun receiveMessage(message: String) {
+        val currentTime = System.currentTimeMillis()
+        val dataFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
+        val formattedTime = dataFormat.format(currentTime)
+
+        val newChat = Chat(id = 0, message = message, timestamp = formattedTime, isMyMessage = false)
+        activity?.runOnUiThread {
+            chatRVAdapter.add(newChat)
+            scrollToPositionOnMainThread()
         }
     }
 
-    override fun onMessageReceived(senderId: Int, message: String, timestamp: String) {
-        if (senderId == friendInfo.id) {
-            val newChat = Chat(id = 0, message = message, timestamp = timestamp, isMyMessage = false)
-            activity?.runOnUiThread {
-                chatRVAdapter.add(newChat)
-                scrollToPositionOnMainThread()
-            }
+    override fun onPause() {
+        super.onPause()
+        isPaused = true
+        stompClient.disconnect()
+        stompConnection.dispose()
+        topic.dispose()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isPaused) {
+            isPaused = false
+            connectStomp()
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        stompClient.disconnect()
+        stompConnection.dispose()
+        topic.dispose()
         _binding = null
-        webSocket.close(1000, "Fragment destroyed")
     }
 }

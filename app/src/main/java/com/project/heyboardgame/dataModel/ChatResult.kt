@@ -18,7 +18,7 @@ data class ChatResultData (
 
 data class Chat (
     @SerializedName("id") // 메세지 고유 값
-    val id: Int,
+    val id: Long,
     @SerializedName("message")
     val message: String,
     @SerializedName("createdAt")

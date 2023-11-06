@@ -40,6 +40,7 @@ class ChatRVAdapter(var chatList: MutableList<Chat>, private val friend: Friend)
         val myMessageTime = view.findViewById<TextView>(R.id.myMessageTime)
         val dateSeparator = view.findViewById<ConstraintLayout>(R.id.dateSeparator)
         val date = view.findViewById<TextView>(R.id.date)
+        val unreadSign = view.findViewById<TextView>(R.id.unreadSign)
     }
 
     inner class FriendMessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -53,7 +54,7 @@ class ChatRVAdapter(var chatList: MutableList<Chat>, private val friend: Friend)
 
     override fun getItemViewType(position: Int): Int {
         val item = chatList[position]
-        return if (item?.isMyMessage!!) {
+        return if (item.isMyMessage) {
             VIEW_TYPE_MY_MESSAGE
         } else {
             VIEW_TYPE_FRIEND_MESSAGE
@@ -112,11 +113,11 @@ class ChatRVAdapter(var chatList: MutableList<Chat>, private val friend: Friend)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun shouldShowDateSeparator(currentItem: Chat?, nextItem: Chat?): Boolean {
+    private fun shouldShowDateSeparator(currentItem: Chat, nextItem: Chat?): Boolean {
         if (nextItem == null) {
             return true
         }
-        val currentDate = parseDate(currentItem?.timestamp ?: "")
+        val currentDate = parseDate(currentItem.timestamp)
         val nextDate = parseDate(nextItem.timestamp)
         return currentDate != nextDate
     }
