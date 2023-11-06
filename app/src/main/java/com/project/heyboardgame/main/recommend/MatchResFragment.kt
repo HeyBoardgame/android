@@ -39,7 +39,7 @@ class MatchResFragment : Fragment(R.layout.fragment_match_res) {
         val groupMatchResult = args.groupMatchResult
 
         val seed = groupMatchResult.seed
-        val idList = mutableListOf<Int>()
+        val idList = mutableListOf<Long>()
 
         for (i in 0 until groupMatchResult.group.size) {
             val id = groupMatchResult.group[i].id

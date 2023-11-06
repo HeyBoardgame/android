@@ -18,7 +18,7 @@ data class TimelineResultData (
 
 data class Timeline (
     @SerializedName("id")
-    val timelineId: Int,
+    val timelineId: Long,
     @SerializedName("memberProfileImages")
     val memberProfileImages: List<String?>,
     @SerializedName("recommendedAt")

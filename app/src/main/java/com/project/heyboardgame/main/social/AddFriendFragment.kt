@@ -74,7 +74,7 @@ class AddFriendFragment : Fragment(R.layout.fragment_add_friend) {
         return attributes.softInputMode
     }
 
-    private fun showFriendConfirmationDialog(id: Int, nickname: String) {
+    private fun showFriendConfirmationDialog(id: Long, nickname: String) {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setTitle("친구 추가 확인")
             .setMessage("'$nickname' 님을 친구로 추가하시겠습니까?")

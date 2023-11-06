@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class GroupRecommendData (
     @SerializedName("members")
-    val idList: List<Int>,
+    val idList: List<Long>,
     @SerializedName("seed")
     val seed: Int
 )

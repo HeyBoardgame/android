@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class FriendRequestData (
     @SerializedName("id")
-    val id : Int
+    val id : Long
 )

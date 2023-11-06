@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class BoardGame (
     @SerializedName("id")
-    val id: Int,
+    val id: Long,
     @SerializedName("imagePath")
     val image: String,
     @SerializedName("name")

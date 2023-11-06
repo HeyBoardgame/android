@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.project.heyboardgame.dataModel.BoardGame2
 import com.project.heyboardgame.retrofit.Api
 
-class SearchPagingSource(private val api: Api, private val keyword: String, private val genreIdList: List<Int>,
+class SearchPagingSource(private val api: Api, private val keyword: String, private val genreIdList: List<Long>,
                          private val numOfPlayer: Int, private val size: Int) : PagingSource<Int, BoardGame2>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BoardGame2> {
         val pageNum = params.key ?: 0

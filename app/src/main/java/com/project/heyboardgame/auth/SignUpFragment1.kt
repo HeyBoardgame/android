@@ -95,7 +95,7 @@ class SignUpFragment1 : Fragment() {
                 val email = binding.email.text.toString()
                 val password = binding.password.text.toString()
                 val nickname = binding.nickname.text.toString()
-                val id = listOf<Int>()
+                val id = listOf<Long>()
 
                 val signUpData = SignUpData(email, password, nickname, id)
 

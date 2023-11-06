@@ -10,7 +10,7 @@ data class GoogleRegisterData (
     @SerializedName("nickname")
     val nickname: String,
     @SerializedName("favoriteGenreIds")
-    val id : List<Int>
+    val id : List<Long>
 )
 @Parcelize
 data class GoogleRegisterTempData (

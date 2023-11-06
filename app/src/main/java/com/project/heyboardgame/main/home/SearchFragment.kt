@@ -41,7 +41,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private var isWarClicked = false
     private var isWorldClicked = false
     // 장르 ID 리스트
-    private var genreIdList : MutableList<Int> = mutableListOf()
+    private var genreIdList : MutableList<Long> = mutableListOf()
     // 키보드 설정 변수
     private var originalMode : Int? = null
 
@@ -275,7 +275,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         return attributes.softInputMode
     }
 
-    private fun loadSearchPagingData(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
+    private fun loadSearchPagingData(keyword: String, genreIdList: List<Long>, numOfPlayer: Int) {
         mainViewModel.loadSearchPagingData(keyword, genreIdList, numOfPlayer)
 
         // SearchagingData Flow 관찰
@@ -288,7 +288,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun updateGenreUI(genreIdList: List<Int>) {
+    private fun updateGenreUI(genreIdList: List<Long>) {
         if (genreIdList.contains(1)) {
             isWorldClicked = true
             binding.world.setBackgroundColor(Color.parseColor("#DEB4FF"))

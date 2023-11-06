@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Friend (
     @SerializedName("id")
-    val id: Int,
+    val id: Long,
     @SerializedName("imagePath")
     val image: String?,
     @SerializedName("nickname")

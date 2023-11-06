@@ -66,7 +66,7 @@ class MainViewModel : ViewModel() {
     val friendRequestPagingData: LiveData<Flow<PagingData<Friend>>> = _friendRequestPagingData
     // 검색 결과 변수
     private var currentSearchKeyword = ""
-    private var currentGenreIdList = emptyList<Int>()
+    private var currentGenreIdList = emptyList<Long>()
     private var currentNumOfPlayer = 0
     // 그룹 추천 타임라인 목록 LiveData
     private val _timelinePagingData = MutableLiveData<Flow<PagingData<Timeline>>>()
@@ -166,7 +166,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 보드게임 상세 조회 (DetailFragment)
-    fun getDetail(id: Int, onSuccess: (detailResult: DetailResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun getDetail(id: Long, onSuccess: (detailResult: DetailResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.getDetail(id)
             if (response.isSuccessful) {
@@ -182,7 +182,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 보드게임 평가하기 (DetailFragment)
-    fun requestRating(id: Int, ratingData: RatingData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun requestRating(id: Long, ratingData: RatingData, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestRating(id, ratingData)
             if (response.isSuccessful) {
@@ -195,7 +195,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 보드게임 찜하기 (DetailFragment)
-    fun addBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun addBookmark(id: Long, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.addBookmark(id)
             if(response.isSuccessful) {
@@ -208,7 +208,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 보드게임 찜하기 취소 (DetailFragment)
-    fun deleteBookmark(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun deleteBookmark(id: Long, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.deleteBookmark(id)
             if (response.isSuccessful) {
@@ -257,7 +257,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 검색 결과 페이징 (SearchFragment)
-    fun loadSearchPagingData(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
+    fun loadSearchPagingData(keyword: String, genreIdList: List<Long>, numOfPlayer: Int) {
         setCurrentSearchQuery(keyword, genreIdList, numOfPlayer)
         val size = 20
         val pagingDataFlow = Pager(
@@ -268,13 +268,13 @@ class MainViewModel : ViewModel() {
         _searchPagingData.value = pagingDataFlow
     }
     // 검색 결과 저장하는 함수
-    private fun setCurrentSearchQuery(keyword: String, genreIdList: List<Int>, numOfPlayer: Int) {
+    private fun setCurrentSearchQuery(keyword: String, genreIdList: List<Long>, numOfPlayer: Int) {
         currentSearchKeyword = keyword
         currentGenreIdList = genreIdList
         currentNumOfPlayer = numOfPlayer
     }
     // 검색 결과 return하는 함수
-    fun getCurrentSearchQuery(): Triple<String, List<Int>, Int> {
+    fun getCurrentSearchQuery(): Triple<String, List<Long>, Int> {
         return Triple(currentSearchKeyword, currentGenreIdList, currentNumOfPlayer)
     }
     // 친구 목록 페이징 (SocialFragment)
@@ -314,7 +314,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 친구 요청 수락
-    fun acceptFriendRequest(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun acceptFriendRequest(id: Long, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.acceptFriendRequest(id)
             if (response.isSuccessful) {
@@ -327,7 +327,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 친구 요청 거절
-    fun declineFriendRequest(id: Int, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun declineFriendRequest(id: Long, onSuccess: () -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.declineFriendRequest(id)
             if (response.isSuccessful) {
@@ -340,7 +340,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 친구 요청 시 사용자 유효성 확인
-    fun checkFriendRequest(nickname: String, onSuccess: (id: Int) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun checkFriendRequest(nickname: String, onSuccess: (id: Long) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.checkFriendRequest(nickname)
             if (response.isSuccessful) {
@@ -451,7 +451,7 @@ class MainViewModel : ViewModel() {
         }
     }
     // 채팅 대화 페이징 (ChatFragment)
-    fun getChatting(id: Int, pageNum: Int?, size: Int, onSuccess: (chatResultData: ChatResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun getChatting(id: Long, pageNum: Int?, size: Int, onSuccess: (chatResultData: ChatResultData) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.getChatting(id, pageNum, size)
             if (response.isSuccessful) {
@@ -475,7 +475,7 @@ class MainViewModel : ViewModel() {
         _timelinePagingData.value = pagingDataFlow
     }
     // 추천 받았던 보드게임 요청하는 함수 (RecListFragment)
-    fun requestRecommendedList(timelineId: Int, onSuccess: (groupRecommendResultData: GroupRecommendResultData) -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+    fun requestRecommendedList(timelineId: Long, onSuccess: (groupRecommendResultData: GroupRecommendResultData) -> Unit, onFailure: (errorCode: Int) -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
         try {
             val response = api.requestRecommendedList(timelineId)
             if (response.isSuccessful) {

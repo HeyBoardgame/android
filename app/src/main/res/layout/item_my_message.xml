@@ -85,4 +85,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/myMessage"
         app:layout_constraintRight_toLeftOf="@+id/myMessage"/>
 
+    <TextView
+        android:id="@+id/unreadSign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:textColor="@color/purple"
+        android:textSize="12sp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/myMessageTime"
+        app:layout_constraintEnd_toStartOf="@+id/myMessage"
+        android:visibility="gone"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -86,23 +86,23 @@ interface Api {
     @GET("boardgames/search") // 보드게임 검색
     suspend fun getSearchResult(
         @Query("searchWord") keyword: String,
-        @Query("genre") genreIdList: List<Int>,
+        @Query("genre") genreIdList: List<Long>,
         @Query("player") numOfPlayer: Int,
         @Query("page") pageNum: Int?,
         @Query("size") size: Int
     ): Response<SearchResult>
 
     @GET("boardgames/{id}") // 보드게임 단건 조회
-    suspend fun getDetail(@Path("id") id: Int): Response<DetailResult>
+    suspend fun getDetail(@Path("id") id: Long): Response<DetailResult>
 
     @POST("boardgames/{id}/bookmarks") // 보드게임 찜하기
-    suspend fun addBookmark(@Path("id") id: Int): Response<Void>
+    suspend fun addBookmark(@Path("id") id: Long): Response<Void>
 
     @DELETE("boardgames/{id}/bookmarks") // 보드게임 찜하기 취소
-    suspend fun deleteBookmark(@Path("id") id: Int): Response<Void>
+    suspend fun deleteBookmark(@Path("id") id: Long): Response<Void>
 
     @PUT("boardgames/{id}/rate") // 보드게임 평가하기
-    suspend fun requestRating(@Path("id") id: Int, @Body ratingData: RatingData): Response<Void>
+    suspend fun requestRating(@Path("id") id: Long, @Body ratingData: RatingData): Response<Void>
 
     @GET("my/bookmarks") // 찜한 보드게임 목록 조회
     suspend fun getBookmarkList(@Query("sort") sort: String, @Query("page") pageNum: Int?, @Query("size") size: Int): Response<HistoryResult>
@@ -128,10 +128,10 @@ interface Api {
     suspend fun getFriendRequestList(): Response<FriendResult>
 
     @POST("friends/requests/{id}") // 친구 요청 수락
-    suspend fun acceptFriendRequest(@Path("id") id: Int): Response<Void>
+    suspend fun acceptFriendRequest(@Path("id") id: Long): Response<Void>
 
     @DELETE("friends/requests/{id}") // 친구 요청 거절
-    suspend fun declineFriendRequest(@Path("id") id: Int): Response<Void>
+    suspend fun declineFriendRequest(@Path("id") id: Long): Response<Void>
 
     @GET("friends/requests/search") // 친구 요청 시 사용자 유효성 확인
     suspend fun checkFriendRequest(@Query("nickname") nickname: String): Response<CheckRequestResult>
@@ -143,7 +143,7 @@ interface Api {
     suspend fun getChatList(): Response<ChatListResult>
 
     @GET("chats/{id}") // 채팅방 대화 조회
-    suspend fun getChatting(@Path("id") id: Int, @Query("page") pageNum: Int?, @Query("size") size: Int): Response<ChatResult>
+    suspend fun getChatting(@Path("id") id: Long, @Query("page") pageNum: Int?, @Query("size") size: Int): Response<ChatResult>
 
     @GET("recommends") // 홈화면 컨텐츠(개인추천) 조회
     suspend fun getPersonalRecommend(): Response<PersonalRecResult>
@@ -161,5 +161,5 @@ interface Api {
     suspend fun requestRecommendTimeline(@Query("page") pageNum: Int?, @Query("size") size: Int): Response<TimelineResult>
 
     @GET("recommends/group/history/details") // 그룹 추천 기록 조회
-    suspend fun requestRecommendedList(@Query("id") id: Int): Response<GroupRecommendResult>
+    suspend fun requestRecommendedList(@Query("id") id: Long): Response<GroupRecommendResult>
 }
