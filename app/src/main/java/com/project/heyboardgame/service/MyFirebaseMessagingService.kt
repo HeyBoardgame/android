@@ -39,36 +39,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val body = remoteMessage.data["body"]
 
             when (pushAlarmType) {
-                "chatting" -> { // 채팅 관련 알림
-                    val imageUrl = remoteMessage.data["image"]
-                    val profileImg : String?
-                    if (imageUrl == null) {
-                        profileImg = null
-                    } else {
-                        profileImg = imageUrl.toString()
-                    }
-                    val friendInfo = Friend(id = id!!.toInt(), image = profileImg, nickname = title!!)
-                    val bundle = bundleOf("friend" to friendInfo)
-
-                    val pendingIntent = NavDeepLinkBuilder(App.getContext())
-                        .setComponentName(MainActivity::class.java)
-                        .setGraph(R.navigation.main_nav)
-                        .setDestination(R.id.chatFragment)
-                        .setArguments(bundle)
-                        .createPendingIntent()
-
-                    val notificationManager = App.getContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-                    val builder = NotificationCompat.Builder(App.getContext(), "chatting")
-                        .setSmallIcon(R.drawable.logo)
-                        .setContentTitle(title)
-                        .setContentText(body)
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(true)
-
-                    val notificationId = 3 + id.toInt()
-                    notificationManager.notify(notificationId, builder.build())
-                }
                 "friendRequest" -> { // 친구 요청 수신 알림
                     val pendingIntent = NavDeepLinkBuilder(App.getContext())
                         .setComponentName(MainActivity::class.java)
@@ -113,7 +83,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     val pendingIntent = NavDeepLinkBuilder(App.getContext())
                         .setComponentName(MainActivity::class.java)
                         .setGraph(R.navigation.main_nav)
-                        .setDestination(R.id.recListFragment)
+                        .setDestination(R.id.recTimelineFragment)
                         .setArguments(bundleOf())
                         .createPendingIntent()
 
@@ -127,6 +97,36 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                         .setAutoCancel(true)
 
                     val notificationId = 3
+                    notificationManager.notify(notificationId, builder.build())
+                }
+                "chatting" -> { // 채팅 관련 알림
+                    val imageUrl = remoteMessage.data["image"]
+                    val profileImg : String?
+                    if (imageUrl == null) {
+                        profileImg = null
+                    } else {
+                        profileImg = imageUrl.toString()
+                    }
+                    val friendInfo = Friend(id = id!!.toLong(), image = profileImg, nickname = title!!)
+                    val bundle = bundleOf("friend" to friendInfo)
+
+                    val pendingIntent = NavDeepLinkBuilder(App.getContext())
+                        .setComponentName(MainActivity::class.java)
+                        .setGraph(R.navigation.main_nav)
+                        .setDestination(R.id.chatFragment)
+                        .setArguments(bundle)
+                        .createPendingIntent()
+
+                    val notificationManager = App.getContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+                    val builder = NotificationCompat.Builder(App.getContext(), "chatting")
+                        .setSmallIcon(R.drawable.logo)
+                        .setContentTitle(title)
+                        .setContentText(body)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true)
+
+                    val notificationId = 3 + id.toInt()
                     notificationManager.notify(notificationId, builder.build())
                 }
                 else -> {

@@ -9,7 +9,7 @@ data class ChatListResult (
 
 data class ChatRoom (
     @SerializedName("id")
-    val roomId: Int,
+    val roomId: Long,
     @SerializedName("userInfo")
     val userInfo: Friend,
     @SerializedName("lastMessage")

@@ -10,13 +10,15 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.ChatRoom
+import com.project.heyboardgame.dataModel.Friend
 import com.project.heyboardgame.utils.GlideUtils
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class ChatListRVAdapter(var chatRoomList: List<ChatRoom>) : RecyclerView.Adapter<ChatListRVAdapter.ViewHolder>() {
+class ChatListRVAdapter(var chatRoomList: MutableList<ChatRoom>) : RecyclerView.Adapter<ChatListRVAdapter.ViewHolder>() {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image = view.findViewById<ImageView>(R.id.profileImg)
         val nickname = view.findViewById<TextView>(R.id.nickname)
@@ -26,10 +28,44 @@ class ChatListRVAdapter(var chatRoomList: List<ChatRoom>) : RecyclerView.Adapter
         val unreadNum = view.findViewById<TextView>(R.id.unreadNum)
     }
 
+    fun addAll(newList: MutableList<ChatRoom>) {
+        chatRoomList.addAll(newList)
+        notifyItemRangeChanged(0, chatRoomList.size)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
-    fun updateData(newData: List<ChatRoom>) {
-        chatRoomList = newData
-        notifyDataSetChanged()
+    fun addNewRoom(roomId: Long, friend: Friend, lastMessage: String, timestamp: String) {
+        val foundItem = chatRoomList.find { it.roomId == roomId }
+
+        Timber.d("$foundItem")
+
+        if (foundItem != null) { // 기존 채팅방이 존재하는 경우
+            val position = chatRoomList.indexOf(foundItem)
+            if (position != 0) {
+                val newRoom = ChatRoom(roomId, friend, lastMessage, timestamp, foundItem.unreadMessage?.let { it + 1 } ?: 1)
+                chatRoomList.removeAt(position)
+                chatRoomList.add(0, newRoom)
+                notifyDataSetChanged()
+            } else { // 기존 채팅방이 맨 위에 있는 경우
+                val newRoom = ChatRoom(roomId, friend, lastMessage, timestamp, foundItem.unreadMessage?.let { it + 1 } ?: 1)
+                chatRoomList.removeAt(0)
+                chatRoomList.add(0, newRoom)
+                notifyDataSetChanged()
+            }
+        } else { // 새로운 채팅방이 생성된 경우
+            val newRoom = ChatRoom(roomId, friend, lastMessage, timestamp, 1)
+            chatRoomList.add(0, newRoom)
+            notifyItemInserted(0)
+        }
+    }
+
+    fun deleteAndUpdateRoom(existingRoom: ChatRoom) {
+        val position = chatRoomList.indexOf(existingRoom)
+        if (position != -1) {
+            chatRoomList.removeAt(position)
+            chatRoomList.add(0, existingRoom)
+            notifyItemMoved(position, 0)
+        }
     }
 
     interface OnItemClickListener {
