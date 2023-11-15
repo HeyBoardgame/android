@@ -18,6 +18,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
 import com.project.heyboardgame.databinding.ActivityAuthBinding
 import com.project.heyboardgame.main.MainActivity
+import com.project.heyboardgame.utils.CustomDialog
 
 
 class AuthActivity : AppCompatActivity() {
@@ -50,7 +51,7 @@ class AuthActivity : AppCompatActivity() {
         viewModel.firstRun.observe(this, Observer {
             if (it) { // 앱 처음 실행한 유저
                 createChannels()
-                requestPermissons()
+                showPermissionDialog()
 
                 viewModel.setIsFirstRun()
             }
@@ -58,11 +59,19 @@ class AuthActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun showPermissionDialog() {
+        val dialog = CustomDialog(this) {
+            requestPermissons()
+        }
+        dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun requestPermissons() {
         val permissions = arrayOf(
-            Manifest.permission.POST_NOTIFICATIONS,
+            Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.READ_MEDIA_IMAGES,
-            Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.POST_NOTIFICATIONS
         )
 
         val permissionStates = permissions.map { permission ->

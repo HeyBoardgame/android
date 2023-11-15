@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">heyboardgame</string>
+    <string name="app_name">여보게</string>
     <string name="login">로그인</string>
     <string name="email">이메일</string>
     <string name="password">비밀번호</string>
@@ -110,4 +110,16 @@
     <string name="no_content_recommend_text2">친구들과 함께 그룹 추천을 받아보세요!</string>
     <string name="friends_rating">친구들의 평가</string>
     <string name="ask_review">물어보기</string>
+    <string name="access_permission_title">앱 접근 권한 안내</string>
+    <string name="permission_required">필수 접근 권한</string>
+    <string name="permission_optional">선택 접근 권한</string>
+    <string name="location">위치</string>
+    <string name="gallery">사진/미디어/파일</string>
+    <string name="notification">알림</string>
+    <string name="confirm">확인</string>
+    <string name="location_feature">그룹 매칭</string>
+    <string name="gallery_feature">프로필 사진 등록</string>
+    <string name="notification_feature">채팅, 친구 요청, 평가 요청 알림</string>
+    <string name="guide1">•권한을 거부할 경우 해당 기능이 정상적으로 작동하지 않습니다.</string>
+    <string name="guide2">•접근 권한 변경 방법: 설정 > 여보게 > 권한</string>
 </resources>
