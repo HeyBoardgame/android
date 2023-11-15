@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import com.project.heyboardgame.App
 import com.project.heyboardgame.dataModel.TempPasswordData
 import com.project.heyboardgame.databinding.FragmentForgotPwdBinding
 

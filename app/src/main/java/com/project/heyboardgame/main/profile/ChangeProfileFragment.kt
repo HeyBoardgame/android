@@ -114,6 +114,7 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
         }
 
         binding.changeProfileBtn.setOnClickListener {
+            binding.loading.visibility = View.VISIBLE
             val filePart : MultipartBody.Part?
             if (finalImageUri == null) {
                 filePart = null
@@ -127,13 +128,16 @@ class ChangeProfileFragment : Fragment(R.layout.fragment_change_profile) {
 
             mainViewModel.changeMyProfile(filePart, changeProfileData,
                 onSuccess = {
+                    binding.loading.visibility = View.GONE
                     findNavController().popBackStack()
                     Toast.makeText(requireContext(), "프로필이 성공적으로 변경되었습니다.", Toast.LENGTH_SHORT).show()
                 },
                 onFailure = {
+                    binding.loading.visibility = View.GONE
                     Toast.makeText(requireContext(), "프로필 변경 실패", Toast.LENGTH_SHORT).show()
                 },
                 onErrorAction = {
+                    binding.loading.visibility = View.GONE
                     Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                 }
             )

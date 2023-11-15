@@ -387,7 +387,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:visibility="gone">
 
                 <TextView
@@ -408,11 +408,13 @@
                     android:layout_marginBottom="10dp">
 
                     <!-- BEST 평가 친구 -->
+
+                    <!-- WORST 평가 친구 -->
                     <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/bestRatingFriend"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:id="@+id/bestRatingFriend"
                         android:layout_weight="1">
 
                         <androidx.cardview.widget.CardView
@@ -442,16 +444,16 @@
                             android:layout_marginTop="40dp"
                             android:elevation="10dp"
                             android:orientation="vertical"
+                            app:layout_constraintBottom_toTopOf="@+id/bestNickname"
                             app:layout_constraintStart_toStartOf="@+id/cardView1"
-                            app:layout_constraintTop_toTopOf="@+id/cardView1"
-                            app:layout_constraintBottom_toTopOf="@+id/bestNickname">
+                            app:layout_constraintTop_toTopOf="@+id/cardView1">
 
                             <ImageView
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
+                                android:layout_marginBottom="3dp"
                                 android:scaleType="fitCenter"
-                                android:src="@drawable/icon_thumbs_up"
-                                android:layout_marginBottom="3dp"/>
+                                android:src="@drawable/icon_thumbs_up" />
 
                             <TextView
                                 android:id="@+id/bestRate"
@@ -468,14 +470,14 @@
                             android:id="@+id/bestNickname"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:gravity="center"
                             android:textColor="@color/black"
                             android:textSize="15sp"
-                            android:layout_marginBottom="10dp"
+                            app:layout_constraintBottom_toTopOf="@+id/askBestReview"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/thumbsUp"
-                            app:layout_constraintBottom_toTopOf="@+id/askBestReview"/>
+                            app:layout_constraintTop_toBottomOf="@+id/thumbsUp" />
 
                         <Button
                             android:id="@+id/askBestReview"
@@ -484,8 +486,8 @@
                             android:background="@drawable/button_color"
                             android:text="@string/ask_review"
                             android:textColor="@color/black"
-                            android:textStyle="bold"
                             android:textSize="12sp"
+                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
@@ -493,7 +495,6 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                    <!-- WORST 평가 친구 -->
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
