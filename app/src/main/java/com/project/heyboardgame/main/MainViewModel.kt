@@ -490,4 +490,19 @@ class MainViewModel : ViewModel() {
             onErrorAction.invoke()
         }
     }
+    fun requestRoomId(friendId: Long, onSuccess: (roomId: Long) -> Unit, onFailure: () -> Unit, onErrorAction: () -> Unit) = viewModelScope.launch {
+        try {
+            val response = api.requestRoomId(friendId)
+            if (response.isSuccessful) {
+                val roomIdResult = response.body()
+                roomIdResult?.let {
+                    onSuccess.invoke(it.result.roomId)
+                }
+            } else {
+                onFailure.invoke()
+            }
+        } catch(e: Exception) {
+            onErrorAction.invoke()
+        }
+    }
 }

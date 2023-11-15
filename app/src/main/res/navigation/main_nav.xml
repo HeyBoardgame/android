@@ -95,6 +95,9 @@
             <argument
                 android:name="friend"
                 app:argType="com.project.heyboardgame.dataModel.Friend" />
+            <argument
+                android:name="roomId"
+                app:argType="long" />
         </action>
     </fragment>
     <fragment
@@ -214,6 +217,9 @@
             <argument
                 android:name="friend"
                 app:argType="com.project.heyboardgame.dataModel.Friend" />
+            <argument
+                android:name="roomId"
+                app:argType="long" />
         </action>
         <argument
             android:name="id"
@@ -246,6 +252,9 @@
             <argument
                 android:name="friend"
                 app:argType="com.project.heyboardgame.dataModel.Friend" />
+            <argument
+                android:name="roomId"
+                app:argType="long" />
         </action>
     </fragment>
     <fragment
@@ -345,6 +354,9 @@
         <argument
             android:name="friend"
             app:argType="com.project.heyboardgame.dataModel.Friend" />
+        <argument
+            android:name="roomId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/recListFragment"

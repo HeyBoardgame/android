@@ -12,11 +12,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.project.heyboardgame.R
 import com.project.heyboardgame.dataModel.Friend
+import com.project.heyboardgame.main.MainViewModel
 import com.project.heyboardgame.main.social.SocialFragmentDirections
 import com.project.heyboardgame.utils.GlideUtils
+import timber.log.Timber
 
-class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHolder>(FriendListComparator) {
-
+class FriendListRVAdapter(private val mainViewModel: MainViewModel) : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHolder>(FriendListComparator) {
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image = view.findViewById<ImageView>(R.id.profileImg)
         val nickname = view.findViewById<TextView>(R.id.nickname)
@@ -46,10 +47,19 @@ class FriendListRVAdapter : PagingDataAdapter<Friend, FriendListRVAdapter.ViewHo
             holder.nickname.text = it.nickname
 
             holder.chatBtn.setOnClickListener {
-                val navController = Navigation.findNavController(holder.itemView)
-
-                val action = SocialFragmentDirections.actionSocialFragmentToChatFragment(item)
-                navController.navigate(action)
+                mainViewModel.requestRoomId(item.id,
+                    onSuccess = { roomId ->
+                        val navController = Navigation.findNavController(holder.itemView)
+                        val action = SocialFragmentDirections.actionSocialFragmentToChatFragment(item, roomId)
+                        navController.navigate(action)
+                    },
+                    onFailure = {
+                        Timber.d("채팅방 아이디 불러오기 실패")
+                    },
+                    onErrorAction = {
+                        Timber.d("네트워크 오류")
+                    }
+                )
             }
         }
     }

@@ -24,6 +24,7 @@ import com.project.heyboardgame.dataModel.RatedResult
 import com.project.heyboardgame.dataModel.RatingData
 import com.project.heyboardgame.dataModel.RefreshData
 import com.project.heyboardgame.dataModel.RefreshResult
+import com.project.heyboardgame.dataModel.RoomIdResult
 import com.project.heyboardgame.dataModel.SearchResult
 import com.project.heyboardgame.dataModel.SignUpData
 import com.project.heyboardgame.dataModel.TempPasswordData
@@ -162,4 +163,7 @@ interface Api {
 
     @GET("recommends/group/history/details") // 그룹 추천 기록 조회
     suspend fun requestRecommendedList(@Query("id") id: Long): Response<GroupRecommendResult>
+
+    @GET("chats/request-room/{id}") // roomId 요청
+    suspend fun requestRoomId(@Path("id") friendId: Long): Response<RoomIdResult>
 }

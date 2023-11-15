@@ -66,7 +66,7 @@ class SocialFragment : Fragment(), FriendRequestCallback {
         binding.friendRequestRV.adapter = topRequestRVAdapter
         binding.friendRequestRV.layoutManager = LinearLayoutManager(requireContext())
 
-        friendListRVAdapter = FriendListRVAdapter()
+        friendListRVAdapter = FriendListRVAdapter(mainViewModel)
         binding.friendListRV.adapter = friendListRVAdapter
         binding.friendListRV.layoutManager = LinearLayoutManager(requireContext())
 

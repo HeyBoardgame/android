@@ -74,7 +74,7 @@ class ChatListFragment : Fragment(R.layout.fragment_chat_list) {
 
         chatListRVAdapter.setOnItemClickListener(object : ChatListRVAdapter.OnItemClickListener {
             override fun onItemClick(item: ChatRoom) {
-                val action = ChatListFragmentDirections.actionChatListFragmentToChatFragment(item.userInfo)
+                val action = ChatListFragmentDirections.actionChatListFragmentToChatFragment(item.userInfo, item.roomId)
                 findNavController().navigate(action)
             }
         })

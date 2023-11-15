@@ -57,7 +57,10 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     private lateinit var stompClient : StompClient
     private lateinit var stompConnection: Disposable
     private lateinit var topic: Disposable
+    // 중복 방지 flag
     private var isPaused = false
+    // 채팅방 아이디
+    private var roomId: Long = 0
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,6 +70,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
 
         val args : ChatFragmentArgs by navArgs()
         friendInfo = args.friend
+        roomId = args.roomId
 
         accessToken = runBlocking { myDataStore.getAccessToken() }
 
@@ -180,21 +184,17 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
     }
 
     private fun connectStomp() {
-        val url = "ws://13.125.211.203:8080/api/v1/chats/connect/${friendInfo.id}"
+        val url = "ws://13.125.211.203:8080/api/v1/chats/connect/${roomId}"
         stompClient =  Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
+
+        topic = stompClient.topic("/sub/send-message/${roomId}").subscribe { stompMessage ->
+            val payload = stompMessage.payload
+            processReceivedMessage(payload)
+        }
 
         val headerList = arrayListOf<StompHeader>()
         headerList.add(StompHeader("Authorization", "Bearer $accessToken"))
         stompClient.connect(headerList)
-
-        topic = stompClient.topic("/sub/send-message/${friendInfo.id}").subscribe { topicMessage ->
-            Timber.d("${topicMessage.payload}")
-            val jsonObject = JSONObject(topicMessage.payload)
-            val message = jsonObject.getString("msg")
-            Timber.d("${message}")
-
-            receiveMessage(topicMessage.payload)
-        }
 
         stompConnection = stompClient.lifecycle().subscribe { lifecycleEvent ->
             when (lifecycleEvent.type) {
@@ -225,7 +225,7 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         data.put("timeStamp", formattedTime)
         data.put("accessToken", accessToken)
 
-        stompClient.send("/pub/send-message/${friendInfo.id}", data.toString()).subscribe()
+        stompClient.send("/pub/send-message/${roomId}", data.toString()).subscribe()
 
         val newChat = Chat(id = 0, message = message, timestamp = formattedTime, isMyMessage = true)
         activity?.runOnUiThread {
@@ -235,15 +235,22 @@ class ChatFragment : Fragment(R.layout.fragment_chat) {
         binding.chatEditText.text.clear()
     }
 
-    private fun receiveMessage(message: String) {
-        val currentTime = System.currentTimeMillis()
-        val dataFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
-        val formattedTime = dataFormat.format(currentTime)
+    private fun processReceivedMessage(payload: String) {
+        val jsonObject = JSONObject(payload)
+        val message = jsonObject.getString("msg")
+        val timestampString = jsonObject.getString("timeStamp")
+        val sender = jsonObject.getLong("sender")
 
-        val newChat = Chat(id = 0, message = message, timestamp = formattedTime, isMyMessage = false)
-        activity?.runOnUiThread {
-            chatRVAdapter.add(newChat)
-            scrollToPositionOnMainThread()
+        if (sender == friendInfo.id) {
+            val dataFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault())
+            val timestamp = dataFormat.parse(timestampString)
+            val formattedTime = dataFormat.format(timestamp!!)
+
+            val newChat = Chat(id = 0, message = message, timestamp = formattedTime, isMyMessage = false)
+            activity?.runOnUiThread {
+                chatRVAdapter.add(newChat)
+                scrollToPositionOnMainThread()
+            }
         }
     }
 
