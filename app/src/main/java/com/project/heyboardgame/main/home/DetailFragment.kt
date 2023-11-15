@@ -16,6 +16,7 @@ import com.project.heyboardgame.databinding.FragmentDetailBinding
 import com.project.heyboardgame.main.MainViewModel
 import com.project.heyboardgame.utils.GlideUtils
 import timber.log.Timber
+import kotlin.math.round
 
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
@@ -44,13 +45,13 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         val args : DetailFragmentArgs by navArgs()
         id = args.id
-
+        isFirstTime = true
         // 화면 초기화
         mainViewModel.getDetail(id,
             onSuccess = {
                 // 보드게임 정보 세팅
                 Glide.with(requireContext()).load(it.boardGameDetail.image).into(binding.detailImg) // 이미지
-//                binding.starRating.text = it.boardGameDetail.starRating.toString() // 보드게임 평점
+                binding.starRating.text = roundDecimals(it.boardGameDetail.starRating).toString()// 보드게임 평점
                 binding.title.text = it.boardGameDetail.title // 보드게임 이름
                 binding.genre.text = it.boardGameDetail.genre.toCommaSeparatedString() // 장르
                 binding.theme.text = it.boardGameDetail.theme.toCommaSeparatedString() // 테마
@@ -121,13 +122,33 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
 
         binding.askBestReview.setOnClickListener {
-            val action = DetailFragmentDirections.actionDetailFragmentToChatFragment(bestRatingFriend)
-            findNavController().navigate(action)
+            mainViewModel.requestRoomId(bestRatingFriend.id,
+                onSuccess = {
+                    val action = DetailFragmentDirections.actionDetailFragmentToChatFragment(bestRatingFriend, it)
+                    findNavController().navigate(action)
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "채팅방 아이디 불러오기에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
 
         binding.askWorstReview.setOnClickListener {
-            val action = DetailFragmentDirections.actionDetailFragmentToChatFragment(worstRatingFriend)
-            findNavController().navigate(action)
+            mainViewModel.requestRoomId(worstRatingFriend.id,
+                onSuccess = {
+                    val action = DetailFragmentDirections.actionDetailFragmentToChatFragment(worstRatingFriend, it)
+                    findNavController().navigate(action)
+                },
+                onFailure = {
+                    Toast.makeText(requireContext(), "채팅방 아이디 불러오기에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                },
+                onErrorAction = {
+                    Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            )
         }
 
         // 찜하기 버튼
@@ -180,6 +201,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         return joinToString(", ")
     }
 
+    private fun roundDecimals(value: Double): Double {
+        return round(value * 10.0) / 10.0
+    }
+
     // 인원 수 String 만드는 함수
     private fun createPlayerString(min: Int, max: Int): String {
         return if (min == max) {
@@ -216,6 +241,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                     }
                 )
             }
+            .setCancelable(false)
             .setNegativeButton("취소") { _, _ ->
                 isRatingCanceled = true
                 binding.myRating.rating = currentRating
@@ -228,5 +254,4 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         super.onDestroyView()
         _binding = null
     }
-
 }
