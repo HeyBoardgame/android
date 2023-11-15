@@ -26,6 +26,8 @@ import com.project.heyboardgame.dataModel.MyProfileResultData
 import com.project.heyboardgame.databinding.FragmentProfileBinding
 import com.project.heyboardgame.main.MainViewModel
 import com.project.heyboardgame.utils.GlideUtils
+import java.io.File
+import java.lang.Exception
 
 
 class ProfileFragment : Fragment() {
@@ -137,6 +139,7 @@ class ProfileFragment : Fragment() {
                     Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
                 }
             )
+            deleteCache(requireContext())
         }
 
         binding.changeProfile.setOnClickListener {
@@ -201,6 +204,29 @@ class ProfileFragment : Fragment() {
             }
         }
     }
+
+    private fun deleteCache(context: Context) {
+        try {
+            val dir = context.cacheDir
+            deleteDir(dir)
+        } catch (e: Exception) {}
+    }
+
+    private fun deleteDir(dir: File): Boolean {
+        if (dir != null && dir.isDirectory) {
+            val children = dir.list()
+            for (element in children) {
+                val success = deleteDir(File(dir, element))
+                if (!success) return false
+            }
+            return dir.delete()
+        }
+
+        if (dir != null && dir.isFile) return dir.delete()
+
+        return false
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
