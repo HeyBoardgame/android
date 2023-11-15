@@ -35,6 +35,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         if (notificationAllowed) {
             val pushAlarmType = remoteMessage.data["pushAlarmType"]
             val id = remoteMessage.data["id"]
+            val roomId = remoteMessage.data["roomId"]
             val title = remoteMessage.data["title"]
             val body = remoteMessage.data["body"]
 
@@ -107,8 +108,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     } else {
                         profileImg = imageUrl.toString()
                     }
+
                     val friendInfo = Friend(id = id!!.toLong(), image = profileImg, nickname = title!!)
-                    val bundle = bundleOf("friend" to friendInfo)
+                    val bundle = bundleOf("friend" to friendInfo, "roomId" to roomId!!.toLong())
 
                     val pendingIntent = NavDeepLinkBuilder(App.getContext())
                         .setComponentName(MainActivity::class.java)
