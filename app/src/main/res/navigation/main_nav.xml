@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.project.heyboardgame.main.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="long"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/recommendFragment"
+        android:name="com.project.heyboardgame.main.recommend.RecommendFragment"
+        android:label="fragment_recommend"
+        tools:layout="@layout/fragment_recommend" >
+        <action
+            android:id="@+id/action_recommendFragment_to_addFriendFragment"
+            app:destination="@id/addFriendFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_recommendFragment_to_matchFragment"
+            app:destination="@id/matchFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="groupMatchResult"
+                app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
+        </action>
+        <action
+            android:id="@+id/action_recommendFragment_to_recTimelineFragment"
+            app:destination="@id/recTimelineFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/socialFragment"
+        android:name="com.project.heyboardgame.main.social.SocialFragment"
+        android:label="fragment_social"
+        tools:layout="@layout/fragment_social" >
+        <action
+            android:id="@+id/action_socialFragment_to_addFriendFragment"
+            app:destination="@id/addFriendFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_socialFragment_to_chatListFragment"
+            app:destination="@id/chatListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_socialFragment_to_friendRequestFragment"
+            app:destination="@id/friendRequestFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_socialFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="friend"
+                app:argType="com.project.heyboardgame.dataModel.Friend" />
+            <argument
+                android:name="roomId"
+                app:argType="long" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.project.heyboardgame.main.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_unregisterFragment"
+            app:destination="@id/unregisterFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_profileFragment_to_changePwdFragment"
+            app:destination="@id/changePwdFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_profileFragment_to_changeProfileFragment"
+            app:destination="@id/changeProfileFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="myProfileData"
+                app:argType="com.project.heyboardgame.dataModel.MyProfileResultData" />
+        </action>
+        <action
+            android:id="@+id/action_profileFragment_to_bookmarkFragment"
+            app:destination="@id/bookmarkFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_profileFragment_to_ratedFragment"
+            app:destination="@id/ratedFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchFragment"
+        android:name="com.project.heyboardgame.main.recommend.MatchFragment"
+        android:label="fragment_match"
+        tools:layout="@layout/fragment_match" >
+        <action
+            android:id="@+id/action_matchFragment_to_matchResFragment"
+            app:destination="@id/matchResFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="groupMatchResult"
+                app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
+        </action>
+        <argument
+            android:name="groupMatchResult"
+            app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchResFragment"
+        android:name="com.project.heyboardgame.main.recommend.MatchResFragment"
+        android:label="fragment_match_res"
+        tools:layout="@layout/fragment_match_res" >
+        <argument
+            android:name="groupMatchResult"
+            app:argType="com.project.heyboardgame.dataModel.GroupMatchResultData" />
+        <action
+            android:id="@+id/action_matchResFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="long" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.project.heyboardgame.main.home.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="long"/>
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.project.heyboardgame.main.home.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail">
+        <action
+            android:id="@+id/action_detailFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="friend"
+                app:argType="com.project.heyboardgame.dataModel.Friend" />
+            <argument
+                android:name="roomId"
+                app:argType="long" />
+        </action>
+        <argument
+            android:name="id"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFriendFragment"
+        android:name="com.project.heyboardgame.main.social.AddFriendFragment"
+        android:label="fragment_add_friend"
+        tools:layout="@layout/fragment_add_friend" />
+    <fragment
+        android:id="@+id/chatListFragment"
+        android:name="com.project.heyboardgame.main.social.ChatListFragment"
+        android:label="fragment_chat_list"
+        tools:layout="@layout/fragment_chat_list" >
+        <action
+            android:id="@+id/action_chatListFragment_to_addFriendFragment"
+            app:destination="@id/addFriendFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_chatListFragment_to_chatFragment"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="friend"
+                app:argType="com.project.heyboardgame.dataModel.Friend" />
+            <argument
+                android:name="roomId"
+                app:argType="long" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/unregisterFragment"
+        android:name="com.project.heyboardgame.main.profile.UnregisterFragment"
+        android:label="fragment_unregister"
+        tools:layout="@layout/fragment_unregister" />
+    <fragment
+        android:id="@+id/changePwdFragment"
+        android:name="com.project.heyboardgame.main.profile.ChangePwdFragment"
+        android:label="fragment_change_pwd"
+        tools:layout="@layout/fragment_change_pwd" />
+    <fragment
+        android:id="@+id/changeProfileFragment"
+        android:name="com.project.heyboardgame.main.profile.ChangeProfileFragment"
+        android:label="fragment_change_profile"
+        tools:layout="@layout/fragment_change_profile" >
+        <argument
+            android:name="myProfileData"
+            app:argType="com.project.heyboardgame.dataModel.MyProfileResultData" />
+    </fragment>
+    <fragment
+        android:id="@+id/bookmarkFragment"
+        android:name="com.project.heyboardgame.main.profile.BookmarkFragment"
+        android:label="fragment_bookmark"
+        tools:layout="@layout/fragment_bookmark" >
+        <action
+            android:id="@+id/action_bookmarkFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="long" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/ratedFragment"
+        android:name="com.project.heyboardgame.main.profile.RatedFragment"
+        android:label="fragment_rated"
+        tools:layout="@layout/fragment_rated" >
+        <action
+            android:id="@+id/action_ratedFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="long" />
+        </action>
+        <action
+            android:id="@+id/action_ratedFragment_to_specificRateFragment"
+            app:destination="@id/specificRateFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="score"
+                app:argType="float" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/specificRateFragment"
+        android:name="com.project.heyboardgame.main.profile.SpecificRateFragment"
+        android:label="fragment_specific_rate"
+        tools:layout="@layout/fragment_specific_rate" >
+        <action
+            android:id="@+id/action_specificRateFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="long" />
+        </action>
+        <argument
+            android:name="score"
+            app:argType="float" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendRequestFragment"
+        android:name="com.project.heyboardgame.main.social.FriendRequestFragment"
+        android:label="fragment_friend_request"
+        tools:layout="@layout/fragment_friend_request" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.project.heyboardgame.main.social.ChatFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" >
+        <argument
+            android:name="friend"
+            app:argType="com.project.heyboardgame.dataModel.Friend" />
+        <argument
+            android:name="roomId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/recListFragment"
+        android:name="com.project.heyboardgame.main.recommend.RecListFragment"
+        android:label="fragment_rec_list"
+        tools:layout="@layout/fragment_rec_list" >
+        <action
+            android:id="@+id/action_recListFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="id"
+                app:argType="long" />
+        </action>
+        <argument
+            android:name="timelineId"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/recTimelineFragment"
+        android:name="com.project.heyboardgame.main.recommend.RecTimelineFragment"
+        android:label="fragment_rec_timeline"
+        tools:layout="@layout/fragment_rec_timeline" >
+        <action
+            android:id="@+id/action_recTimelineFragment_to_recListFragment"
+            app:destination="@id/recListFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="timelineId"
+                app:argType="long" />
+        </action>
+    </fragment>
+</navigation>

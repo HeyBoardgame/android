@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/auth_nav"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.project.heyboardgame.auth.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_forgotPwdFragment"
+            app:destination="@id/forgotPwdFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_loginFragment_to_signUpFragment1"
+            app:destination="@id/signUpFragment1"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_loginFragment_to_googleSignUpFragment1"
+            app:destination="@id/googleSignUpFragment1"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="googleEmail"
+                app:argType="string" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPwdFragment"
+        android:name="com.project.heyboardgame.auth.ForgotPwdFragment"
+        android:label="fragment_forgot_pwd"
+        tools:layout="@layout/fragment_forgot_pwd" />
+    <fragment
+        android:id="@+id/signUpFragment1"
+        android:name="com.project.heyboardgame.auth.SignUpFragment1"
+        android:label="fragment_sign_up1"
+        tools:layout="@layout/fragment_sign_up1" >
+        <action
+            android:id="@+id/action_signUpFragment1_to_signUpFragment2"
+            app:destination="@id/signUpFragment2"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="signUpData"
+                app:argType="com.project.heyboardgame.dataModel.SignUpData" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/signUpFragment2"
+        android:name="com.project.heyboardgame.auth.SignUpFragment2"
+        android:label="fragment_sign_up2"
+        tools:layout="@layout/fragment_sign_up2" >
+        <action
+            android:id="@+id/action_signUpFragment2_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="signUpData"
+            app:argType="com.project.heyboardgame.dataModel.SignUpData" />
+    </fragment>
+    <fragment
+        android:id="@+id/googleSignUpFragment1"
+        android:name="com.project.heyboardgame.auth.GoogleSignUpFragment1"
+        android:label="fragment_google_sign_up1"
+        tools:layout="@layout/fragment_google_sign_up1" >
+        <argument
+            android:name="googleEmail"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_googleSignUpFragment1_to_googleSignUpFragment2"
+            app:destination="@id/googleSignUpFragment2"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+            <argument
+                android:name="googleRegisterTempData"
+                app:argType="com.project.heyboardgame.dataModel.GoogleRegisterTempData" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/googleSignUpFragment2"
+        android:name="com.project.heyboardgame.auth.GoogleSignUpFragment2"
+        android:label="fragment_google_sign_up2"
+        tools:layout="@layout/fragment_google_sign_up2" >
+        <argument
+            android:name="googleRegisterTempData"
+            app:argType="com.project.heyboardgame.dataModel.GoogleRegisterTempData" />
+    </fragment>
+</navigation>
